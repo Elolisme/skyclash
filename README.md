@@ -7,15 +7,27 @@ Minecraft plugin, reimagining hypixels old minigame
 ***
 
 ## Skyclash Game Manager
-### Usage
-Click a stick to save your data to a file in ```<Root folder>/Players/<username>.json```
+### Saving System
+When you log in, your data is saved to a file in ```<Root folder>/Players/<username>.json```
+<br>
+Whenever the game needs it, it will read from those files
 <br>
 
-Click a carrot on a stick to load data from file with your usename
+### Voting System
+Click into menu, then vote
 <br>
+Click on the block to vote for that map
+<br>
+For admins, use this command to change the votes
+
+```/setvotes <map name> <value>```
 
 - Much more developement planned in future
 <br>
+
+### Starting the game
+- planned to add ready system
+- currently ```/startgame``` exists for admins
 
 ***
 
