@@ -23,11 +23,17 @@ For admins, use this command to change the votes
 ```/setvotes <map name> <value>```
 
 - Much more developement planned in future
-<br>
+
 
 ### Starting the game
-- planned to add ready system
-- currently ```/startgame``` exists for admins
+In the menu click the wool to become ready
+<br>
+When 2 or more people become ready the game starts in 60s
+<br>
+Click the wool again to unready yourself, this could cancel the game thought
+<br>
+```/startgame``` exists for admins to start game manually
+<br>
 
 ***
 
@@ -36,10 +42,8 @@ For admins, use this command to change the votes
 Get weapons by using the command 
   ```/giveitem <item>```
 <br>
-
 (use lowercase with spaces)
 <br>
-
 Example:
   ```/giveitem chicken bow```
 
