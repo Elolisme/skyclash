@@ -1,0 +1,18 @@
+name: skyclash
+version: '${project.version}'
+main: skyclash.skyclash.main
+commands:
+  startgame:
+   description: starts game
+   usage: /startgame
+   permission: host
+  setvotes:
+   description: adjusts votes of a map
+   usage: /setvotes <map name> <value>
+   permission: host
+   aliases: [setvote, voteset, setmapvotes]
+  giveitem:
+    description: gives a custom item
+    usage: /giveitem <item>
+    aliases: [gi, customitem]
+    permission: host
