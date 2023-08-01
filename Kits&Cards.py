@@ -47,11 +47,11 @@ while item != "":
 buff = input("Describe buff shortly: ")
 notes = input("Any final notes or questions: ")
 code = code + f"\n    player.setMetadata(\"{name}\", new FixedMetadataValue(main.getPlugin(main.class), \"kit\"));\n}}"
-code = code + f"\n// Buff: {buffs}\n// {notes}"
+code = code + f"\n// Buff: {buff}\n// {notes}"
 
 print(f"\nHere is the code:\n<--------Kits.java------------>\n")
 print(code + f"\n\n<----------------------->")
 
 print(f"\n<-----------lobby.java----------->")
-print(code2+"<---------------------->")
+print(code2+"\n<---------------------->")
 input(" ")
