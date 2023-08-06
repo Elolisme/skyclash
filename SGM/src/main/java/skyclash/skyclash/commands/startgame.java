@@ -47,7 +47,7 @@ public class startgame implements CommandExecutor {
             public void run() {
                 GameStarts();
             }
-        }.runTaskLater(plugin, 20*1);
+        }.runTaskLater(plugin, 20*30);
         return true;
     }
 
