@@ -1,4 +1,5 @@
 skyclash\skyclash\commands\startgame.class
+skyclash\skyclash\managers\Mapsfile.class
 skyclash\skyclash\commands\startgame$7.class
 skyclash\skyclash\handlers\lobby.class
 skyclash\skyclash\commands\startgame$2.class

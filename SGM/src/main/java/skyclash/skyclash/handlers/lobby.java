@@ -1,11 +1,16 @@
 package skyclash.skyclash.handlers;
 
+import com.avaje.ebeaninternal.server.transaction.BulkEventListenerMap;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -17,26 +22,31 @@ import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
+import org.json.simple.JSONObject;
 import skyclash.skyclash.main;
 import skyclash.skyclash.managers.DataFiles;
 import skyclash.skyclash.managers.PlayerData;
+import skyclash.skyclash.managers.Mapsfile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class lobby implements Listener {
-
     public lobby(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    // event handler
     @EventHandler
     public void onUseItem(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (!main.playertracker.containsKey(player.getName())) {
             main.playertracker.put(player.getName(), "lobby");
+        }
+        if (!main.playertracker.get(player.getName()).equals("lobby")) {
+            if (!main.playertracker.get(player.getName()).equals("ready")) {
+                return;
+            }
         }
         if (player.getItemInHand().getType() != Material.NETHER_STAR) {
             return;
@@ -72,7 +82,6 @@ public class lobby implements Listener {
             meta2.setLore(lore2);
             item2.setItemMeta(meta2);
         }
-        
 
         // item 2b
         ItemStack item3 = new Wool(DyeColor.GREEN).toItemStack();
@@ -158,63 +167,88 @@ public class lobby implements Listener {
     }
 
     @EventHandler
+    public void onDrag(InventoryCreativeEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (!main.playertracker.containsKey(player.getName())) {
+            main.playertracker.put(player.getName(), "lobby");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @EventHandler
     public void onClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         DataFiles dataFiles2 = new DataFiles(player);
         PlayerData data1 = dataFiles2.LoadData();
-
-        if (event.getCurrentItem() != null) {
-            if (event.getCurrentItem().getType() == Material.NETHER_STAR && data1.State.equals("Lobby") && player.getGameMode() != GameMode.CREATIVE) {
-                event.setCancelled(true);
+        if (!main.playertracker.containsKey(player.getName())) {
+            main.playertracker.put(player.getName(), "lobby");
         }
 
+        if (event.getCurrentItem() == null) {
+            return;
         }
+        if (event.getCurrentItem().getType() == Material.AIR) {
+            return;
+        }
+
+
+        if (event.getCurrentItem().getType() == Material.NETHER_STAR) {
+            if (data1.State.equals("Lobby")) {
+                if (player.getGameMode() != GameMode.CREATIVE) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+        if (!main.playertracker.get(player.getName()).equals("lobby")) {
+            if (!main.playertracker.get(player.getName()).equals("ready")) {
+                return;
+            }
+        }
+
         // on opening main menu
         if (player.hasMetadata("OpenedMenu")) {
             event.setCancelled(true);
 
             if (event.getSlot() == 1) {
-                player.closeInventory();
+
 
                 // menu map selection
                 Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Map Selection");
 
-                // item 1
-                ItemStack item = new ItemStack(Material.GRASS);
-                item.setAmount(1);
-                ItemMeta meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Map1: "+main.mapselection.get("Map1")+" Votes");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(0, item);
-
-                // item 2
-                ItemStack item2 = new Wool(DyeColor.PURPLE).toItemStack();
-                item2.setAmount(1);
-                ItemMeta meta2 = item.getItemMeta();
-                if (meta2 != null) {
-                    meta2.setDisplayName(ChatColor.RED + "Map2: "+main.mapselection.get("Map2")+" Votes");
-                    item2.setItemMeta(meta2);
-                }
-                inventory.setItem(1, item2);
-
-                // item 3
-                ItemStack item3 = new ItemStack(Material.STONE);
-                item3.setAmount(1);
-                ItemMeta meta3 = item.getItemMeta();
-                if (meta3 != null) {
-                    meta3.setDisplayName(ChatColor.RED + "Map3: "+main.mapselection.get("Map3")+" Votes");
-                    item3.setItemMeta(meta3);
-                }
-                inventory.setItem(2, item3);
+                Mapsfile maps = new Mapsfile();
+                maps.read_file(false, false);
+                AtomicInteger count = new AtomicInteger();
 
 
+                maps.jsonObject.forEach((name, info) -> {
+                    JSONObject info1 = (JSONObject) info;
+                    boolean ignore = (boolean) info1.get("ignore");
+                    if (!ignore) {
+                        String name1 = (String) name;
+                        String material = (String) info1.get("icon");
+                        ItemStack item;
+
+                        if (material.equals("purple_wool")) {
+                            item = new Wool(DyeColor.PURPLE).toItemStack();
+                        } else {
+                            item = new ItemStack(Material.matchMaterial(material.toUpperCase()));
+                        }
+
+                        item.setAmount(1);
+                        ItemMeta meta = item.getItemMeta();
+                        if (meta != null) {
+                            meta.setDisplayName(ChatColor.RED + name1 + ": " +main.mapselection.get(count.get()+1)+" Votes");
+                            item.setItemMeta(meta);
+                        }
+                        inventory.setItem(count.get(), item);
+                        count.getAndIncrement();
+                    }
+
+                });
                 player.openInventory(inventory);
                 player.setMetadata("OpenedMenu2", new FixedMetadataValue(main.getPlugin(main.class), "Map Selection"));
 
             } else if (event.getSlot() == 3) {
-                
                 if (main.playertracker.get(player.getName()).equals("ready")) {
                     player.sendMessage(ChatColor.YELLOW+"You are no longer ready");
                     main.playertracker.put(player.getName(), "lobby");
@@ -227,13 +261,10 @@ public class lobby implements Listener {
                 player.closeInventory();
 
             } else if (event.getSlot() == 5) {
-                player.closeInventory();
-
-                // kit selection
+                // TODO add kits
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Kit Selection");
 
                 // item 1
-                // TODO add kits
                 ItemStack item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
@@ -266,9 +297,6 @@ public class lobby implements Listener {
                 player.setMetadata("OpenedMenu3", new FixedMetadataValue(main.getPlugin(main.class), "Kit Selection"));
 
             } else if (event.getSlot() == 7) {
-                player.closeInventory();
-
-                // card selection
                 // TODO add cards
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Card Selection");
 
@@ -302,7 +330,6 @@ public class lobby implements Listener {
                 }
                 inventory.setItem(2, item3);
 
-
                 player.openInventory(inventory);
                 player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.getPlugin(main.class), "Card Selection"));
 
@@ -320,11 +347,17 @@ public class lobby implements Listener {
                         player.closeInventory();
                         return;
                     }
-                    main.decrementvalue("Map" + oldmap);
+                    Integer num = main.mapselection.get(oldmap);
+                    num++;
+                    main.mapselection.put(oldmap, num);
                 }
-                main.incrementvalue("Map" + slot);
+                Integer num = main.mapselection.get(slot);
+                num++;
+                main.mapselection.put(slot, num);
                 main.playermap.put(player.getName(), slot);
-                player.sendMessage(ChatColor.GREEN + "You have voted for Map " + slot);
+                String[] display = event.getCurrentItem().getItemMeta().getDisplayName().split(":");
+
+                player.sendMessage(ChatColor.GREEN + "You have voted for "+ display[0]);
                 player.closeInventory();
             }
         }
@@ -333,34 +366,20 @@ public class lobby implements Listener {
         else if (player.hasMetadata("OpenedMenu3")) {
             DataFiles dataFiles = new DataFiles(player);
             PlayerData data2 = dataFiles.LoadData();
-            if (event.getSlot() == 0) {
-                data2.Kit = "Assassin";
-            } else if (event.getSlot() == 1) {
-                data2.Kit = "Beserker";
-            } else if (event.getSlot() == 2) {
-                data2.Kit = "Swordsman";
-            }
-            // TODO add kits here as well
-            player.closeInventory();
+            data2.Kit = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
             player.sendMessage(ChatColor.YELLOW+"You have chosen "+data2.Kit+" kit");
             dataFiles.SetData(data2);
+            player.closeInventory();
         }
 
         // clicks in menu 4
         else if (player.hasMetadata("OpenedMenu4")) {
             DataFiles dataFiles = new DataFiles(player);
             PlayerData data3 = dataFiles.LoadData();
-            if (event.getSlot() == 0) {
-                data3.Card = "Creeper";
-            } else if (event.getSlot() == 1) {
-                data3.Card = "Bigger Bangs";
-            } else if (event.getSlot() == 2) {
-                data3.Card = "Damage Potion";
-            }
-            // TODO add cards here as well
-            player.closeInventory();
+            data3.Card = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
             player.sendMessage(ChatColor.YELLOW + "You have chosen " + data3.Card + " card");
             dataFiles.SetData(data3);
+            player.closeInventory();
         }
     }
 
@@ -368,9 +387,9 @@ public class lobby implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        // FIXME remove soon
-        player.sendMessage(ChatColor.RED+"PLEASE DO NOT BUILD IN AGENTLAB WORLD!\nCHECK DISCORD FOR INFO ON multiverse");
+        if (player.getWorld().getName().equals("agentlab")) {
+            player.sendMessage(ChatColor.DARK_PURPLE + "Check dc, dont build in agentlab world");
+        }
 
         DataFiles datafiles = new DataFiles(player);
         PlayerData data = datafiles.LoadData();
@@ -401,6 +420,22 @@ public class lobby implements Listener {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
             }
+        }
+    }
+
+        @EventHandler
+    public  void onDamagePlayer(EntityDamageByEntityEvent event) {
+        if (event.getDamager().getType() != EntityType.PLAYER) {
+            return;
+        }
+        if (event.getEntity().getType() != EntityType.PLAYER) {
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        DataFiles datafiles = new DataFiles(player);
+        PlayerData data = datafiles.LoadData();
+        if (data.State.equals("Lobby") ) {
+            event.setCancelled(true);
         }
     }
 

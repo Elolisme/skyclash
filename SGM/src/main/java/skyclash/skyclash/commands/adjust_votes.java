@@ -19,16 +19,16 @@ public class adjust_votes implements CommandExecutor {
 
         // Check for arguments
         if (args.length == 0) { //Sender only typed '/setvotes' and nothing else
-            sender.sendMessage(ChatColor.RED + "Use /setvotes <map name> <value>");
+            sender.sendMessage(ChatColor.RED + "Use /setvotes <map index> <value>");
             return true;
         }
-        if (args.length == 1) { //Sender only typed '/setvotes <map>' and nothing else
+        if (args.length == 1) { //Sender only typed '/setvotes <map index>' and nothing else
             sender.sendMessage(ChatColor.RED+"Fucking idiot");
-            sender.sendMessage(ChatColor.RED + "Use /setvotes <map name> <value>");
+            sender.sendMessage(ChatColor.RED + "Use /setvotes <map index> <value>");
             return true;
         }
         if (args.length > 2) { //Sender typed '/setvotes <map> <value>' + more
-            sender.sendMessage(ChatColor.RED + "Use /setvotes <map name> <value>");
+            sender.sendMessage(ChatColor.RED + "Use /setvotes <map index> <value>");
             return true;
         }
         String map = args[0];
@@ -40,13 +40,23 @@ public class adjust_votes implements CommandExecutor {
             player.sendMessage(ChatColor.RED+"Value must be an integer");
             return true;
         }
-        if (!main.mapselection.containsKey(map)) {
-            player.sendMessage(ChatColor.RED+"Map name must be valid");
+
+        int value2;
+        try {
+            value2 = Integer.parseInt(map);
+        } catch (NumberFormatException e) {
+            player.sendMessage(ChatColor.RED+"Map index must be an integer");
+            return true;
+        }
+
+
+        if (!main.mapselection.containsKey(value2)) {
+            player.sendMessage(ChatColor.RED+"Map index must be valid");
             return true;
         }
 
         // adjust value
-        main.mapselection.put(map, value1);
+        main.mapselection.put(value2, value1);
 
 
 

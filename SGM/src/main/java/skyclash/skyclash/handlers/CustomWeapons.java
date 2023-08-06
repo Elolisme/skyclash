@@ -1,5 +1,6 @@
 package skyclash.skyclash.handlers;
 
+import com.avaje.ebeaninternal.server.transaction.BulkEventListenerMap;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -59,9 +60,12 @@ public class CustomWeapons implements Listener {
     }
     @EventHandler
     public void onShootJBow(EntityShootBowEvent event) {
+        // checks
+        if (event.getEntity().getType() != EntityType.PLAYER) {
+            return;
+        }
         Player player = (Player) event.getEntity();
         Arrow arrow = (Arrow) event.getProjectile();
-        // checks
         if (player.getItemInHand().getType() != Material.BOW) {
             return;
         }
@@ -88,9 +92,12 @@ public class CustomWeapons implements Listener {
 
     @EventHandler
     public void onShootEbow(EntityShootBowEvent event) {
+        // checks
+        if (event.getEntity().getType() != EntityType.PLAYER) {
+            return;
+        }
         Player player = (Player) event.getEntity();
         Arrow arrow = (Arrow) event.getProjectile();
-        // checks
         if (player.getItemInHand().getType() != Material.BOW) {
             return;
         }

@@ -1,6 +1,7 @@
-name: skyclash
+name: SGMv1.1
 version: '1.0-SNAPSHOT'
 main: skyclash.skyclash.main
+softdepend: ['Multiverse-Core']
 commands:
   startgame:
    description: starts game
@@ -8,7 +9,7 @@ commands:
    permission: host
   setvotes:
    description: adjusts votes of a map
-   usage: /setvotes <map name> <value>
+   usage: /setvotes <map index> <value>
    permission: host
    aliases: [setvote, voteset, setmapvotes]
   giveitem:

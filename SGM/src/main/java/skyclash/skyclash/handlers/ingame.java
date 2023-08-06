@@ -1,16 +1,22 @@
 package skyclash.skyclash.handlers;
 
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.simple.JSONObject;
 import skyclash.skyclash.main;
 import skyclash.skyclash.managers.DataFiles;
 import skyclash.skyclash.managers.PlayerData;
+import skyclash.skyclash.managers.Mapsfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +34,12 @@ public class ingame implements Listener {
         if (player.hasMetadata("NoMovement")) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onCloseInventory(InventoryCloseEvent event) {
+        Player player = (Player) event.getPlayer();
+        player.updateInventory();
     }
 
     @EventHandler
@@ -56,7 +68,6 @@ public class ingame implements Listener {
             }
             }, 2);
         player.getInventory().clear();
-        // FIXME check armour clearing
         main.PlayersLeft--;
         player.sendMessage(ChatColor.RED+"Better luck next time");
 
@@ -71,6 +82,7 @@ public class ingame implements Listener {
 
     }
 
+    @SuppressWarnings("unchecked")
     public void Endgame() {
         // reset all map votes
         main.mapselection.forEach((key1, value1) -> main.mapselection.put(key1, 0));
@@ -100,7 +112,7 @@ public class ingame implements Listener {
                 player.setSaturation(20);
                 data.State = "Lobby";
                 main.playertracker.put(player.getName(), "lobby");
-                main.playermap.put(player.getName(), 0);
+                main.playermap.remove(player.getName());
 
                 // give item
                 ItemStack item = new ItemStack(Material.NETHER_STAR);
@@ -116,8 +128,28 @@ public class ingame implements Listener {
 
                 datafiles.SetData(data);
 
-                // TODO tp person back to lobby
+                Mapsfile maps = new Mapsfile();
+                maps.read_file(false, false);
+                AtomicReference<String> default_world = new AtomicReference<>();
+                maps.jsonObject.forEach((name, info) -> {
+                    JSONObject info1 = (JSONObject) info;
+                    boolean isdefault = (boolean) info1.get("isdefault");
+                    String name1 = (String) name;
+                    if (isdefault) {
+                        default_world.set(name1);
+                    }
+                });
+
+                MVWorldManager worldManager = main.mvcore.getMVWorldManager();
+                worldManager.loadWorld(default_world.get());
+                World w = Bukkit.getWorld("world");
+                Location spawnloc = new Location(w, 0, 100, 0);
+                player.teleport(spawnloc);
             }
         });
+        main.mvcore.getMVWorldManager().deleteWorld(main.current_world.getName(), true, true);
+        main.current_world = null;
+
+
     }
 }

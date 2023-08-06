@@ -27,14 +27,15 @@ public class DataFiles {
         String path = "players";
         File folder = new File(path);
         if(!folder.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             folder.mkdirs();
         }
 
         File playerFile = new File(path+File.separator+player.getName()+".json");
         if(!playerFile.exists()) {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 playerFile.createNewFile();
-                // Bukkit.getLogger().info("Created file");
                 SaveData();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -42,7 +43,7 @@ public class DataFiles {
         }
 
     }
-
+    @SuppressWarnings("unchecked")
     public void SaveData() {
         String path = "players"+File.separator+player.getName()+".json";
         JSONObject jsondata = new JSONObject();
@@ -52,10 +53,9 @@ public class DataFiles {
         jsondata.put("state", data.State);
 
         try {
-            FileWriter file = new FileWriter(path);
+            @SuppressWarnings("resource") FileWriter file = new FileWriter(path);
             file.write(jsondata.toJSONString());
             file.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
