@@ -4,11 +4,17 @@ Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
 
 ***
 
-## Skyclash Game Manager
+## Skyclash's Drug Pollinated Code
+### Commands
+**TODO**
+
+### Permissions
+**TODO**
+
 ### Kits and Cards
+**TODO**
 
-
-### Saving Data and Worlds
+### Saving Player, World, and Chest Loot data
 When you log in, your data is saved to a file in ```<Root folder>/Players/<username>.json```
 <br>
 Whenever the game needs it, it will read from those files
@@ -30,7 +36,6 @@ For admins, use this command to change the votes
 <br>
 Maps are automatically added for each multiverse world AKA USE MULTIVERSE
 
-
 ### Starting the game
 In the menu click the wool to become ready
 <br>
@@ -40,6 +45,12 @@ Click the wool again to unready yourself, this will cancel the game if 2 players
 <br>
 ```/startgame``` exists for admins to start game manually
 <br>
+
+### Ending a Game
+**TODO**
+
+### Chest Loot system
+**TODO**
 
 ### Custom Weapons
 Get weapons by using the command 
@@ -66,3 +77,27 @@ Example:
   - Summon lightning 2 blocks in front of you when you hit an enemy
   - Has a cooldown of 2 seconds
 
+
+# TODO
+Soon
+- Map all chest coords to maps.json
+- Map all spawn locations to maps.json
+- Finish readme
+- Add more kits and cards
+
+Future
+- Upgrade kit and card system
+
+# Changelog
+
+## v1.1
+GitHub:
+- Added changelog
+- changed plugin name to SDPC (skyclash drug pollinated code)
+- Added todo in readme so it's easier to track progress
+
+Code:
+- refactored a lot of files and organised everything
+- added chest refill system with chest loots
+- Finished any loose ends with the plugin, it should be fully functional now
+- Changed state value in json to hasJoined as it was no longer necessary
