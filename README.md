@@ -2,9 +2,11 @@
 Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
 <br>
 
+### How To Use
+**TODO**
 ***
 
-## Skyclash's Drug Pollinated Code
+## Skyclash's Drug Pollinated Code Plugin
 ### Commands
 **TODO**
 
@@ -90,7 +92,7 @@ Future
 
 # Changelog
 
-## v1.1
+## v1.1.0
 GitHub:
 - Added changelog
 - changed plugin name to SDPC (skyclash drug pollinated code)
