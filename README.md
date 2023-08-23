@@ -82,8 +82,7 @@ Example:
 
 # TODO
 Soon
-- Map all chest coords to maps.json
-- Map all spawn locations to maps.json
+- add enderchest loot
 - Finish readme
 - Add more kits and cards
 
@@ -91,6 +90,16 @@ Future
 - Upgrade kit and card system
 
 # Changelog
+
+## v1.1.1
+Code:
+- made maps start with correct settings
+- fixed /giveitem command and custom items not working
+- changed /startgame to start in 5 seconds, as opposed to 30
+- ingame map does not spawn mobs, set to day on start
+- added /setchest [add|remove|list] command (can change where chest loot can go)
+- added /gamespawn [add|remove|list] command (similar function but for spawnpoints instead)
+
 
 ## v1.1.0
 GitHub:
