@@ -47,7 +47,6 @@ public class ChestManager {
                 lootChest = LootChestIO.loadChest(chestName1);
                 chest.getBlockInventory().setContents(lootChest.generate());
             } else if (targetBlock.getState() instanceof EnderChest) {
-                // TODO enderchest menu
 //                EnderChest echest = (EnderChest) targetBlock.getState();
 //                lootChest = LootChestIO.loadChest(chestName1);
 //                chest.getBlockInventory().setContents(lootChest.generate());

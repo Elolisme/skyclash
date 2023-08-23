@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import skyclash.skyclash.ingame.EndGame;
+import skyclash.skyclash.gameManager.EndGame;
 import skyclash.skyclash.main;
 
 public class end_game implements CommandExecutor {

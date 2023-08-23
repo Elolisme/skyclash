@@ -33,7 +33,7 @@ public class tolobby implements CommandExecutor {
         Player player = (Player) sender;
 
         // If player is still playing game
-        if (main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (main.playerStatus.get(player.getName()).equals("gameManager")) {
             player.sendMessage(ChatColor.RED + "You cannot give up!");
             return true;
         }

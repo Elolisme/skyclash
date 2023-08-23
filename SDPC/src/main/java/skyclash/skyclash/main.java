@@ -5,14 +5,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.commands.*;
-import skyclash.skyclash.customitems.CustomWeapons;
-import skyclash.skyclash.ingame.InGame;
-import skyclash.skyclash.ingame.PlayerDC;
-import skyclash.skyclash.ingame.PlayerDeath;
+import skyclash.skyclash.customitems.CustomItems;
+import skyclash.skyclash.gameManager.InGame;
+import skyclash.skyclash.gameManager.PlayerDC;
+import skyclash.skyclash.gameManager.PlayerDeath;
 import skyclash.skyclash.kitscards.KitAbilities;
-import skyclash.skyclash.lobbymenu.InMenu;
-import skyclash.skyclash.lobbymenu.LobbyControls;
-import skyclash.skyclash.lobbymenu.OpenMenuItem;
+import skyclash.skyclash.lobby.InMenu;
+import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.OpenMenuItem;
 
 import java.util.HashMap;
 
@@ -33,7 +33,7 @@ public class main extends JavaPlugin {
         new LobbyControls(this);
         new InMenu(this);
         new InGame(this);
-        new CustomWeapons(this);
+        new CustomItems(this);
         new PlayerDC(this);
         new PlayerDeath(this);
         new KitAbilities(this);
@@ -46,8 +46,24 @@ public class main extends JavaPlugin {
         this.getCommand("endgame").setExecutor(new end_game());
         this.getCommand("lootchest").setExecutor(new lootchest());
         this.getCommand("lobby").setExecutor(new tolobby());
+        this.getCommand("setchest").setExecutor(new setchest());
+        this.getCommand("gamespawn").setExecutor(new gamespawn());
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
+
+        /* # LOGS
+        Changes:
+        - made maps start with correct settings
+        - fixed giveitem command
+        - fixed custom items not working? idk either
+        - changed /startgame to start in 5 seconds, as opposed to 30
+        - battle map does not spawn mobs, set to day on start
+        - added /setchest [add|remove|list] command
+        - added /gamespawn [add|remove|list] command as well
+
+        Todo:
+        - Add ender chest loot (ChestManager)
+        */
     }
 
     @Override

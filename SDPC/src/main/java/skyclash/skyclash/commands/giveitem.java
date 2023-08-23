@@ -13,9 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class giveitem implements CommandExecutor{
     /*
@@ -26,32 +24,27 @@ public class giveitem implements CommandExecutor{
     */
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args1) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check for arguments
-        if (args1.length == 0) { //Sender only typed '/giveitem' and nothing else
+        if (args.length == 0) { //Sender only typed '/giveitem' and nothing else
             sender.sendMessage(ChatColor.RED + "Specify more arguments\nUse /giveitem <player> <item>");
             return true;
         }
-        if (args1.length == 1) { //Sender only typed '/giveitem <player>' and nothing else
+        if (args.length == 1) { //Sender only typed '/giveitem <player>' and nothing else
             sender.sendMessage(ChatColor.RED+"Specify an item");
             sender.sendMessage(ChatColor.RED + "Use /giveitem <player> <item>");
             return true;
         }
-        if (args1.length > 2) { //Sender typed '/giveitem <player> <item>' + more
-            sender.sendMessage(ChatColor.RED + "Too many arguments\nUse /giveitem <player> <item>");
-            return true;
-        }
-        AtomicBoolean isOnline = new AtomicBoolean(false);
-        Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
-        players.forEach((player) -> isOnline.set(player.getName().equals(args1[1])));
-        if (isOnline.get()) {
-            sender.sendMessage(ChatColor.RED + "Player is not online");
+        Bukkit.getLogger().info(args[0]);
+
+        Player player = Bukkit.getPlayer(args[0]);
+        if (player == null) {
+            sender.sendMessage(ChatColor.RED + "That player is not online\nUse /giveitem <player> <item>");
             return true;
         }
 
-        Player player = Bukkit.getPlayer(args1[1]);
-        String[] args = Arrays.copyOfRange(args1, 1, args1.length);
-        String arg_full = String.join(" ", args);
+        String[] args1 = Arrays.copyOfRange(args, 1, args.length);
+        String arg_full = String.join(" ", args1);
 
         // custom item master spark (definitely not a Touhou reference)
         ItemStack item = new ItemStack(Material.FIREWORK_CHARGE);

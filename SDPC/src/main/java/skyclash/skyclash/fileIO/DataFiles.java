@@ -58,7 +58,7 @@ public class DataFiles {
             file.write(jsondata.toJSONString());
             file.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

@@ -43,7 +43,7 @@ public class Mapsfile {
             gson.toJson(jsonObject, file);
             file.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,7 +89,6 @@ public class Mapsfile {
                 defaultcoords.add(64);
                 defaultcoords.add(0);
                 JSONArray coordslist = new JSONArray();
-                coordslist.add(defaultcoords);
                 coordslist.add(defaultcoords);
                 String coords = String.valueOf(coordslist);
                 mapdata.put("isdefault", isspawn);

@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 import skyclash.skyclash.chestgen.ChestManager;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
-import skyclash.skyclash.ingame.EndGame;
+import skyclash.skyclash.gameManager.EndGame;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class Clock {
 
         // Scoreboard
         board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-        Objective o = board.registerNewObjective("ingame", "dummy");
+        Objective o = board.registerNewObjective("gameManager", "dummy");
         o.setDisplayName(ChatColor.RED+"SKYCLASH!");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         s = o.getScore(ChatColor.YELLOW+"Time left: ");

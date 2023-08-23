@@ -32,6 +32,14 @@ commands:
     usage: /lobby
     aliases: [home, hub]
     permission: lobby
+  setchest:
+    description: add or remove chest location from world
+    usage: /setchest [add|remove|list]
+    permission: host
+  gamespawn:
+    description: add or remove spawn points for when games start
+    usage: /gamespawn [add|remove|list]
+    permission: host
 
 permissions:
   sgm.lobby:
