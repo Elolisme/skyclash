@@ -39,6 +39,7 @@ Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
 
 ### Permissions
 sgm.lobby - default permission for everyone, allows /lobby command
+<br>
 sgm.host - allows opped players access to all other commands
 
 ### Kits and Cards
