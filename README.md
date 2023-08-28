@@ -82,14 +82,26 @@ Example:
 
 # TODO
 Soon
-- add enderchest loot
 - Finish readme
-- Add more kits and cards
+- balance kits
+- fix ALL bugs
+- add nbt to chest loot
+- improve setchest for convenience
+
 
 Future
+- Add more kits and cards
 - Upgrade kit and card system
 
 # Changelog
+
+## v1.1.2
+Code:
+- Made enderchests now spawn better loot
+- Fixed minor inconveniences
+- fixed nether star
+- maybe fixed starting game issue
+- there was once an block iterator issue
 
 ## v1.1.1
 Code:
