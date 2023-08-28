@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,10 +30,6 @@ public class LobbyControls implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (player.getWorld().getName().equals("agentlab")) {
-            player.sendMessage(ChatColor.DARK_PURPLE + "Check dc, dont build in agentlab world");
-        }
-
         if (!main.playerStatus.containsKey(player.getName())) {
             main.playerStatus.put(player.getName(), "lobby");
         }
@@ -77,15 +73,15 @@ public class LobbyControls implements Listener {
     }
 
     @EventHandler
-    public  void onDamagePlayer(EntityDamageByEntityEvent event) {
-        if (event.getDamager().getType() != EntityType.PLAYER) {
-            return;
-        }
+    public  void onDamagePlayer(EntityDamageEvent event) {
         if (event.getEntity().getType() != EntityType.PLAYER) {
             return;
         }
-        Player player = (Player) event.getDamager();
-        if (main.playerStatus.get(player.getName()).equals("lobby") ) {
+        if (!event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            return;
+        }
+        Player player = (Player) event.getEntity();
+        if (main.playerStatus.get(player.getName()).equals("lobby")) {
             event.setCancelled(true);
         }
     }
@@ -103,7 +99,7 @@ public class LobbyControls implements Listener {
         }
     }
 
-    public void GiveItem(Player player) {
+    public static void GiveItem(Player player) {
         ItemStack item = new ItemStack(Material.NETHER_STAR);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {

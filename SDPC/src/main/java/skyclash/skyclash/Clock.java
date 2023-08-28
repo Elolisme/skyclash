@@ -2,6 +2,7 @@ package skyclash.skyclash;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -51,7 +52,7 @@ public class Clock {
 
         // Scoreboard
         board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-        Objective o = board.registerNewObjective("gameManager", "dummy");
+        Objective o = board.registerNewObjective("Ingame", "dummy");
         o.setDisplayName(ChatColor.RED+"SKYCLASH!");
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         s = o.getScore(ChatColor.YELLOW+"Time left: ");
@@ -89,6 +90,7 @@ public class Clock {
     Mapsfile maps = new Mapsfile();
     void ChestRefill() {
         // chest loot generation
+        Bukkit.getServer().getOnlinePlayers().forEach((player) -> player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f));
         maps.read_file(false, false);
         JSONObject info2 = (JSONObject) maps.jsonObject.get(activeWorld);
         JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));

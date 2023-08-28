@@ -6,40 +6,40 @@ commands:
   startgame:
    description: starts game
    usage: /startgame
-   permission: host
+   permission: sgm.host
   setvotes:
    description: adjusts votes of a map
    usage: /setvotes <map index> <value>
-   permission: host
+   permission: sgm.host
    aliases: [setvote, voteset, setmapvotes]
   giveitem:
     description: gives a custom item
     usage: /giveitem <player> <item>
     aliases: [gi, customitem]
-    permission: host
+    permission: sgm.host
   endgame:
     description: manually end a game
     usage: /endgame
     aliases: [abort, end_game, shank]
-    permission: host
+    permission: sgm.host
   lootchest:
     description: set loot in chests
     usage: /lootchest <name>
     aliases: [chestloot, saveloot]
-    permission: host
+    permission: sgm.host
   lobby:
     description: go back to lobby world
     usage: /lobby
     aliases: [home, hub]
-    permission: lobby
+    permission: sgm.lobby
   setchest:
     description: add or remove chest location from world
     usage: /setchest [add|remove|list]
-    permission: host
+    permission: sgm.host
   gamespawn:
     description: add or remove spawn points for when games start
     usage: /gamespawn [add|remove|list]
-    permission: host
+    permission: sgm.host
 
 permissions:
   sgm.lobby:

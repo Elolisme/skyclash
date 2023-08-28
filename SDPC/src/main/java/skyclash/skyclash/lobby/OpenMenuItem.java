@@ -37,6 +37,11 @@ public class OpenMenuItem implements Listener {
         if (player.getItemInHand().getType() != Material.NETHER_STAR) {
             return;
         }
+        if (!player.getItemInHand().hasItemMeta()) {
+            return;
+        }
+
+
         if (!player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.RED + "Skyclash Menu")) {
             return;
         }

@@ -1,13 +1,10 @@
 package skyclash.skyclash.chestgen;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.EnderChest;
+import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 import skyclash.skyclash.fileIO.LootChestIO;
 
@@ -46,10 +43,12 @@ public class ChestManager {
                 chest = (Chest) targetBlock.getState();
                 lootChest = LootChestIO.loadChest(chestName1);
                 chest.getBlockInventory().setContents(lootChest.generate());
-            } else if (targetBlock.getState() instanceof EnderChest) {
-//                EnderChest echest = (EnderChest) targetBlock.getState();
-//                lootChest = LootChestIO.loadChest(chestName1);
-//                chest.getBlockInventory().setContents(lootChest.generate());
+            } else if (targetBlock.getType() == Material.ENDER_CHEST) {
+                Location newloc = targetBlock.getLocation().add(new Vector(0, 100, 0));
+                newloc.getBlock().setType(Material.CHEST);
+                chest = (Chest) newloc.getBlock().getState();
+                lootChest = LootChestIO.loadChest(chestName2);
+                chest.getBlockInventory().setContents(lootChest.generate());
             }
             else {
                 Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"There is no chest at specified location:    "+x+" "+y+" "+z);

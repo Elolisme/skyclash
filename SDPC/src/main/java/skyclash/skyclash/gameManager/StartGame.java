@@ -17,6 +17,7 @@ import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.Cards;
 import skyclash.skyclash.kitscards.Kits;
 import skyclash.skyclash.kitscards.PlayerData;
+import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 
 import java.util.Random;
@@ -159,7 +160,8 @@ public class StartGame {
                     player.setSaturation(20);
                     player.setMetadata("NoMovement", new FixedMetadataValue(main.getPlugin(main.class), "1"));
                     player.sendMessage("You will be sent to play soon");
-                    main.playerStatus.put(player.getName(), "gameManager");
+                    new RemoveTags(player);
+                    main.playerStatus.put(player.getName(), "ingame");
                     counter.getAndIncrement();
                 }
             }
@@ -200,18 +202,19 @@ public class StartGame {
 
                 // start game code
                 main.playerStatus.forEach((key, value) -> {
-                    Player player = Bukkit.getServer().getPlayer(key);
-                    if (player.hasMetadata("NoMovement")) {
-                        player.removeMetadata("NoMovement", main.getPlugin(main.class));
-                    }
-                    DataFiles datafiles = new DataFiles(player);
-                    PlayerData data = datafiles.LoadData();
-                    if (main.playerStatus.get(player.getName()).equals("gameManager")) {
+                    if (main.playerStatus.get(key).equals("ingame")) {
+                        Player player = Bukkit.getServer().getPlayer(key);
+                        if (player.hasMetadata("NoMovement")) {
+                            player.removeMetadata("NoMovement", main.getPlugin(main.class));
+                        }
+                        DataFiles datafiles = new DataFiles(player);
+                        PlayerData data = datafiles.LoadData();
                         Kits kit1 = new Kits(data.Kit, player);
                         kit1.GiveKit();
                         Cards card1 = new Cards(data.Card, player);
                         card1.GiveCard();
                         player.setScoreboard(Clock.board);
+                        player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.9f);
                     }
                 });
                 Clock.timer = 600;

@@ -6,18 +6,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.StringToJSON;
-import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -33,7 +29,7 @@ public class tolobby implements CommandExecutor {
         Player player = (Player) sender;
 
         // If player is still playing game
-        if (main.playerStatus.get(player.getName()).equals("gameManager")) {
+        if (main.playerStatus.get(player.getName()).equals("ingame")) {
             player.sendMessage(ChatColor.RED + "You cannot give up!");
             return true;
         }
@@ -70,23 +66,8 @@ public class tolobby implements CommandExecutor {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
-        //data.State = "Lobby";
         main.playerStatus.put(player.getName(), "lobby");
-        main.playerVote.remove(player.getName());
-
-        // give item
-        ItemStack item = new ItemStack(Material.NETHER_STAR);
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(ChatColor.RED + "Skyclash Menu");
-            List<String> lore = new ArrayList<>();
-            lore.add("Click to access the menu");
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-        }
-        player.getInventory().setItem(8, item);
-
-
+        LobbyControls.GiveItem(player);
         if (player.hasMetadata("NoMovement")) {
             player.removeMetadata("NoMovement", main.getPlugin(main.class));
         }

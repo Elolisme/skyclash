@@ -51,7 +51,7 @@ public class Kits {
         item1 = new ItemStack(Material.LEATHER_BOOTS);
         this.player.getInventory().setBoots(item1);
         Potion item = new Potion(PotionType.STRENGTH);
-        item.setLevel(2);
+        item.setLevel(1);
         item.setSplash(true);
         item1 = item.toItemStack(3);
         this.player.getInventory().addItem(item1);
@@ -69,7 +69,7 @@ public class Kits {
         this.player.getInventory().setLeggings(item1);
         item1 = new ItemStack(Material.LEATHER_BOOTS);
         this.player.getInventory().setBoots(item1);
-        item1 = new ItemStack(Material.ENDER_PEARL, 3);
+        item1 = new ItemStack(Material.ENDER_PEARL, 1);
         this.player.getInventory().addItem(item1);
         Potion item = new Potion(PotionType.INSTANT_DAMAGE);
         item.setLevel(2);
@@ -79,7 +79,7 @@ public class Kits {
         item = new Potion(PotionType.INVISIBILITY);
         item.setLevel(1);
         item.setSplash(true);
-        item1 = item.toItemStack(2);
+        item1 = item.toItemStack(1);
         this.player.getInventory().addItem(item1);
         player.setMetadata("Assassin", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
@@ -98,13 +98,13 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(3);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*60, 2), true);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*60, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*15, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 0), true);
         meta.setDisplayName(ChatColor.RED+"Beserker Potion");
         List<String> lore = new ArrayList<>();
         lore.add("§6Effect:§e Regeneration 2");
         lore.add("§6Effect:§e Resistance 1");
-        lore.add("§6Duration:§e 1 minute");
+        lore.add("§6Duration:§e 15 seconds");
         meta.setLore(lore);
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);

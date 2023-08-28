@@ -35,8 +35,6 @@ public class giveitem implements CommandExecutor{
             sender.sendMessage(ChatColor.RED + "Use /giveitem <player> <item>");
             return true;
         }
-        Bukkit.getLogger().info(args[0]);
-
         Player player = Bukkit.getPlayer(args[0]);
         if (player == null) {
             sender.sendMessage(ChatColor.RED + "That player is not online\nUse /giveitem <player> <item>");

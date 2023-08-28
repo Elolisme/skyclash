@@ -36,21 +36,21 @@ public class setchest implements CommandExecutor {
 
         switch (args[0]) {
             case "add":
-                if (!(targetBlock.getState() instanceof Chest)) {
+                if (!(targetBlock.getState() instanceof Chest) && targetBlock.getType() != Material.ENDER_CHEST) {
                     player.sendMessage("§cPlease look at a chest while performing this command!");
                     return true;
                 }
-                addMap(player, targetBlock);
+                addChest(player, targetBlock);
                 break;
             case "remove":
                 if (!(targetBlock.getState() instanceof Chest)) {
                     player.sendMessage("§cPlease look at a chest while performing this command!");
                     return true;
                 }
-                removeMap(player, targetBlock);
+                removeChest(player, targetBlock);
                 break;
             case "list":
-                listMaps(player);
+                listChests(player);
                 break;
         }
 
@@ -58,7 +58,7 @@ public class setchest implements CommandExecutor {
         return true;
     }
 
-    private void addMap(Player player, Block block) {
+    private void addChest(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
         maps.read_file(false, false);
@@ -87,7 +87,7 @@ public class setchest implements CommandExecutor {
         maps.write_file();
     }
 
-    private void removeMap(Player player, Block block) {
+    private void removeChest(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
         maps.read_file(false, false);
@@ -114,7 +114,7 @@ public class setchest implements CommandExecutor {
         maps.write_file();
     }
 
-    private void listMaps(Player player) {
+    private void listChests(Player player) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
         maps.read_file(false, false);

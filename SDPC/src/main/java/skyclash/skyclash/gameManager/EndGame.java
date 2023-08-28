@@ -4,16 +4,16 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.kitscards.RemoveTags;
+import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,7 +27,7 @@ public class EndGame {
         if (!isCommand) {
             // check for winner
             main.playerStatus.forEach((key, value) -> {
-                if (value.equals("gameManager")) {
+                if (value.equals("ingame")) {
                     winner.set(key);
                 }
             });
@@ -60,37 +60,33 @@ public class EndGame {
 
         // loop for every player
         main.playerStatus.forEach((key, value) -> {
-            if (value.equals("spectator") ^ value.equals("gameManager")) {
+            if (value.equals("spectator") ^ value.equals("ingame")) {
                 Player player = Bukkit.getServer().getPlayer(key);
                 if (isCommand) {
                     player.sendMessage("The game has abruptly ended");
                 } else {
                     player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
+                    player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
                 }
                 player.setScoreboard(Clock.emptyboard);
                 player.getInventory().clear();
-                player.getEquipment().clear();
+                player.getInventory().setHelmet(new ItemStack(Material.AIR));
+                player.getInventory().setChestplate(new ItemStack(Material.AIR));
+                player.getInventory().setLeggings(new ItemStack(Material.AIR));
+                player.getInventory().setBoots(new ItemStack(Material.AIR));
                 player.setGameMode(GameMode.ADVENTURE);
+                for (PotionEffect effect : player.getActivePotionEffects())
+                    player.removePotionEffect(effect.getType());
                 player.setHealth(20);
                 player.setSaturation(20);
                 main.playerStatus.put(player.getName(), "lobby");
                 main.playerVote.remove(player.getName());
-
-                // give item
-                ItemStack item = new ItemStack(Material.NETHER_STAR);
-                ItemMeta meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Skyclash Menu");
-                    List<String> lore = new ArrayList<>();
-                    lore.add("Click to access the menu");
-                    meta.setLore(lore);
-                    item.setItemMeta(meta);
-                }
-                player.getInventory().setItem(8, item);
+                LobbyControls.GiveItem(player);
                 if (player.hasMetadata("NoMovement")) {
                     player.removeMetadata("NoMovement", main.getPlugin(main.class));
                 }
                 player.teleport(spawnloc);
+                new RemoveTags(player);
             }
         });
         String ingamemap = main.mvcore.getMVWorldManager().getMVWorld("ingame_map").getName();
@@ -100,7 +96,6 @@ public class EndGame {
         }
         main.isGameActive = false;
         Clock.playersLeft = 0;
-
-
+        Clock.timer = 0;
     }
 }

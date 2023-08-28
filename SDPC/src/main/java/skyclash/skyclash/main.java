@@ -4,12 +4,13 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
 import skyclash.skyclash.customitems.CustomItems;
 import skyclash.skyclash.gameManager.InGame;
 import skyclash.skyclash.gameManager.PlayerDC;
 import skyclash.skyclash.gameManager.PlayerDeath;
-import skyclash.skyclash.kitscards.KitAbilities;
+import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.InMenu;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.lobby.OpenMenuItem;
@@ -36,7 +37,8 @@ public class main extends JavaPlugin {
         new CustomItems(this);
         new PlayerDC(this);
         new PlayerDeath(this);
-        new KitAbilities(this);
+        new Abilities(this);
+        new OpenEChest(this);
         new Clock();
 
         // commands
@@ -52,17 +54,26 @@ public class main extends JavaPlugin {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
 
         /* # LOGS
-        Changes:
-        - made maps start with correct settings
-        - fixed giveitem command
-        - fixed custom items not working? idk either
-        - changed /startgame to start in 5 seconds, as opposed to 30
-        - battle map does not spawn mobs, set to day on start
-        - added /setchest [add|remove|list] command
-        - added /gamespawn [add|remove|list] command as well
+        Changes 1.1.3:
+        - actaully removed tags from players at start and end of game
+        - fixed players being able to hit each other in lobby
+        - nerfs: swordsman strength level to 1 (from 2)
+                 assassin now gets 1 pearl and invis pot (from 2 each)
+                 beserker pots are 15 seconds (from 60)
+                 beserker pots are regen 2, resistance 1 (from 3, 2)
+        - fixed dc's
+        - fixed armour clearing
+        - fixed effect clearing
+        - fixed spectators dcing
+        - fixed startgame not working sometimes due to offline players being ready
+        - fixed /lobby for deopped players
+
 
         Todo:
-        - Add ender chest loot (ChestManager)
+        - make setchest list show locations that have no chests
+        - add setchest wand item
+        - add enchants to chest items
+        - add pearl cooldown
         */
     }
 

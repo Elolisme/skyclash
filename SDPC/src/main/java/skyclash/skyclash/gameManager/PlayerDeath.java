@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffect;
 import skyclash.skyclash.Clock;
+import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 
 public class PlayerDeath implements Listener {
@@ -19,11 +21,7 @@ public class PlayerDeath implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if (!main.playerStatus.containsKey(player.getName())) {
-            main.playerStatus.put(player.getName(), "lobby");
-        }
-
-        if (!main.playerStatus.get(player.getName()).equals("gameManager")) {
+        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
             return;
         }
         // code
@@ -40,9 +38,11 @@ public class PlayerDeath implements Listener {
             }
         }, 2);
         player.getInventory().clear();
+        for (PotionEffect effect : player.getActivePotionEffects())
+            player.removePotionEffect(effect.getType());
         Clock.playersLeft--;
         player.sendMessage(ChatColor.RED+"Better luck next time");
-
+        new RemoveTags(player);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
             if (Clock.playersLeft <= 1) {

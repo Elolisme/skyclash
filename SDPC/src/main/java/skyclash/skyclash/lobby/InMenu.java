@@ -279,7 +279,7 @@ public class InMenu implements Listener {
 
     }
 
-    public void CheckStartGame(boolean started) {
+    public static void CheckStartGame(boolean started) {
         AtomicInteger people_ready = new AtomicInteger(0);
         main.playerStatus.forEach((key, value) -> {
             if (value.equals("ready")) {
