@@ -133,7 +133,6 @@ public class InMenu implements Listener {
 
             // open kits
             else if (event.getSlot() == 5) {
-                // TODO add kits
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Kit Selection");
 
                 // item 1
@@ -172,7 +171,6 @@ public class InMenu implements Listener {
 
             // open cards
             else if (event.getSlot() == 7) {
-                // TODO add cards
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Card Selection");
 
                 // item 1
