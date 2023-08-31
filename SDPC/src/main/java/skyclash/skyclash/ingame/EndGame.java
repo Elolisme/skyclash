@@ -73,6 +73,8 @@ public class EndGame {
                 player.setGameMode(GameMode.ADVENTURE);
                 player.setHealth(20);
                 player.setSaturation(20);
+                player.setExp(0);
+                player.setLevel(0);
                 main.playerStatus.put(player.getName(), "lobby");
                 main.playerVote.remove(player.getName());
 

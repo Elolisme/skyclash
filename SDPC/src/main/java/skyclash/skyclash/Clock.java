@@ -13,6 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.chestgen.ChestManager;
 import skyclash.skyclash.chestgen.StringToJSON;
+import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.gameManager.EndGame;
 
@@ -61,7 +62,7 @@ public class Clock {
     }
 
     void Tick() {
-
+        Cooldown.handleCooldowns();
     }
     void Second() {
         List<World> world = Bukkit.getWorlds();
