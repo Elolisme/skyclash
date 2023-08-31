@@ -147,6 +147,8 @@ public class StartGame {
                     player.getInventory().clear();
                     player.setHealth(20);
                     player.setSaturation(20);
+                    player.setExp(0);
+                    player.setLevel(0);
                     player.setMetadata("NoMovement", new FixedMetadataValue(main.getPlugin(main.class), "1"));
                     player.sendMessage("You will be sent to play soon");
                     main.playerStatus.put(player.getName(), "ingame");

@@ -1,6 +1,7 @@
 package skyclash.skyclash.fileIO;
 
 import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,7 +17,7 @@ public class DataFiles {
     private PlayerData data;
     public DataFiles(Player player) {
         this.player = player;
-        this.data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false);
+        this.data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, new JSONArray(), 0);
         LoadData();
     }
     public void SetData(PlayerData data) {
@@ -52,6 +53,8 @@ public class DataFiles {
         jsondata.put("card", data.Card);
         jsondata.put("kit", data.Kit);
         jsondata.put("hasJoined", data.hasJoined);
+        jsondata.put("stats", data.Stats);
+        jsondata.put("coins", data.Coins);
 
         try {
             @SuppressWarnings("resource") FileWriter file = new FileWriter(path);
@@ -68,7 +71,7 @@ public class DataFiles {
         try {
             if (!(new File(path).exists())) {
                 CreateFile();
-                return new PlayerData(player.getName(), "Damage Potion", "Swordsman", false);
+                return new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, new JSONArray(), 0);
             }
             Object p = parser.parse(new FileReader(path));
             JSONObject jsonObject =(JSONObject) p;
@@ -76,7 +79,10 @@ public class DataFiles {
             String card = (String) jsonObject.get("card");
             String kit = (String) jsonObject.get("kit");
             boolean hasJoined = (boolean) jsonObject.get("hasJoined");
-            return new PlayerData(name, card, kit, hasJoined);
+            JSONArray stats = (JSONArray) jsonObject.get("stats");
+            Long coins = (Long) jsonObject.get("coins");
+            int coins2 = Math.toIntExact(coins);
+            return new PlayerData(name, card, kit, hasJoined, stats, coins2);
 
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);

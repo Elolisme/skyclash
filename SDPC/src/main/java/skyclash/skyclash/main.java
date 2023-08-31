@@ -54,26 +54,23 @@ public class main extends JavaPlugin {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
 
         /* # LOGS
-        Changes 1.1.3:
-        - actaully removed tags from players at start and end of game
-        - fixed players being able to hit each other in lobby
-        - nerfs: swordsman strength level to 1 (from 2)
-                 assassin now gets 1 pearl and invis pot (from 2 each)
-                 beserker pots are 15 seconds (from 60)
-                 beserker pots are regen 2, resistance 1 (from 3, 2)
-        - fixed dc's
-        - fixed armour clearing
-        - fixed effect clearing
-        - fixed spectators dcing
-        - fixed startgame not working sometimes due to offline players being ready
-        - fixed /lobby for deopped players
-
+        Changes 1.2.0:
+        - added swordsman true damage every 10 seconds and beserker resistance on low health (5) passives
+        - made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
 
         Todo:
         - make setchest list show locations that have no chests
         - add setchest wand item
         - add enchants to chest items
         - add pearl cooldown
+        - add kdr and lifetime stats, half done
+        - TEST xp clearing
+        - TEST being able to hit each other in lobby
+        - add flint and steel in loot
+
+        ideas:
+        - grace period
+        - chest autocollect
         */
     }
 
