@@ -57,20 +57,17 @@ public class main extends JavaPlugin {
         Changes 1.2.0:
         - added swordsman true damage every 10 seconds and beserker resistance on low health (5) passives
         - made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
+        - made bigger bangs spawn with flint and steel and 2 tnt
+        - fixed xp clearing
+        - fixed players being able to hit each other maybe
+        - added grace period of 5 seconds
+        - make setchest list show locations that have no chests
 
         Todo:
-        - make setchest list show locations that have no chests
         - add setchest wand item
         - add enchants to chest items
         - add pearl cooldown
         - add kdr and lifetime stats, half done
-        - TEST xp clearing
-        - TEST being able to hit each other in lobby
-        - add flint and steel in loot
-
-        ideas:
-        - grace period
-        - chest autocollect
         */
     }
 

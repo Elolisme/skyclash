@@ -33,6 +33,11 @@ public class Cards {
         }
         if (this.card.equals("Bigger Bangs")) {
             player.setMetadata("Bigger Bangs", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            ItemStack item1 = new ItemStack(Material.FLINT_AND_STEEL);
+            this.player.getInventory().addItem(item1);
+            item1 = new ItemStack(Material.TNT);
+            item1.setAmount(2);
+            this.player.getInventory().addItem(item1);
 
         }
         if (this.card.equals("Damage Potion")) {

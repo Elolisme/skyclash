@@ -79,6 +79,8 @@ public class EndGame {
                     player.removePotionEffect(effect.getType());
                 player.setHealth(20);
                 player.setSaturation(20);
+                player.setLevel(0);
+                player.setExp(0);
                 main.playerStatus.put(player.getName(), "lobby");
                 main.playerVote.remove(player.getName());
                 LobbyControls.GiveItem(player);

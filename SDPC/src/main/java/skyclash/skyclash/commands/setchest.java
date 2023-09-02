@@ -123,7 +123,16 @@ public class setchest implements CommandExecutor {
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");
         chestsarray.forEach((loc) -> {
             JSONArray array = (JSONArray) loc;
-            player.sendMessage(ChatColor.YELLOW+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2));
+            int x = (int) array.get(1);
+            int y = (int) array.get(1);
+            int z = (int) array.get(1);
+            Block worldBlock = player.getWorld().getBlockAt(x, y, z);
+            if (worldBlock.getState() instanceof Chest && worldBlock.getType() != Material.ENDER_CHEST) {
+                player.sendMessage(ChatColor.YELLOW+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2));
+            } else {
+                player.sendMessage(ChatColor.RED+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2)+"     No chest at these coords");
+            }
+            
         });
     }
 }

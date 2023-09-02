@@ -4,11 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -73,11 +72,8 @@ public class LobbyControls implements Listener {
     }
 
     @EventHandler
-    public  void onDamagePlayer(EntityDamageEvent event) {
-        if (event.getEntity().getType() != EntityType.PLAYER) {
-            return;
-        }
-        if (!event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+    public  void onHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
         Player player = (Player) event.getEntity();

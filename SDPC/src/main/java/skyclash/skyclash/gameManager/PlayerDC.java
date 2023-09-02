@@ -79,6 +79,8 @@ public class PlayerDC implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
+        player.setLevel(0);
+        player.setExp(0);
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
         main.playerStatus.put(player.getName(), "lobby");

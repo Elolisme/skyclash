@@ -5,6 +5,8 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONArray;
@@ -158,6 +160,8 @@ public class StartGame {
                     player.getInventory().clear();
                     player.setHealth(20);
                     player.setSaturation(20);
+                    player.setLevel(0);
+                    player.setExp(0);
                     player.setMetadata("NoMovement", new FixedMetadataValue(main.getPlugin(main.class), "1"));
                     player.sendMessage("You will be sent to play soon");
                     new RemoveTags(player);
@@ -212,6 +216,7 @@ public class StartGame {
                         Kits kit1 = new Kits(data.Kit, player);
                         kit1.GiveKit();
                         Cards card1 = new Cards(data.Card, player);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 254, true));
                         card1.GiveCard();
                         player.setScoreboard(Clock.board);
                         player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.9f);
