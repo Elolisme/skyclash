@@ -1,2 +1,5 @@
 SDPC/pom.xml
 .vscode/*
+SDPC/target/classes/*
+SDPC/target/maven-archiver/*
+SDPC/target/maven-status/*
