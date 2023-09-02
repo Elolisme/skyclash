@@ -4,6 +4,8 @@ Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
 
 ### How To Install
 **TODO**
+You need to install the multiverse plugin, this is dependant on that
+You optionally would want VoidWorld plugin to generate new void worlds for new maps
 ***
 
 ## Skyclash's Drug Pollinated Code Plugin
