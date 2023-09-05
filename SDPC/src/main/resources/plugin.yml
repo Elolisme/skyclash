@@ -20,7 +20,7 @@ commands:
   endgame:
     description: manually end a game
     usage: /endgame
-    aliases: [abort, end_game, shank]
+    aliases: [abort, end_game]
     permission: sgm.host
   lootchest:
     description: set loot in chests

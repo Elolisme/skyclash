@@ -39,6 +39,8 @@ public class PlayerDC implements Listener {
     private void ingame(Player player) {
         Clock.playersLeft--;
         Bukkit.broadcastMessage(ChatColor.RED+player.getName()+" has died due to disconnecting");
+        
+        StatsManager.changeStat(player, "deaths", 1);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
             if (Clock.playersLeft <= 1) {

@@ -25,6 +25,9 @@ public class PlayerDeath implements Listener {
             return;
         }
         // code
+        
+        StatsManager.changeStat(player, "deaths", 1);
+
         main.playerStatus.put(player.getName(), "spectator");
         player.setGameMode(GameMode.SPECTATOR);
         Location loc = event.getEntity().getLocation();

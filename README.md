@@ -19,7 +19,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 /giveitem <player> <item> | /customitem <player> <item>
 - lets you get custom items from this plugin
 
-/endgame | /abort | /shank
+/endgame | /abort
 - Ends the currently running game
 
 /lootchest <name>
@@ -70,6 +70,9 @@ The plugin will take chest loot from a folder called ```<root>/LootChests/..```,
 <br>
 There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile...
 
+#### Lifetime Statistics
+**TODO**
+
 ### Voting System
 Click into menu, then vote
 <br>
@@ -97,6 +100,8 @@ Click the wool again to unready yourself, this will cancel the game if 2 players
 
 ### Chest Loot system
 **TODO**
+https://github.com/Veraimt/CustomLootChest
+- mostly taken from here, but modified for skyclash
 
 ### Custom Weapons
 Get weapons by using the command 
@@ -127,15 +132,34 @@ Example:
 # TODO
 Soon
 - Finish readme
-- add nbt to chest loot
+- add enchants to chest loot
 - improve setchest for convenience
+  - setchest wand
+- pearl cooldown
+- display stats and coins
 
 Future
 - Add more kits and cards
 - Upgrade kit and card system
 
-
 # Changelog
+
+## v1.2.0
+Kits:
+- added swordsman true damage every 10 seconds 
+- added beserker resistance on low health (2.5 hearts) passives
+- made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
+- made bigger bangs spawn with flint and steel and 2 tnt
+
+Code:
+- fixed xp clearing
+- fixed players being able to hit each other maybe
+- added grace period of 5 seconds
+- make setchest list show locations that have no chests
+- added lifetime stats - kills, deaths, wins, games, join amount,
+
+GitHub:
+- accidentally spammed some commits
 
 ## v1.1.3
 Code:

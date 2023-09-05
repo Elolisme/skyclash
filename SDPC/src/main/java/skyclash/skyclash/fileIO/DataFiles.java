@@ -1,7 +1,6 @@
 package skyclash.skyclash.fileIO;
 
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,14 +11,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@SuppressWarnings("unchecked")
 public class DataFiles {
     private final Player player;
     private PlayerData data;
+
     public DataFiles(Player player) {
         this.player = player;
-        this.data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, new JSONArray(), 0);
-        LoadData();
+        this.data = LoadData();
     }
+    
     public void SetData(PlayerData data) {
         this.data = data;
         SaveData();
@@ -45,7 +46,6 @@ public class DataFiles {
         }
 
     }
-    @SuppressWarnings("unchecked")
     public void SaveData() {
         String path = "players"+File.separator+player.getName()+".json";
         JSONObject jsondata = new JSONObject();
@@ -70,8 +70,15 @@ public class DataFiles {
         JSONParser parser = new JSONParser();
         try {
             if (!(new File(path).exists())) {
+                JSONObject arr = new JSONObject();
+                arr.put("kills", 0);
+                arr.put("deaths", 0);
+                arr.put("wins", 0);
+                arr.put("total_games", 0);
+                arr.put("joins", 0);
+                data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, arr, 0);
                 CreateFile();
-                return new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, new JSONArray(), 0);
+                return data;
             }
             Object p = parser.parse(new FileReader(path));
             JSONObject jsonObject =(JSONObject) p;
@@ -79,7 +86,7 @@ public class DataFiles {
             String card = (String) jsonObject.get("card");
             String kit = (String) jsonObject.get("kit");
             boolean hasJoined = (boolean) jsonObject.get("hasJoined");
-            JSONArray stats = (JSONArray) jsonObject.get("stats");
+            JSONObject stats = (JSONObject) jsonObject.get("stats");
             Long coins = (Long) jsonObject.get("coins");
             int coins2 = Math.toIntExact(coins);
             return new PlayerData(name, card, kit, hasJoined, stats, coins2);

@@ -29,6 +29,9 @@ public class EndGame {
             main.playerStatus.forEach((key, value) -> {
                 if (value.equals("ingame")) {
                     winner.set(key);
+                    Player winr = Bukkit.getPlayer(key);
+                    StatsManager.changeStat(winr, "wins", 1);
+                    StatsManager.changeStat(winr, "coins", 50);
                 }
             });
         }
@@ -67,6 +70,7 @@ public class EndGame {
                 } else {
                     player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
                     player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+                    StatsManager.changeStat(player, "total_games", 1);
                 }
                 player.setScoreboard(Clock.emptyboard);
                 player.getInventory().clear();

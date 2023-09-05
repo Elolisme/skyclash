@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.fileIO.DataFiles;
+import skyclash.skyclash.gameManager.StatsManager;
 import skyclash.skyclash.kitscards.PlayerData;
 import skyclash.skyclash.main;
 
@@ -56,6 +57,8 @@ public class LobbyControls implements Listener {
         if (main.playerStatus.get(player.getName()).equals("lobby") && player.getGameMode() != GameMode.CREATIVE) {
             GiveItem(player);
         }
+
+        StatsManager.changeStat(player, "joins", 1);
     }
 
     @EventHandler
