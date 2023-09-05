@@ -1,15 +1,18 @@
 # Skyclash
 
-![image](https://github.com/Elolisme/skyclash/assets/118145727/3cdf733c-1466-443a-b4c2-d79f054c57db)
-
-Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
+<div align="center">
+    <img src="https://github.com/Elolisme/skyclash/assets/118145727/3cdf733c-1466-443a-b4c2-d79f054c57db" style="height:auto;width:60%"/>
+    <br>
+    <br>
+    <strong>Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"</strong>
+</div>
 
 ## Resources for development
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
-- docs for cards + maps
+- Docs for cards + maps
 
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
-- spreadsheet of kits
+- Spreadsheet of kits
 
 https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
 - Forced labour completely in vain
