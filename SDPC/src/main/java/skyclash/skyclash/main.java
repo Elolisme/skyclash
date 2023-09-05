@@ -57,6 +57,7 @@ public class main extends JavaPlugin {
     @Override
     public void onDisable() {
         Clock.End();
+        
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"Closing SDPC");
     }
 }

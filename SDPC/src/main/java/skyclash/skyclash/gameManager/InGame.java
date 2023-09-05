@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+
+import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.main;
 
 public class InGame implements Listener {
@@ -27,15 +29,23 @@ public class InGame implements Listener {
 
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
-        if (event.getEntity() instanceof Player) {
-            if (event.getEntity().getKiller() instanceof Player) {
-                Player player = event.getEntity().getKiller();
-                if (main.playerStatus.get(player.getName()).equals("ingame")) {
-                    player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 1);
-                    StatsManager.changeStat(player, "kills", 1);
-                    StatsManager.changeStat(player, "coins", 1);
-                }
-            }
+        if (!(event.getEntity() instanceof Player)) {
+            return;
         }
+        if (!(event.getEntity().getKiller() instanceof Player)) {
+            return;
+        }
+        Player killer = event.getEntity().getKiller();
+        if (!main.playerStatus.get(killer.getName()).equals("ingame")) {
+            return;
+        }
+        if (event.getEntity().getName() == killer.getName()) {
+            killer.sendMessage(ChatColor.YELLOW+"You killed yourself! Kill credit revoked");
+            return;
+        }
+
+        killer.playSound(killer.getLocation(), Sound.WITHER_DEATH, 1, 1.3f);
+        StatsManager.changeStat(killer, "kills", 1);
+        StatsManager.changeStat(killer, "coins", 10);
     }
 }
