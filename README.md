@@ -1,5 +1,11 @@
 # Skyclash
-Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
+
+<p align="center">
+<img src="https://media.discordapp.net/attachments/695046835898679296/1124609227005120563/SKYCLASH.gif?width=622&height=347" style="height: auto; width: 70%"/>
+</p>
+
+<div align="center">Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
+</div>
 
 ## Resources for development
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
@@ -7,6 +13,9 @@ https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY7
 
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
 - spreadsheet of kits
+
+https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
+- Forced labour completely in vain
 
 ## How To Install
 **TODO**
@@ -79,7 +88,7 @@ Cards
 - Creeper
 - Damage Potion
 
-### Saving Player, World, and Chest Loot data
+### Saving Player, World
 When you log in, your data is saved to a file in ```<Root folder>/Players/<username>.json```
 <br>
 Whenever the game needs it, it will read from those files
@@ -88,9 +97,14 @@ Also, SDPC will save all multiverse worlds to a JSON in ```<root>/plugins/maps.j
 <br>
 You can change the icon of a world (icon:material), whether its a playable map (ignore:boolean), and where chests/spawnpoints are.
 
+### Chest Loot
 The plugin will take chest loot from a folder called ```<root>/LootChests/..```, where loot tables is stored
 <br>
 There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile...
+
+<img src="https://media.discordapp.net/attachments/1124653076205281440/1139865042397970502/image.png?width=477&height=217" />
+
+<img src="https://media.discordapp.net/attachments/1124653076205281440/1139866651060338698/image.png?width=466&height=201"/>
 
 ### Lifetime Statistics
 The current statistics saved for each player are:
@@ -184,7 +198,9 @@ Future
 Kits:
 - added swordsman true damage every 10 seconds 
 - added beserker resistance on low health (2.5 hearts) passives
-- made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
+- made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius<br><br>
+<img src="https://media.discordapp.net/attachments/1124653076205281440/1146360931673186385/image.png?width=1183&height=657" style="height:auto;width:60%"/>
+
 - made bigger bangs spawn with flint and steel and 2 tnt
 
 Code:
