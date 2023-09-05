@@ -1,11 +1,8 @@
 # Skyclash
 
-<p align="center">
-<img src="https://media.discordapp.net/attachments/695046835898679296/1124609227005120563/SKYCLASH.gif?width=622&height=347" style="height: auto; width: 70%"/>
-</p>
+![image](https://github.com/Elolisme/skyclash/assets/118145727/3cdf733c-1466-443a-b4c2-d79f054c57db)
 
-<div align="center">Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
-</div>
+Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"
 
 ## Resources for development
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
