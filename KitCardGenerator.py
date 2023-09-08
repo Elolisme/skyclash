@@ -4,10 +4,10 @@ def inp(type):
     if user:
         enchant = input("Enchantment (eg: protection 2): ").split(" ")
         code = ""
-        code = code + f"\n    ItemStack item1 = new ItemStack(Material.{user.upper()});"
+        code = code + f"\n    ItemStack item;\n    item1 = new ItemStack(Material.{user.upper()});"
         if enchant[0]:
             code = code + f"\n    item1.addEnchantment(Enchantment.{enchant[0].upper()}, {enchant[1]}); // CHECK ENCHANT"
-        code = code + f"\n    this.player.getInventory().setHelmet(item1);"
+        code = code + f"\n    this.player.getInventory().set{type.title()}(item1);"
         return code
     else:
         return ""
@@ -15,13 +15,12 @@ def inp(type):
 code = ""
 code2 = ""
 enchant = [""]
-print("Please answer questions, or leave blank and press enter to choose nothing\nAll kits can be found here:\n    https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing \n    (Please do master level kits for now)")
+print("Please answer questions, or leave blank and press enter to choose nothing\nAll kits can be found here:\n    https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing \n    (Please do level 1 kits for now)")
 name = input("Kit name (eg: Swordsman): ")
 code = code + f"public void {name}() {{"
 
 icon = input("Item for icon of kit: ")
-iconname = input("Name of icon: ")
-code2 = code2 + f"ItemStack item3 = new ItemStack(Material.{icon.upper});\nitem3.setAmount(1);\nItemMeta meta3 = item3.getItemMeta();\nif (meta3 != null) {{\n    meta3.setDisplayName(ChatColor.RED + \"{name}\");\n    item3.setItemMeta(meta3);\n}}\ninventory.setItem(2, item3);"
+code2 = code2 + f"item = new ItemStack(Material.{icon.upper()});\nitem.setAmount(1);\meta = item.getItemMeta();\nif (meta != null) {{\n    meta.setDisplayName(ChatColor.RED + \"{name}\");\n    item.setItemMeta(meta);\n}}\ninventory.setItem(2, item);"
 # armour
 code = code + inp("helmet")
 code = code + inp("chestplate")
@@ -46,12 +45,12 @@ while item != "":
     item = input("Other items: ")
 buff = input("Describe buff shortly: ")
 notes = input("Any final notes or questions: ")
-code = code + f"\n    player.setMetadata(\"{name}\", new FixedMetadataValue(main.getPlugin(main.class), \"kit\"));\n}}"
+code = code + f"\n    this.player.setMetadata(\"{name}\", new FixedMetadataValue(main.getPlugin(main.class), \"kit\"));\n}}"
 code = code + f"\n// Buff: {buff}\n// {notes}"
 
-print(f"\nHere is the code:\n<--------Kits.java------------>\n")
+print(f"\nHere is the code:\n<--------kitscards/Kits.java------------>\n")
 print(code + f"\n\n<----------------------->")
 
-print(f"\n<-----------lobby.java----------->")
+print(f"\n<-----------lobby/inMenu.java----------->")
 print(code2+"\n<---------------------->")
 input(" ")

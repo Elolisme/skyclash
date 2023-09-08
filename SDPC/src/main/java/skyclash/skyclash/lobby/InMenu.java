@@ -135,33 +135,70 @@ public class InMenu implements Listener {
             else if (event.getSlot() == 5) {
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Kit Selection");
 
-                // item 1
-                ItemStack item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
-                ItemMeta meta = item.getItemMeta();
+                ItemStack item;
+                ItemMeta meta;
+
+                item = new ItemStack(Material.BOW);
+                item.setAmount(1);
+                meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.GRAY + "Assassin");
+                    meta.setDisplayName(ChatColor.RED + "Archer");
                     item.setItemMeta(meta);
                 }
                 inventory.setItem(0, item);
 
-                // item 2
-                ItemStack item2 = new Potion(PotionType.STRENGTH).toItemStack(1);
-                ItemMeta meta2 = item.getItemMeta();
-                if (meta2 != null) {
-                    meta2.setDisplayName(ChatColor.RED + "Beserker");
-                    item2.setItemMeta(meta2);
+                item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.GRAY + "Assassin");
+                    item.setItemMeta(meta);
                 }
-                inventory.setItem(1, item2);
+                inventory.setItem(1, item);
 
-                // item 3
-                ItemStack item3 = new ItemStack(Material.IRON_SWORD);
-                item3.setAmount(1);
-                ItemMeta meta3 = item3.getItemMeta();
-                if (meta3 != null) {
-                    meta3.setDisplayName(ChatColor.RED + "Swordsman");
-                    item3.setItemMeta(meta3);
+                item = new Potion(PotionType.STRENGTH).toItemStack(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Beserker");
+                    item.setItemMeta(meta);
                 }
-                inventory.setItem(2, item3);
+                inventory.setItem(2, item);
+
+                item = new ItemStack(Material.GOLDEN_APPLE);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Cleric");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(3, item);
+
+                item = new ItemStack(Material.SNOW_BALL);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Frost_Knight");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(4, item);
+
+                item = new ItemStack(Material.IRON_CHESTPLATE);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Guardian");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(5, item);
+
+                // swordsman
+                item = new ItemStack(Material.IRON_SWORD);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Swordsman");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(6, item);
 
 
                 player.openInventory(inventory);
@@ -173,10 +210,13 @@ public class InMenu implements Listener {
             else if (event.getSlot() == 7) {
                 Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Card Selection");
 
+                ItemStack item;
+                ItemMeta meta;
+
                 // item 1
-                ItemStack item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
+                item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
                 item.setAmount(1);
-                ItemMeta meta = item.getItemMeta();
+                meta = item.getItemMeta();
                 if (meta != null) {
                     meta.setDisplayName(ChatColor.GREEN + "Creeper");
                     item.setItemMeta(meta);
@@ -184,24 +224,24 @@ public class InMenu implements Listener {
                 inventory.setItem(0, item);
 
                 // item 2
-                ItemStack item2 = new ItemStack(Material.TNT);
-                item2.setAmount(1);
-                ItemMeta meta2 = item.getItemMeta();
-                if (meta2 != null) {
-                    meta2.setDisplayName(ChatColor.RED + "Bigger Bangs");
-                    item2.setItemMeta(meta2);
+                item = new ItemStack(Material.TNT);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Bigger Bangs");
+                    item.setItemMeta(meta);
                 }
-                inventory.setItem(1, item2);
+                inventory.setItem(1, item);
 
                 // item 3
-                ItemStack item3 = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
-                item3.setAmount(1);
-                ItemMeta meta3 = item.getItemMeta();
-                if (meta3 != null) {
-                    meta3.setDisplayName(ChatColor.RED + "Damage Potion");
-                    item3.setItemMeta(meta3);
+                item = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Damage Potion");
+                    item.setItemMeta(meta);
                 }
-                inventory.setItem(2, item3);
+                inventory.setItem(2, item);
 
                 player.openInventory(inventory);
                 player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.getPlugin(main.class), "Card Selection"));

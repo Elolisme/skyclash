@@ -34,6 +34,8 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
     Create a new empty world
 ```
 
+
+
 ### Preferable settings for a new world:
 - set the world ~ y=64 high up
 - use /mv modify set monsters false to turn of mob spawns
@@ -56,7 +58,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 - Ends the currently running game
 
 /lootchest <name>
-- makes a loot table file in ```<root>/LootChestst/..``` from the current chest you are looking at
+- makes a loot table file in `<root>/LootChestst/..` from the current chest you are looking at
 
 /lobby | /home | /hub
 - send you to the first spawn point of the default world
@@ -89,16 +91,16 @@ Cards
 - Damage Potion
 
 ### Saving Player, World
-When you log in, your data is saved to a file in ```<Root folder>/Players/<username>.json```
+When you log in, your data is saved to a file in `<Root folder>/Players/<username>.json`
 <br>
 Whenever the game needs it, it will read from those files
 
-Also, SDPC will save all multiverse worlds to a JSON in ```<root>/plugins/maps.json``` which has settings for each world, which automatically update for new worlds. You can manually edit any setting realtime.
+Also, SDPC will save all multiverse worlds to a JSON in `<root>/plugins/maps.json` which has settings for each world, which automatically update for new worlds. You can manually edit any setting realtime.
 <br>
 You can change the icon of a world (icon:material), whether its a playable map (ignore:boolean), and where chests/spawnpoints are.
 
 ### Chest Loot
-The plugin will take chest loot from a folder called ```<root>/LootChests/..```, where loot tables is stored
+The plugin will take chest loot from a folder called `<root>/LootChests/..`, where loot tables is stored
 <br>
 There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile...
 
@@ -193,6 +195,20 @@ Future
 - Upgrade kit and card system
 
 # Changelog
+
+## v1.3.0
+Kits:
+- changed all kits to be from level 0 now (basically nerfed everything, kept enchants tho)
+- Added archer, 50% for their arrows to home on targets
+- Added Cleric, healer build with higher passive regeneration
+- Added Frost Knight, snowball hits on players give speed to them and slow down opponents
+- Added Guardian, Gets resistance on low health
+- Changed beserker to get regeneration instead of resistance on low health
+
+4 more kits to go! (and a lot of cards :| )
+
+Code:
+- Fixed everything in the kitgenerator python script (except misinput for enchants), should work much better for generating all other kits and cards kindof
 
 ## v1.2.0
 Kits:

@@ -10,6 +10,10 @@ public class RemoveTags {
         player.removeMetadata("Assassin", p);
         player.removeMetadata("Swordsman", p);
         player.removeMetadata("Beserker", p);
+        player.removeMetadata("Archer", p);
+        player.removeMetadata("Frost_Knight", p);
+        player.removeMetadata("Cleric", p);
+        player.removeMetadata("Guardian", p);
         player.removeMetadata("Bigger Bangs", p);
     }
 }
