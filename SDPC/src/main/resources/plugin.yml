@@ -34,12 +34,14 @@ commands:
     permission: sgm.lobby
   setchest:
     description: add or remove chest location from world
-    usage: /setchest [add|remove|list]
+    usage: /chests [add|remove|list|scan] <radius> <add chests found>
     permission: sgm.host
+    aliases: [chests, chest]
   gamespawn:
     description: add or remove spawn points for when games start
-    usage: /gamespawn [add|remove|list]
+    usage: /spawns [add|remove|list]
     permission: sgm.host
+    aliases: [spawns, spawn]
 
 permissions:
   sgm.lobby:

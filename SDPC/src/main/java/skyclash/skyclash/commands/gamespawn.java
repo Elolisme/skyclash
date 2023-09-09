@@ -29,7 +29,7 @@ public class gamespawn implements CommandExecutor {
         Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
 
         if (args.length == 0 ^ args.length > 1) {
-            player.sendMessage("§cPlease specify the correct arguments\nUse /gamespawn [add|remove|list]");
+            player.sendMessage("§cPlease specify the correct arguments\nUse /spawn [add|remove|list]");
             return true;
         }
 

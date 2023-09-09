@@ -45,31 +45,36 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 
 ## Skyclash's Drug Pollinated Code Plugin
 ### Commands
-/setvotes <map index> <votes>
+`/setvotes <map index> <votes>`
 - Used to change votes for a map for admins
 
-/startgame
+`/startgame`
 - Start the game earlier (5 seconds), may result in 0 player games where u need to /endgame
 
-/giveitem <player> <item> | /customitem <player> <item>
+`/giveitem <player> <item> | /customitem <player> <item>`
 - lets you get custom items from this plugin
 
-/endgame | /abort
+`/endgame | /abort`
 - Ends the currently running game
 
-/lootchest <name>
+`/lootchest <name>`
 - makes a loot table file in `<root>/LootChestst/..` from the current chest you are looking at
 
-/lobby | /home | /hub
+`/lobby | /home | /hub`
 - send you to the first spawn point of the default world
 
-/setchest [add|remove|list]
+`/chest [add|remove|list|scan] <radius> <add chests found>` | /setchest
 - lets you add/remove a chest in a world where loot will spawn, once a game starts on that world
 - Takes the current chest you are looking at in a specific world
 - This technically just edits maps.json, so you can manually input coords in the file
-- /setchest list will just list coords already set in the world
+- /chest list will just list coords already set in the world
+- Example: 
+```
+/chest scan 10 true
+- Finds chests/enderchests in a 20x20x20 around player and adds them to maps.json
+```
 
-/gamespawn [add|remove|list]
+`/spawn [add|remove|list] | /gamespawn`
 - adds a spawnpoint for when games run, wher players start out at
 - look at block under spawn to set it as one, and use list to show already set coords
 - this also modifies maps.json similarly to /setchest
@@ -195,6 +200,14 @@ Future
 - Upgrade kit and card system
 
 # Changelog
+
+## v1.3.1
+Code:
+- You can now use `/chest | /chests` instead of /setchests
+- NEW COMMAND: /chest scan `<radius> <add chest>`
+  - You can find chests in an area and add them to the chest list more easily now
+  - This can cause significant lag at very large radiuses
+- Can use `/spawn | /spawns` instead of /gamespawn
 
 ## v1.3.0
 Kits:
