@@ -25,8 +25,7 @@ public class HomingTask extends BukkitRunnable {
             cancel();
             return;
         }
-        Vector toTarget = this.target.getLocation().clone().add(new Vector(0.0D, 0.5D, 0.0D))
-                .subtract(this.arrow.getLocation()).toVector();
+        Vector toTarget = this.target.getLocation().clone().add(new Vector(0.0D, 0.5D, 0.0D)).subtract(this.arrow.getLocation()).toVector();
 
         Vector dirVelocity = this.arrow.getVelocity().clone().normalize();
         Vector dirToTarget = toTarget.clone().normalize();

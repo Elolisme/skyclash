@@ -2,7 +2,6 @@ package skyclash.skyclash;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
@@ -50,14 +49,10 @@ public class main extends JavaPlugin {
         this.getCommand("lobby").setExecutor(new tolobby());
         this.getCommand("setchest").setExecutor(new setchest());
         this.getCommand("gamespawn").setExecutor(new gamespawn());
-
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
     }
 
     @Override
     public void onDisable() {
-        Clock.End();
-        
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"Closing SDPC");
+        Clock.End();  
     }
 }

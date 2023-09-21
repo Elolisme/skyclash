@@ -17,6 +17,28 @@ https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY7
 https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
 - Forced labour completely in vain
 
+https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit
+- Rebalanced kits
+
+<strong>mc.elol.gay<strong>
+- server IP
+
+## Contributers to Skyclash Remake
+Developer
+- TitanPlayz
+
+Server host / Project Owner
+- Elol
+
+Builders
+- CalibaniteKnight
+- InfernoPig
+- ElectricEel06
+- TMaster9975
+
+Cool people:
+- xEzKillz_
+
 ## How To Install
 **TODO**
 
@@ -201,7 +223,21 @@ Future
 
 # Changelog
 
+## v1.3.2
+Kits:
+- Rebalanced all the kits to the doc mostly
+
+Code:
+- idk i did some shit
+- added credits to top of readme
+
 ## v1.3.1
+NEW SERVER ICON!
+
+<img src="https://media.discordapp.net/attachments/1123187127346282507/1149981450440032307/server-icon.png?width=80&height=80">
+
+<br>
+
 Code:
 - You can now use `/chest | /chests` instead of /setchests
 - NEW COMMAND: /chest scan `<radius> <add chest>`

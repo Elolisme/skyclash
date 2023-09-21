@@ -78,30 +78,28 @@ public class Kits {
         this.player.setMetadata("Swordsman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     public void Assassin() {
-        ItemStack item1 = new ItemStack(Material.STONE_SWORD);
+        ItemStack item1 = new ItemStack(Material.DIAMOND_SWORD);
         item1.addEnchantment(Enchantment.DURABILITY, 1);
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.LEATHER_HELMET);
         this.player.getInventory().setHelmet(item1);
-        item1 = new ItemStack(Material.ENDER_PEARL, 1);
+        item1 = new ItemStack(Material.ENDER_PEARL, 2);
         this.player.getInventory().addItem(item1);
-        Potion item = new Potion(PotionType.INSTANT_DAMAGE);
-        item.setLevel(2);
-        item.setSplash(true);
-        item1 = item.toItemStack(1);
-        this.player.getInventory().addItem(item1);
-        item = new Potion(PotionType.INVISIBILITY);
+        Potion item = new Potion(PotionType.INVISIBILITY);
         item.setLevel(1);
         item.setSplash(true);
-        item1 = item.toItemStack(1);
+        item1 = item.toItemStack(3);
         this.player.getInventory().addItem(item1);
         this.player.setMetadata("Assassin", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     public void Beserker() {
-        ItemStack item1 = new ItemStack(Material.IRON_AXE);
+        ItemStack item1 = new ItemStack(Material.DIAMOND_AXE);
         this.player.getInventory().addItem(item1);
-        item1 = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        item1 = new ItemStack(Material.IRON_HELMET);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+        this.player.getInventory().setHelmet(item1);
+        item1 = new ItemStack(Material.IRON_CHESTPLATE);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
         this.player.getInventory().setChestplate(item1);
         item1 = new ItemStack(Material.COOKED_BEEF, 1);
         this.player.getInventory().addItem(item1);
@@ -109,7 +107,7 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*6, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*6, 5), true);
         meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*6, 0), true);
         meta.setDisplayName(ChatColor.RED+"Beserker Potion");
         List<String> lore = new ArrayList<>();
@@ -119,15 +117,17 @@ public class Kits {
         meta.setLore(lore);
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 99999, 0, true, true), false);
         this.player.setMetadata("Beserker", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     public void Archer() {
         ItemStack item1;
-        item1 = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        item1 = new ItemStack(Material.IRON_CHESTPLATE);
         this.player.getInventory().setChestplate(item1);
-        item1 = new ItemStack(Material.CHAINMAIL_BOOTS);
+        item1 = new ItemStack(Material.IRON_BOOTS);
         this.player.getInventory().setBoots(item1);
         item1 = new ItemStack(Material.BOW, 1);
+        item1.addEnchantment(Enchantment.ARROW_DAMAGE, 3);
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.ARROW, 16);
         this.player.getInventory().addItem(item1);
@@ -135,13 +135,26 @@ public class Kits {
     }
     public void Cleric() {
         ItemStack item1;
+        item1 = new ItemStack(Material.GOLD_HELMET);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        this.player.getInventory().setHelmet(item1);
+        item1 = new ItemStack(Material.GOLD_CHESTPLATE);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        this.player.getInventory().setChestplate(item1);
+        item1 = new ItemStack(Material.GOLD_LEGGINGS);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        this.player.getInventory().setLeggings(item1);
+        item1 = new ItemStack(Material.GOLD_BOOTS);
+        item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        this.player.getInventory().setBoots(item1);
         item1 = new ItemStack(Material.GOLD_SWORD, 1);
-        item1.addEnchantment(Enchantment.DAMAGE_UNDEAD, 1);
+        item1.addEnchantment(Enchantment.DAMAGE_UNDEAD, 5);
+        item1.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         this.player.getInventory().addItem(item1);
         Potion item = new Potion(PotionType.INSTANT_HEAL); // CHECK POTION;
         item.setLevel(1);
         item.setSplash(true);
-        item1 = item.toItemStack(1);
+        item1 = item.toItemStack(4);
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.GOLDEN_APPLE, 1);
         this.player.getInventory().addItem(item1);
@@ -167,33 +180,41 @@ public class Kits {
         this.player.getInventory().setLeggings(item1);
         item1 = new ItemStack(Material.DIAMOND_SPADE, 1);
         this.player.getInventory().addItem(item1);
-        item1 = new ItemStack(Material.SNOW_BALL, 12);
+        item1 = new ItemStack(Material.SNOW_BALL, 16);
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.SNOW_BLOCK, 6);
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.PUMPKIN, 2);
         this.player.getInventory().addItem(item1);
+        Potion item = new Potion(PotionType.POISON);
+        item.setLevel(1);
+        item.setSplash(true);
+        item1 = item.toItemStack(1);
+        this.player.getInventory().addItem(item1);
         this.player.setMetadata("Frost_Knight", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     public void Guardian() {
         ItemStack item1;
-        item1 = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        item1 = new ItemStack(Material.IRON_CHESTPLATE);
         this.player.getInventory().setChestplate(item1);
-        item1 = new ItemStack(Material.LEATHER_LEGGINGS);
-        this.player.getInventory().setLeggings(item1);
-        item1 = new ItemStack(Material.LEATHER_BOOTS);
+        item1 = new ItemStack(Material.DIAMOND_BOOTS);
         this.player.getInventory().setBoots(item1);
         Potion item = new Potion(PotionType.WATER);
         item.setSplash(true);
         item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*15, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*999, 1), true);
         meta.setDisplayName(ChatColor.RED+"Absorption Potion");
         List<String> lore = new ArrayList<>();
         lore.add("§6Effect:§e Absorption 2");
         lore.add("§6Duration:§e 15 seconds");
         meta.setLore(lore);
         item1.setItemMeta(meta);
+        this.player.getInventory().addItem(item1);
+        item = new Potion(PotionType.SLOWNESS);
+        item.setLevel(2);
+        item.setSplash(true);
+        item1 = item.toItemStack(2);
         this.player.getInventory().addItem(item1);
         this.player.setMetadata("Guardian", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }

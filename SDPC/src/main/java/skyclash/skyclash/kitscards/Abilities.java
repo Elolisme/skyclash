@@ -59,8 +59,8 @@ public class Abilities implements Listener {
         }
 
         // Beserker
-        if (player.getHealth() < 6) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*4, 1));
+        if (player.getHealth() < 12) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*6, 1));
         }
     }
 

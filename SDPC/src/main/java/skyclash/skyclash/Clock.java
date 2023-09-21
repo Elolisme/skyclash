@@ -59,6 +59,8 @@ public class Clock {
         s = o.getScore(ChatColor.YELLOW+"Time left: ");
         s2 = o.getScore(ChatColor.YELLOW+"Players left: ");
         emptyboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
     }
 
     void Tick() {
@@ -106,5 +108,7 @@ public class Clock {
         if (isGameActive) {
             new EndGame(true);
         }
+
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"Closing SDPC");
     }
 }
