@@ -20,7 +20,7 @@ https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYE
 https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit
 - Rebalanced kits
 
-<strong>mc.elol.gay<strong>
+<strong>mc.elol.gay</strong>
 - server IP
 
 ## Contributers to Skyclash Remake
@@ -108,9 +108,19 @@ sgm.host - allows opped players access to all other commands
 
 ### Kits and Cards
 Kits:
-- Swordsman
-- Beserker
+- Archer
 - Assassin
+- Beserker
+- Cleric
+- Frost Knight
+- Guardian
+- Jumpman
+- Necromancer
+- Swordsman
+- Treasure hunter
+- Scout
+
+All information for each kit can be found on <a href="https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438">this spreadsheet</a>
 
 Cards
 - Bigger Bangs (just like ur mum)
@@ -129,19 +139,26 @@ You can change the icon of a world (icon:material), whether its a playable map (
 ### Chest Loot
 The plugin will take chest loot from a folder called `<root>/LootChests/..`, where loot tables is stored
 <br>
-There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile...
+There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile... It is much easier to just edit the current file.
 
 <img src="https://media.discordapp.net/attachments/1124653076205281440/1139865042397970502/image.png?width=477&height=217" />
 
 <img src="https://media.discordapp.net/attachments/1124653076205281440/1139866651060338698/image.png?width=466&height=201"/>
+
+note: lapis lazuli has been added to spawn chests
+
+This code was mostly taken <a href="https://github.com/Veraimt/CustomLootChest">from here </a>but modified heavily to integrate with SDPC
 
 ### Lifetime Statistics
 The current statistics saved for each player are:
 - Kills
 - Deaths
 - Wins
-- Total Games Played
+- Games
 - Joins
+- times died in first 30 seconds
+- deaths to the void
+- times killed xezkillz
 
 As well as storing coins, which are gained by killing (10) or winning a game (50)
 * Note killing yourself will not award kill credit but counts as a death
@@ -174,12 +191,6 @@ Exists for admins to start game manually
 ### Ending a Game
 **TODO**
 
-### Chest Loot system
-**TODO**
-
-https://github.com/Veraimt/CustomLootChest
-- mostly taken from here, but modified for skyclash
-
 ### Custom Weapons
 Get weapons by using the command 
 <br>
@@ -211,17 +222,32 @@ Example:
 
 # TODO
 Soon
-- Finish readme
-- add lapis in chest loot
-- setchest wand
-- pearl cooldown
-- item in menu showing stats or smthing like that
+- [ ] finish readme
+- [ ] leaderboard command for stats
+- [ ] add planned cards
 
 Future
-- Add more kits and cards
 - Upgrade kit and card system
+- balancing kits
 
 # Changelog
+
+## v1.4.0
+- added 4 kits (master level):
+  - jumpman: random chance to get slime in chest, slime blocks provide large vertical boost to anyone using it (might make specific to only this kit)
+  - necromancer: summons a zombie on each kill
+  - treasure hunter: gets a random drop from breaking a chest - golden apple, gold sword/axe, diamond, tnt
+  - scout: gets speed from opening a chest
+- readjusted all kits back to master level
+- made mobs spawned not target the player who spawned it: affects creeper and necromancer
+- add more lifetime stats
+  - times died in first 30 seconds
+  - deaths to the void
+  - times killed xezkillz
+- added item in menu to show lifetime stats, specially coded the KDR and WR to display the kills, deaths, wins and total game stats
+- added kills leaderboard at end of each game
+- added pearl cooldown of 5 seconds globally
+- added lapis lazuli x6 to chest loot in spawn (40%)
 
 ## v1.3.2
 Kits:
@@ -231,10 +257,12 @@ Code:
 - idk i did some shit
 - added credits to top of readme
 
+<i>What's even the point of numbering these updates, not like anyone ever looks here anyway unless i fucked up somewhere</i>
+
 ## v1.3.1
 NEW SERVER ICON!
 
-<img src="https://media.discordapp.net/attachments/1123187127346282507/1149981450440032307/server-icon.png?width=80&height=80">
+<img src="https://media.discordapp.net/attachments/1124653076205281440/1151079254243684422/image.png?ex=651a8618&is=65193498&hm=945b2068697fffb9d2e093d4b26e007fa0d921f58a35d42918b731636231d258&=&width=111&height=103">
 
 <br>
 

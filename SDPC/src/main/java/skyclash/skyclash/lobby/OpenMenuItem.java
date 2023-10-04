@@ -1,5 +1,10 @@
 package skyclash.skyclash.lobby;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -11,12 +16,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
-import skyclash.skyclash.main;
+import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import skyclash.skyclash.main;
+import skyclash.skyclash.fileIO.DataFiles;
+import skyclash.skyclash.kitscards.PlayerData;
 
 public class OpenMenuItem implements Listener {
     public OpenMenuItem(main plugin) {
@@ -24,6 +31,7 @@ public class OpenMenuItem implements Listener {
     }
 
     @EventHandler
+    @SuppressWarnings("unchecked")
     public void onUseItem(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (!main.playerStatus.containsKey(player.getName())) {
@@ -47,7 +55,7 @@ public class OpenMenuItem implements Listener {
         }
 
         // Main menu
-        Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Skyclash Menu");
+        Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Skyclash Menu");
 
         // item 1
         ItemStack item = new ItemStack(Material.PAPER);
@@ -107,7 +115,7 @@ public class OpenMenuItem implements Listener {
             inventory.setItem(3, item6);
         }
 
-        // item 4
+        // kits
         ItemStack item4 = new ItemStack(Material.DIAMOND_SWORD);
         item.setAmount(4);
         ItemMeta meta4 = item.getItemMeta();
@@ -120,7 +128,7 @@ public class OpenMenuItem implements Listener {
         }
         inventory.setItem(5, item4);
 
-        // item 5
+        // cards
         ItemStack item5 = new ItemStack(Material.ENCHANTED_BOOK);
         item.setAmount(5);
         ItemMeta meta5 = item.getItemMeta();
@@ -133,6 +141,53 @@ public class OpenMenuItem implements Listener {
         }
         inventory.setItem(7, item5);
 
+        // stats
+        DataFiles df = new DataFiles(player);
+        PlayerData pdata = df.LoadData();
+
+        JSONObject stats = pdata.Stats;
+        
+        item5 = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+        item.setAmount(5);
+        SkullMeta smeta = (SkullMeta) item5.getItemMeta();
+        smeta.setOwner(player.getName().toString());
+        item5.setItemMeta(smeta);
+        meta5 = item5.getItemMeta();
+        if (meta5 != null) {
+            meta5.setDisplayName(ChatColor.GREEN + player.getName());
+            List<String> lore5 = new ArrayList<>();
+            lore5.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)pdata.Coins);
+            lore5.add("");
+            lore5.add(ChatColor.GOLD+"Your stats:");
+
+            Object kdr;
+            Object wr;
+            try {kdr = ((long)stats.get("kills") *100 / (long)stats.get("deaths"))/100;} catch (Exception e) {kdr = "NaN";}
+            try {wr = (long)stats.get("wins") *100 / (long)stats.get("Games");} catch (Exception e) {wr = "NaN";}
+            
+            lore5.add(ChatColor.YELLOW+"KDR: "+ChatColor.BLUE+kdr+" ("+stats.get("kills")+"/"+stats.get("deaths")+")");
+            stats.remove("kills");
+            stats.remove("deaths");
+            lore5.add(ChatColor.YELLOW+"WR: "+ChatColor.BLUE+wr+"% ("+stats.get("wins")+"/"+stats.get("Games")+")");
+            stats.remove("wins");
+            stats.remove("Games");
+            lore5.add("");
+
+            ArrayList<Long> sortStrings = new ArrayList<>();
+            stats.forEach((stat, value) -> {sortStrings.add((Long)value);});
+            List<Long> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
+            Collections.sort(sortStrings2);
+            Collections.reverse(sortStrings2);
+
+            sortStrings2.forEach((value) -> {
+                stats.forEach((stat, svalue) -> {
+                    if (value.equals((Long)svalue)) {lore5.add(ChatColor.YELLOW+(String)stat+": "+ChatColor.BLUE+stats.get(stat));}
+                });
+            });
+            meta5.setLore(lore5);
+            item5.setItemMeta(meta5);
+        }
+        inventory.setItem(13, item5);
 
         player.openInventory(inventory);
         player.setMetadata("OpenedMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));

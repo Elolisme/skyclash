@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffect;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.kitscards.RemoveTags;
@@ -27,6 +28,12 @@ public class PlayerDeath implements Listener {
         // code
         
         StatsManager.changeStat(player, "deaths", 1);
+        if (Clock.timer > 570) {
+            StatsManager.changeStat(player, "30s Deaths", 1);
+        }
+        if (event.getEntity().getLastDamageCause().getCause() == DamageCause.VOID) {
+            StatsManager.changeStat(player, "Void deaths", 1);
+        }
 
         main.playerStatus.put(player.getName(), "spectator");
         player.setGameMode(GameMode.SPECTATOR);

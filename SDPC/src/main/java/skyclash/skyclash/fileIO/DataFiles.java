@@ -71,11 +71,7 @@ public class DataFiles {
         try {
             if (!(new File(path).exists())) {
                 JSONObject arr = new JSONObject();
-                arr.put("kills", 0);
-                arr.put("deaths", 0);
-                arr.put("wins", 0);
-                arr.put("total_games", 0);
-                arr.put("joins", 0);
+                arr.put("temp", 0);
                 data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, arr, 0);
                 CreateFile();
                 return data;

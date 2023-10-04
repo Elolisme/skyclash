@@ -28,7 +28,7 @@ public class Cards {
                 item.setItemMeta(meta);
             }
             this.player.getInventory().addItem(item);
-
+            player.setMetadata("Creeper", new FixedMetadataValue(main.getPlugin(main.class), "card"));
 
         }
         if (this.card.equals("Bigger Bangs")) {

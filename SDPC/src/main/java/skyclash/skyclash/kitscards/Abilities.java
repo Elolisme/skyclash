@@ -5,7 +5,10 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -14,11 +17,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Chest;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -104,22 +111,18 @@ public class Abilities implements Listener {
         });
     }
 
-    // homing arrows; credit to BlingHomingArrows
     @EventHandler
     public void onShoot(EntityShootBowEvent e) {
-        // player check
+        // homing arrows; credit to BlingHomingArrows
         if (!(e.getEntity() instanceof Player)) {return;}
         Player player = (Player) e.getEntity();
-
-        // archer checks
         if (!(main.playerStatus.get(player.getName()).equals("ingame"))) {return;}
         if (!(player.hasMetadata("Archer"))) {return;}
 
-        // 10% check
+        // 50% check
         int n = new Random().nextInt(100);
         if (n<50) {return;}
 
-        // code
         double minAngle = 6.283185307179586D;
         Entity minEntity = null;
         for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
@@ -169,7 +172,25 @@ public class Abilities implements Listener {
         if (player.getHealth() < 6) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 1));
         }
-
     }
 
+    @EventHandler
+    public void onJump(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (player.getVelocity().getY() <= 0) {return;}
+        // if (!player.hasMetadata("Jumpman")) {return;}
+        if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.SLIME_BLOCK) {return;}
+        player.setVelocity(player.getVelocity().add(new Vector(0, 0.8, 0)));
+        player.playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, null);
+    }
+
+    @EventHandler
+    public void onChestBreak(BlockBreakEvent event) {
+        Material[] items = {Material.GOLDEN_APPLE, Material.DIAMOND, Material.GOLD_SWORD, Material.TNT, Material.GOLD_AXE};
+
+        Player player = event.getPlayer();
+        if (!player.hasMetadata("Treasure_hunter")) {return;}
+        if (!(event.getBlock().getState() instanceof Chest)) {return;}
+        player.getInventory().addItem(new ItemStack(items[new Random().nextInt(items.length)], 1));
+    }
 }

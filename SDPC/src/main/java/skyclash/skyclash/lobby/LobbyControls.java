@@ -4,20 +4,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.projectiles.ProjectileSource;
+
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.gameManager.StatsManager;
 import skyclash.skyclash.kitscards.PlayerData;
 import skyclash.skyclash.main;
+import skyclash.skyclash.cooldowns.Cooldown;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +64,7 @@ public class LobbyControls implements Listener {
         }
 
         StatsManager.changeStat(player, "joins", 1);
+        
     }
 
     @EventHandler
@@ -109,5 +115,20 @@ public class LobbyControls implements Listener {
             item.setItemMeta(meta);
         }
         player.getInventory().setItem(8, item);
+    }
+
+    @EventHandler
+    public void onUsePearl(ProjectileLaunchEvent event) {
+        if (event.getEntityType() != EntityType.ENDER_PEARL) {return;}
+        ProjectileSource shooter = event.getEntity().getShooter();
+        if (!(shooter instanceof Player)) {return;}
+        Player player = (Player) shooter;
+        if(Cooldown.isCooling(player.getName(), "Pearl")) {
+            player.sendMessage(ChatColor.GRAY + "Pearl Cooldown: " + ChatColor.AQUA + Cooldown.getRemaining(player.getName(), "Pearl") + " Seconds");
+            player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 1));
+            event.setCancelled(true);
+            return;
+        }
+        Cooldown.add(player.getName(), "Pearl", 5, System.currentTimeMillis());
     }
 }

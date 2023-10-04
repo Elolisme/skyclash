@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
@@ -73,6 +74,9 @@ public class tolobby implements CommandExecutor {
         }
 
         player.teleport(spawnloc);
+
+        player.getInventory().setItem(0, new ItemStack(Material.INK_SACK, 2, (short) 4));
+
 
         return true;
     }

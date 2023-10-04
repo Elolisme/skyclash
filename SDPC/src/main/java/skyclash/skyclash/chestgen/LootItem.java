@@ -39,7 +39,11 @@ public class LootItem {
     public ItemStack getItemStack() {
         //Temporary solution
         if (itemStack == null)
-            itemStack = new ItemStack(type, amount, (short) 0, data);
+            if (data == 4) {
+                itemStack = new ItemStack(type, amount, (short) 4);
+            } else {
+                itemStack = new ItemStack(type, amount, (short) 0, data);
+            }
         //-
 
         return itemStack;

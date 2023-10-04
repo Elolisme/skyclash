@@ -4,10 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.SpawnEgg;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -49,18 +51,18 @@ public class Kits {
         if (this.kit.equals("Guardian")) {
             Guardian();
         }
-        // if (this.kit.equals("Jumpman")) {
-        //     Jumpman();
-        // }
-        // if (this.kit.equals("Necromancer")) {
-        //     Necromancer();
-        // }
-        // if (this.kit.equals("Treasure_Hunter")) {
-        //     Treasure_Hunter();
-        // }
-        // if (this.kit.equals("Scout")) {
-        //     Scout();
-        // }
+        if (this.kit.equals("Jumpman")) {
+            Jumpman();
+        }
+        if (this.kit.equals("Necromancer")) {
+            Necromancer();
+        }
+        if (this.kit.equals("Treasure_hunter")) {
+            Treasure_hunter();
+        }
+        if (this.kit.equals("Scout")) {
+            Scout();
+        }
 
     }
 
@@ -212,10 +214,101 @@ public class Kits {
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
         item = new Potion(PotionType.SLOWNESS);
-        item.setLevel(2);
+        item.setLevel(1);
         item.setSplash(true);
         item1 = item.toItemStack(2);
         this.player.getInventory().addItem(item1);
         this.player.setMetadata("Guardian", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+    }
+
+    public void Jumpman() {
+        ItemStack item;
+        item = new ItemStack(Material.DIAMOND_CHESTPLATE);
+        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        this.player.getInventory().setChestplate(item);
+        item = new ItemStack(Material.LEATHER_LEGGINGS);
+        this.player.getInventory().setLeggings(item);
+        item = new ItemStack(Material.IRON_SWORD, 1);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.DIRT, 32);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.WATER_BUCKET, 2);
+        this.player.getInventory().addItem(item);
+        Potion item1Potion = new Potion(PotionType.JUMP);
+        item1Potion.setLevel(2);
+        item1Potion.setSplash(true);
+        item = item1Potion.toItemStack(3);
+        this.player.getInventory().addItem(item);
+        this.player.setMetadata("Jumpman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+    }
+
+    public void Necromancer() {
+        ItemStack item;
+        Potion pot;
+        item = new ItemStack(Material.DIAMOND_HELMET);
+        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3); // CHECK ENCHANT
+        this.player.getInventory().setHelmet(item);
+        item = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        this.player.getInventory().setChestplate(item);
+        item = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        this.player.getInventory().setLeggings(item);
+        item = new ItemStack(Material.CHAINMAIL_BOOTS);
+        this.player.getInventory().setBoots(item);
+        pot = new Potion(PotionType.INSTANT_DAMAGE); // CHECK POTION;
+        pot.setLevel(2);
+        pot.setSplash(true);
+        item = pot.toItemStack(2);
+        this.player.getInventory().addItem(item);
+        item = new SpawnEgg(EntityType.SKELETON).toItemStack(4);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.ARROW, 16);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.BOW, 1);
+        item.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
+        this.player.getInventory().addItem(item);
+        this.player.setMetadata("Necromancer", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+    }
+    
+    public void Treasure_hunter() {
+        ItemStack item;
+        item = new ItemStack(Material.GOLD_HELMET);
+        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        this.player.getInventory().setHelmet(item);
+        item = new ItemStack(Material.GOLD_CHESTPLATE);
+        item.addEnchantment(Enchantment.THORNS, 1);
+        this.player.getInventory().setChestplate(item);
+        item = new ItemStack(Material.GOLD_LEGGINGS);
+        this.player.getInventory().setLeggings(item);
+        item = new ItemStack(Material.GOLD_BOOTS);
+        this.player.getInventory().setBoots(item);
+        item = new ItemStack(Material.GOLD_PICKAXE, 1);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.FISHING_ROD, 1);
+        item.addEnchantment(Enchantment.LUCK, 3);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.WEB, 6);
+        this.player.getInventory().addItem(item);
+        this.player.setMetadata("Treasure_hunter", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+    }
+
+    public void Scout() {
+        ItemStack item;
+        Potion pot;
+        item = new ItemStack(Material.IRON_HELMET);
+        item.addEnchantment(Enchantment.PROTECTION_PROJECTILE, 2);
+        this.player.getInventory().setHelmet(item);
+        item = new ItemStack(Material.DIAMOND_BOOTS);
+        item.addEnchantment(Enchantment.PROTECTION_FALL, 4); 
+        this.player.getInventory().setBoots(item);
+        item = new ItemStack(Material.IRON_SWORD, 1);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.WOOD, 24);
+        this.player.getInventory().addItem(item);
+        pot = new Potion(PotionType.SPEED);
+        pot.setLevel(2);
+        pot.setSplash(true);
+        item = pot.toItemStack(1);
+        this.player.getInventory().addItem(item);
+        this.player.setMetadata("Scout", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
 }

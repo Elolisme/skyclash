@@ -14,8 +14,13 @@ import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"unchecked", "UnnecessaryBoxing"})
 public class EndGame {
@@ -32,9 +37,28 @@ public class EndGame {
                     Player winr = Bukkit.getPlayer(key);
                     StatsManager.changeStat(winr, "wins", 1);
                     StatsManager.changeStat(winr, "coins", 50);
+                    winr.sendMessage(ChatColor.YELLOW+"+50 coins for winning");
                 }
             });
         }
+
+        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage(ChatColor.DARK_RED+"Top kills:");
+
+        ArrayList<Integer> sortStrings = new ArrayList<>();
+        StatsManager.killtracker.forEach((player, value) -> {sortStrings.add(value);});
+        List<Integer> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
+        Collections.sort(sortStrings2);
+        Collections.reverse(sortStrings2);
+
+        sortStrings2.forEach((value) -> {
+            StatsManager.killtracker.forEach((player, svalue) -> {
+                if (value.equals(svalue)) {Bukkit.broadcastMessage("  "+ChatColor.RED+player+": "+ChatColor.YELLOW+value);}
+            });
+        });
+        StatsManager.killtracker = new HashMap<>();
+        Bukkit.broadcastMessage("");
+
 
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
@@ -70,7 +94,7 @@ public class EndGame {
                 } else {
                     player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
                     player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
-                    StatsManager.changeStat(player, "total_games", 1);
+                    StatsManager.changeStat(player, "Games", 1);
                 }
                 player.setScoreboard(Clock.emptyboard);
                 player.getInventory().clear();

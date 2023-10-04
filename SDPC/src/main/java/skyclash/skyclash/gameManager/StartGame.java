@@ -154,6 +154,7 @@ public class StartGame {
                     int z = Integer.valueOf(String.valueOf(lists.get(2)));
                     Location spawnloc = new Location(Bukkit.getWorld("ingame_map"), x, y, z);
                     player.teleport(spawnloc);
+                    StatsManager.addPlayer(player);
 
                     // player setup for game
                     player.setGameMode(GameMode.SURVIVAL);

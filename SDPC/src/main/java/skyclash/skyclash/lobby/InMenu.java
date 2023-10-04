@@ -1,6 +1,7 @@
 package skyclash.skyclash.lobby;
 
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.SpawnEgg;
 import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
@@ -190,6 +192,24 @@ public class InMenu implements Listener {
                 }
                 inventory.setItem(5, item);
 
+                // jumpman
+                item = new ItemStack(Material.SLIME_BLOCK, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Jumpman");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(6, item);
+
+                item = new SpawnEgg(EntityType.SKELETON).toItemStack(1);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Necromancer");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(7, item);
+                
                 // swordsman
                 item = new ItemStack(Material.IRON_SWORD);
                 item.setAmount(1);
@@ -198,7 +218,25 @@ public class InMenu implements Listener {
                     meta.setDisplayName(ChatColor.RED + "Swordsman");
                     item.setItemMeta(meta);
                 }
-                inventory.setItem(6, item);
+                inventory.setItem(8, item);
+
+                item = new ItemStack(Material.GOLD_INGOT);
+                item.setAmount(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Treasure_hunter");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(9, item);
+
+                item = new Potion(PotionType.SPEED).toItemStack(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Scout");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(10, item);
+                
 
 
                 player.openInventory(inventory);
