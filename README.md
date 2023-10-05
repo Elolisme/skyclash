@@ -1,27 +1,27 @@
 # Skyclash
 
 <div align="center">
-    <img src="https://github.com/Elolisme/skyclash/assets/118145727/3cdf733c-1466-443a-b4c2-d79f054c57db" style="height:auto;width:60%"/>
+    <img src="./Assets/skyclash_front_image.png" style="height:auto;width:60%"/>
     <br>
     <br>
     <strong>Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"</strong>
 </div>
 
 ## Resources for development
+### Doc with cards and maps
+https://docs.google.com/document/d/14_MdE6IKqPPhNbR60T8SELjxTGKBIpSkJubV28Rsv2w/edit?usp=sharing
+
+### Kits
 https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
-- Docs for cards + maps
 
-https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
-- Spreadsheet of kits
-
-https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
-- Forced labour completely in vain
-
+#### Rebalanced kits
 https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit
-- Rebalanced kits
 
+### Chest locations
+https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
+
+### Server IP
 <strong>mc.elol.gay</strong>
-- server IP
 
 ## Contributers to Skyclash Remake
 Developer
@@ -36,7 +36,7 @@ Builders
 - ElectricEel06
 - TMaster9975
 
-Cool people:
+Cool people
 - xEzKillz_
 
 ## How To Install
@@ -82,7 +82,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 `/lootchest <name>`
 - makes a loot table file in `<root>/LootChestst/..` from the current chest you are looking at
 
-`/lobby | /home | /hub`
+`/lobby | /hub`
 - send you to the first spawn point of the default world
 
 `/chest [add|remove|list|scan] <radius> <add chests found>` | /setchest
@@ -120,9 +120,9 @@ Kits:
 - Treasure hunter
 - Scout
 
-All information for each kit can be found on <a href="https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438">this spreadsheet</a>
+<i>Information for each kit can be found on <a href="https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438">this spreadsheet.</a> Some kits have also been rebalanced</i>
 
-Cards
+Cards:
 - Bigger Bangs (just like ur mum)
 - Creeper
 - Damage Potion
@@ -141,13 +141,13 @@ The plugin will take chest loot from a folder called `<root>/LootChests/..`, whe
 <br>
 There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile... It is much easier to just edit the current file.
 
-<img src="https://media.discordapp.net/attachments/1124653076205281440/1139865042397970502/image.png?width=477&height=217" />
+<img src="./Assets/chest_loot_spawn.png" />
 
-<img src="https://media.discordapp.net/attachments/1124653076205281440/1139866651060338698/image.png?width=466&height=201"/>
+<img src="./Assets/chest_loot_mid.png"/>
 
-note: lapis lazuli has been added to spawn chests
+<i>Note: lapis lazuli has been added to spawn chests</i>
 
-This code was mostly taken <a href="https://github.com/Veraimt/CustomLootChest">from here </a>but modified heavily to integrate with SDPC
+This code was mostly taken <a href="https://github.com/Veraimt/CustomLootChest">from this repo </a>but modified heavily to integrate with SDPC
 
 ### Lifetime Statistics
 The current statistics saved for each player are:
@@ -156,9 +156,9 @@ The current statistics saved for each player are:
 - Wins
 - Games
 - Joins
-- times died in first 30 seconds
-- deaths to the void
-- times killed xezkillz
+- Times died in first 30 seconds
+- Deaths to the void
+- Times killed xezkillz
 
 As well as storing coins, which are gained by killing (10) or winning a game (50)
 * Note killing yourself will not award kill credit but counts as a death
@@ -188,8 +188,14 @@ Click the wool again to unready yourself, this will cancel the game if 2 players
 Exists for admins to start game manually
 ``` 
 
-### Ending a Game
-**TODO**
+### The Gameplay
+Players spawn at preplaced spawnpoints on the most voted map, recieving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
+<br>
+Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner.
+<br>
+The game also ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporing them and spectators back.
+<br>
+If you are in the hub and a game is running, you can spectate the game through the menu.
 
 ### Custom Weapons
 Get weapons by using the command 
@@ -203,7 +209,6 @@ Example:
   /giveitem chicken bow
   ```
 
-#### Weapons:
 - Chicken bow
   - This shoots a chicken jockey instead of an arrow
   - Has 10 durability
@@ -224,13 +229,31 @@ Example:
 Soon
 - [ ] finish readme
 - [ ] leaderboard command for stats
-- [ ] add planned cards
+- [ ] balancing kits
 
 Future
 - Upgrade kit and card system
-- balancing kits
 
 # Changelog
+
+## v1.4.1
+- Added all the rest of the cards (~10 new cards)
+  - blast protection
+    - now gets 2x fireballs
+  - elven archer
+  - quiver refill
+  - apple finder
+  - hit and run
+  - pacify
+  - pearl absorption
+  - sugar rush
+  - lifesteal
+  - monster hunter
+- jumpman now gets winged boots (gives jump boots on jump)
+- necromancer now gets a jockey bow
+- creeper card gets an explosive bow
+- Fixed WR and KDR not having correct decimal places
+- Changed game starting from 30s to 20s
 
 ## v1.4.0
 - added 4 kits (master level):
@@ -248,6 +271,7 @@ Future
 - added kills leaderboard at end of each game
 - added pearl cooldown of 5 seconds globally
 - added lapis lazuli x6 to chest loot in spawn (40%)
+- spawn immunity for 5 seconds (resistance 2)
 
 ## v1.3.2
 Kits:
@@ -262,7 +286,7 @@ Code:
 ## v1.3.1
 NEW SERVER ICON!
 
-<img src="https://media.discordapp.net/attachments/1124653076205281440/1151079254243684422/image.png?ex=651a8618&is=65193498&hm=945b2068697fffb9d2e093d4b26e007fa0d921f58a35d42918b731636231d258&=&width=111&height=103">
+<img src="./Assets/icon_server.png">
 
 <br>
 
@@ -292,7 +316,7 @@ Kits:
 - added swordsman true damage every 10 seconds 
 - added beserker resistance on low health (2.5 hearts) passives
 - made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius<br><br>
-<img src="https://media.discordapp.net/attachments/1124653076205281440/1146360931673186385/image.png?width=1183&height=657" style="height:auto;width:60%"/>
+<img src="./Assets/explosion.png"/>
 
 - made bigger bangs spawn with flint and steel and 2 tnt
 

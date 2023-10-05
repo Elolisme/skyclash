@@ -152,7 +152,7 @@ public class InMenu implements Listener {
                 item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
                 meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.GRAY + "Assassin");
+                    meta.setDisplayName(ChatColor.RED + "Assassin");
                     item.setItemMeta(meta);
                 }
                 inventory.setItem(1, item);
@@ -251,17 +251,15 @@ public class InMenu implements Listener {
                 ItemStack item;
                 ItemMeta meta;
 
-                // item 1
                 item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
                 item.setAmount(1);
                 meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.GREEN + "Creeper");
+                    meta.setDisplayName(ChatColor.RED + "Creeper");
                     item.setItemMeta(meta);
                 }
                 inventory.setItem(0, item);
 
-                // item 2
                 item = new ItemStack(Material.TNT);
                 item.setAmount(1);
                 meta = item.getItemMeta();
@@ -271,7 +269,7 @@ public class InMenu implements Listener {
                 }
                 inventory.setItem(1, item);
 
-                // item 3
+                // card
                 item = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
                 item.setAmount(1);
                 meta = item.getItemMeta();
@@ -281,9 +279,98 @@ public class InMenu implements Listener {
                 }
                 inventory.setItem(2, item);
 
+                // card
+                item = new ItemStack(Material.IRON_CHESTPLATE, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Blast Protection");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(3, item);
+
+                // card
+                item = new ItemStack(Material.BOW, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Elven Archer");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(4, item);
+
+                // card
+                item = new ItemStack(Material.ENCHANTED_BOOK, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Quiver Refill");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(5, item);
+
+                // card
+                item = new ItemStack(Material.CHEST, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Apple Finder");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(6, item);
+
+                // card
+                item = new ItemStack(Material.IRON_BOOTS, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Hit and Run");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(7, item);
+
+                // card
+                item = new SpawnEgg(EntityType.ZOMBIE).toItemStack(1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Pacify");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(8, item);
+
+                // card
+                item = new ItemStack(Material.ENDER_PEARL, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Pearl Absorption");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(9, item);
+
+                // card
+                item = new ItemStack(Material.SUGAR, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Sugar Rush");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(10, item);
+
+                // card
+                item = new ItemStack(Material.REDSTONE, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Lifesteal");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(11, item);
+
+                // card
+                item = new ItemStack(Material.ROTTEN_FLESH, 1);
+                meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(ChatColor.RED + "Monster Hunter");
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(12, item);
+
                 player.openInventory(inventory);
                 player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.getPlugin(main.class), "Card Selection"));
-
             }
         }
 

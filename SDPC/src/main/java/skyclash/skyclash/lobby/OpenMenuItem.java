@@ -162,8 +162,8 @@ public class OpenMenuItem implements Listener {
 
             Object kdr;
             Object wr;
-            try {kdr = ((long)stats.get("kills") *100 / (long)stats.get("deaths"))/100;} catch (Exception e) {kdr = "NaN";}
-            try {wr = (long)stats.get("wins") *100 / (long)stats.get("Games");} catch (Exception e) {wr = "NaN";}
+            try {kdr = ((float) Math.round((long)stats.get("kills") *1000 / (long)stats.get("deaths")))/1000;} catch (Exception e) {kdr = "NaN";}
+            try {wr = ((float)Math.round((long)stats.get("wins") *1000 / (long)stats.get("Games")))/10;} catch (Exception e) {wr = "NaN";}
             
             lore5.add(ChatColor.YELLOW+"KDR: "+ChatColor.BLUE+kdr+" ("+stats.get("kills")+"/"+stats.get("deaths")+")");
             stats.remove("kills");

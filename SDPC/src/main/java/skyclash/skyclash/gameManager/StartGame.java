@@ -41,8 +41,8 @@ public class StartGame {
             delay = 5;
             Bukkit.broadcastMessage(ChatColor.YELLOW + "Game will start in 5 seconds");
         } else {
-            delay = 30;
-            Bukkit.broadcastMessage(ChatColor.YELLOW + "Game will start in 30 seconds");
+            delay = 20;
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Game will start in 20 seconds");
         }
 
 
@@ -51,13 +51,13 @@ public class StartGame {
             public void run() {
                 Bukkit.broadcastMessage(ChatColor.YELLOW + "Game will start in 10 seconds");
             }
-        }.runTaskLater(plugin, 20*20);
+        }.runTaskLater(plugin, 20*10);
         task3 = new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.broadcastMessage(ChatColor.YELLOW + "Game will start in 5 seconds");
             }
-        }.runTaskLater(plugin, 20*25);
+        }.runTaskLater(plugin, 20*15);
         task1 = new BukkitRunnable() {
             @Override
             public void run() {

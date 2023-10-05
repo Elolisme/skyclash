@@ -16,6 +16,7 @@ import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.gameManager.EndGame;
+import skyclash.skyclash.kitscards.Abilities;
 
 import java.util.List;
 
@@ -88,6 +89,8 @@ public class Clock {
                 new EndGame(true);
                 break;
         }
+
+        if (timer % 5 == 0 && timer != 0) {Abilities.Every5Seconds();} // Quiver refill
     }
 
     Mapsfile maps = new Mapsfile();

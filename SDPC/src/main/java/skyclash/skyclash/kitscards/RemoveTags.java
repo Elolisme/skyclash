@@ -20,5 +20,15 @@ public class RemoveTags {
         player.removeMetadata("Scout", p);
         player.removeMetadata("Bigger Bangs", p);
         player.removeMetadata("Creeper", p);
+        player.removeMetadata("Blast Protection", p);
+        player.removeMetadata("Elven Archer", p);
+        player.removeMetadata("Quiver Refill", p);
+        player.removeMetadata("Apple Finder", p);
+        player.removeMetadata("Hit and Run", p);
+        player.removeMetadata("Pacify", p);
+        player.removeMetadata("Pearl Absorption", p);
+        player.removeMetadata("Sugar Rush", p);
+        player.removeMetadata("Lifesteal", p);
+        player.removeMetadata("Monster Hunter", p);        
     }
 }

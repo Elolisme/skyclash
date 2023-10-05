@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import skyclash.skyclash.main;
+import skyclash.skyclash.customitems.GiveItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,6 +240,7 @@ public class Kits {
         item1Potion.setSplash(true);
         item = item1Potion.toItemStack(3);
         this.player.getInventory().addItem(item);
+        GiveItem.GiveCustomItem(player, "winged boots");
         this.player.setMetadata("Jumpman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
 
@@ -261,11 +263,9 @@ public class Kits {
         this.player.getInventory().addItem(item);
         item = new SpawnEgg(EntityType.SKELETON).toItemStack(4);
         this.player.getInventory().addItem(item);
-        item = new ItemStack(Material.ARROW, 16);
+        item = new ItemStack(Material.ARROW, 10);
         this.player.getInventory().addItem(item);
-        item = new ItemStack(Material.BOW, 1);
-        item.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
-        this.player.getInventory().addItem(item);
+        GiveItem.GiveCustomItem(player, "chicken bow");
         this.player.setMetadata("Necromancer", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     

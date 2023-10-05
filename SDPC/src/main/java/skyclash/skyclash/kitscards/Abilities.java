@@ -9,10 +9,13 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -20,12 +23,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Chest;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -84,7 +90,6 @@ public class Abilities implements Listener {
         if (!(entity instanceof LivingEntity)) {
             return;
         }
-        Bukkit.getLogger().info(((LivingEntity)entity).getHealth()+" health");
         if(Cooldown.isCooling(player.getName(), "TrueDamage")) {
             return;
         }
@@ -93,9 +98,10 @@ public class Abilities implements Listener {
         // Swordsman
         double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
         double extra_damage = damage - event.getFinalDamage();
+        float display_damage = (float) Math.round(extra_damage*1000);
         ((LivingEntity)entity).damage(extra_damage);
         Cooldown.add(player.getName(), "TrueDamage", 10, System.currentTimeMillis());
-        player.sendMessage(ChatColor.GREEN+"Dealt "+extra_damage+" more damage");
+        player.sendMessage(ChatColor.GREEN+"Dealt "+display_damage/1000+" more damage");
     }
 
     @EventHandler
@@ -141,19 +147,24 @@ public class Abilities implements Listener {
     }
 
     @EventHandler
+    public void onShootBow2(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player)) {return;}
+        Player player = (Player) event.getEntity();
+        if (!(player.hasMetadata("Elven Archer"))) {return;}
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*3, 0));
+    }
+
+    @EventHandler
     public void onSnowballHit(EntityDamageByEntityEvent event) {
         // Frost Knight
         if (event.getDamager().getType() != EntityType.SNOWBALL) {return;}
-        Bukkit.getLogger().info("snowball hit");
         Projectile snowball = (Projectile) event.getDamager();
         if (!(snowball.getShooter() instanceof Player)) {return;}
-        Bukkit.getLogger().info("found shooter");
         Player shooter = (Player) snowball.getShooter();
         if (!(event.getEntity() instanceof Player)) {return;}
         Player player = (Player) event.getEntity();
         
         if (!shooter.hasMetadata("Frost_Knight")) {return;}
-        Bukkit.getLogger().info("is frost knight");
         shooter.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*5, 1, false, false), true);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*5, 0, false, false), true);
         shooter.playSound(shooter.getLocation(), Sound.ARROW_HIT, 1, 0.9f);
@@ -190,7 +201,149 @@ public class Abilities implements Listener {
 
         Player player = event.getPlayer();
         if (!player.hasMetadata("Treasure_hunter")) {return;}
+        player.sendMessage("something chest");
         if (!(event.getBlock().getState() instanceof Chest)) {return;}
+        player.sendMessage("broke chest");
         player.getInventory().addItem(new ItemStack(items[new Random().nextInt(items.length)], 1));
     }
+
+    @EventHandler
+    public void onExplosiveHit(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getEntity();
+        if (!player.hasMetadata("Blast Protection")) {
+            return;
+        }
+        if (!(event.getCause() == DamageCause.ENTITY_EXPLOSION ^ event.getCause() == DamageCause.BLOCK_EXPLOSION)) {
+            return;
+        }
+
+        // Blast Protection
+        double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
+        damage = damage * 0.5;
+        player.damage(damage);
+        player.sendMessage(ChatColor.GREEN+"Reduced damage");
+        event.setCancelled(true);
+    }
+
+    // quiver refill in clock class
+    public static void Every5Seconds() {
+        main.playerStatus.forEach((player, status) -> {
+            Player plr = Bukkit.getPlayer(player);
+            if ((plr.hasMetadata("Quiver Refill"))) {
+                plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+            }
+        });
+    }
+
+    @EventHandler
+    public void onChestBreak2(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (!player.hasMetadata("Apple Finder")) {return;}
+        if (!(event.getBlock().getState() instanceof Chest)) {return;}
+
+        // 20% check
+        int n = new Random().nextInt(100);
+        if (n>20) {return;}
+
+        player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 1));
+    }
+
+    @EventHandler
+    public void onMobHit(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Monster)) {
+            return;
+        }
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getEntity();
+        if (!player.hasMetadata("Pacify")) {
+            return;
+        }
+
+        // pacify
+        double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
+        damage = damage * 0.8;
+        player.damage(damage);
+        player.sendMessage(ChatColor.GREEN+"Reduced damage");
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onThrowPearl2(ProjectileHitEvent event) {
+        if (!(event.getEntity().getShooter() instanceof Player)) {
+            return;
+        }
+        if (!(event.getEntity().getType() == EntityType.ENDER_PEARL)) {
+            return;
+        }
+        Player player = (Player) event.getEntity().getShooter();
+        if (!player.hasMetadata("Pearl Absorption")) {
+            return;
+        }
+
+        // pearl absorption
+        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*20, 1), true);
+    }
+
+    @EventHandler
+    public void onEatGapple(PlayerItemConsumeEvent event) {
+        if (event.getItem().getType() != Material.GOLDEN_APPLE) {
+            return;
+        }
+        Player player = (Player) event.getPlayer();
+        if (!player.hasMetadata("Sugar Rush")) {
+            return;
+        }
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*10, 1));
+    }
+
+    @EventHandler
+    public void onAnyHit(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        if (!player.hasMetadata("Lifesteal")) {
+            return;
+        }
+
+        // lifesteal
+        double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
+        damage = damage * 0.2;
+        double health = player.getHealth();
+        player.setHealth(health+damage);
+    }
+
+    @EventHandler
+    public void onMobKill(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof Monster)) {
+            return;
+        }
+        Monster monster = (Monster) event.getEntity();
+        if (!(monster.getKiller() instanceof Player)) {
+            return;
+        }
+        Player killer = monster.getKiller();
+        if (!killer.hasMetadata("Monster Hunter")) {
+            return;
+        }
+
+        ItemStack item = killer.getItemInHand();
+        if (item == null) {return;}
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            int level = meta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+            level = level + 1;
+            meta.removeEnchant(Enchantment.DAMAGE_ALL);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, level, true);
+            item.setItemMeta(meta);
+        }
+        killer.setItemInHand(item);
+    }
+    
 }

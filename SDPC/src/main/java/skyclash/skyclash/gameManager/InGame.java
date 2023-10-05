@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.main;
@@ -61,6 +63,10 @@ public class InGame implements Listener {
 
         if (killer.hasMetadata("Necromancer")) {
             killer.getWorld().spawn(killer.getLocation(), Zombie.class);
+        }
+
+        if (killer.hasMetadata("Hit and Run")) {
+            killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15,1));
         }
     }
 

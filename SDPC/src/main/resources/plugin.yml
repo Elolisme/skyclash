@@ -30,7 +30,7 @@ commands:
   lobby:
     description: go back to lobby world
     usage: /lobby
-    aliases: [home, hub]
+    aliases: [hub]
     permission: sgm.lobby
   setchest:
     description: add or remove chest location from world
