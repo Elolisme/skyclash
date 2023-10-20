@@ -32,6 +32,7 @@ public class StatsManager {
         obseletes.put("total_games", "Games");
         obseletes.put("DC", "Disconnect deaths");
         obseletes.put("VoidDeath", "Void deaths");
+        obseletes.put("joins", "Joins");
         
         obseletes.forEach((Object1, Object2) -> {
             if (pdata.Stats.containsKey(Object1)) {

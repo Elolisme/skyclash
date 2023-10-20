@@ -39,6 +39,9 @@ public class InGame implements Listener {
             return;
         }
         Player player = event.getEntity();
+        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+            return;
+        }
         if (!(event.getEntity().getKiller() instanceof Player)) {
             return;
         }

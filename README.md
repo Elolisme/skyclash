@@ -227,14 +227,36 @@ Example:
 
 # TODO
 Soon
-- [ ] finish readme
 - [ ] leaderboard command for stats
-- [ ] balancing kits
+- [ ] add worldborder
+- [ ] fix fireball firing twice
+- [ ] initial pearl cooldown of 10 seconds
 
 Future
-- Upgrade kit and card system
+- Upgrade card system and shop for temporary items
+- finish readme
 
 # Changelog
+
+## v1.4.2
+- Fixed some minor bugs related to lifesteal at full health and disconnecting
+- Fixed effects not clearing
+- Saved enderchest so that it cannot be accessed ingame
+- Fixed spectator mode not working when killed
+- Capitalised "joins" stat
+- Changed stats menu to display 0 instead of null
+- Made kills only count if dead player was also ingame
+- at the end of a game it automatically sets you ready
+
+Kits and cards
+- Buffed elven archer (3->5 seconds)
+- Added the hit and run ability (lmao)
+  - also made it 3 seconds speed on hit
+- Assassin potions have a shorter duration
+- Fixed necromancer + monster hunter
+  - Made it cap at sharpness 3, then adds up to fire aspect 2
+- Fixed cleric losing regeneration when eating gapple
+- Nerfed archer to only 30% chance to home
 
 ## v1.4.1
 - Added all the rest of the cards (~10 new cards)

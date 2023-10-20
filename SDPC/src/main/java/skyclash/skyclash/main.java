@@ -38,6 +38,7 @@ public class main extends JavaPlugin {
         new PlayerDeath(this);
         new Abilities(this);
         new OpenEChest(this);
+        
         new Clock();
 
         // commands

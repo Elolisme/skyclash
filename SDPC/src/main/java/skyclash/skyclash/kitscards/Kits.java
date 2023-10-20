@@ -68,17 +68,26 @@ public class Kits {
     }
 
     public void Swordsman() {
-        ItemStack item1 = new ItemStack(Material.IRON_SWORD);
+        ItemStack item1 = new ItemStack(Material.DIAMOND_SWORD);
         this.player.getInventory().addItem(item1);
-        item1 = new ItemStack(Material.LEATHER_HELMET);
+        item1 = new ItemStack(Material.IRON_HELMET);
         item1.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
         this.player.getInventory().setHelmet(item1);
+        item1 = new ItemStack(Material.LEATHER_CHESTPLATE);
+        this.player.getInventory().setChestplate(item1);
+        item1 = new ItemStack(Material.LEATHER_LEGGINGS);
+        this.player.getInventory().setLeggings(item1);
+        item1 = new ItemStack(Material.LEATHER_BOOTS);
+        this.player.getInventory().setBoots(item1);
         Potion item = new Potion(PotionType.STRENGTH);
-        item.setLevel(1);
         item.setSplash(true);
         item1 = item.toItemStack(2);
+        PotionMeta meta = (PotionMeta) item1.getItemMeta();
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*10, 1), true);
+        meta.setDisplayName(ChatColor.WHITE+"Strength");
+        item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Swordsman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        player.setMetadata("Swordsman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
     public void Assassin() {
         ItemStack item1 = new ItemStack(Material.DIAMOND_SWORD);
@@ -86,12 +95,23 @@ public class Kits {
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.LEATHER_HELMET);
         this.player.getInventory().setHelmet(item1);
-        item1 = new ItemStack(Material.ENDER_PEARL, 2);
+        item1 = new ItemStack(Material.LEATHER_CHESTPLATE);
+        this.player.getInventory().setChestplate(item1);
+        item1 = new ItemStack(Material.LEATHER_LEGGINGS);
+        this.player.getInventory().setLeggings(item1);
+        item1 = new ItemStack(Material.LEATHER_BOOTS);
+        this.player.getInventory().setBoots(item1);
+        item1 = new ItemStack(Material.ENDER_PEARL, 1);
+        this.player.getInventory().addItem(item1);
+        item1 = new ItemStack(Material.ENDER_PEARL, 3);
         this.player.getInventory().addItem(item1);
         Potion item = new Potion(PotionType.INVISIBILITY);
-        item.setLevel(1);
         item.setSplash(true);
         item1 = item.toItemStack(3);
+        PotionMeta meta = (PotionMeta) item1.getItemMeta();
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20*20, 1), true);
+        meta.setDisplayName(ChatColor.RED+"Invisibility");
+        item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
         this.player.setMetadata("Assassin", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
     }
@@ -106,7 +126,7 @@ public class Kits {
         this.player.getInventory().setChestplate(item1);
         item1 = new ItemStack(Material.COOKED_BEEF, 1);
         this.player.getInventory().addItem(item1);
-        Potion item = new Potion(PotionType.WATER);
+        Potion item = new Potion(PotionType.REGEN);
         item.setSplash(true);
         item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();

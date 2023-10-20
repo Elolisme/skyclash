@@ -127,12 +127,12 @@ public class Abilities implements Listener {
 
         // 50% check
         int n = new Random().nextInt(100);
-        if (n<50) {return;}
+        if (n<30) {return;}
 
-        double minAngle = 6.283185307179586D;
+        double minAngle = 6.28;
         Entity minEntity = null;
         for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
-            if ((player.hasLineOfSight(entity)) && ((entity instanceof LivingEntity)) && (!entity.isDead())) {
+            if (player.hasLineOfSight(entity) && (entity instanceof LivingEntity) && !entity.isDead()) {
                 Vector toTarget = entity.getLocation().toVector().clone().subtract(player.getLocation().toVector());
                 double angle = e.getProjectile().getVelocity().angle(toTarget);
                 if (angle < minAngle) {
@@ -151,7 +151,7 @@ public class Abilities implements Listener {
         if (!(event.getEntity() instanceof Player)) {return;}
         Player player = (Player) event.getEntity();
         if (!(player.hasMetadata("Elven Archer"))) {return;}
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*3, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*5, 0));
     }
 
     @EventHandler
@@ -232,8 +232,12 @@ public class Abilities implements Listener {
     public static void Every5Seconds() {
         main.playerStatus.forEach((player, status) -> {
             Player plr = Bukkit.getPlayer(player);
+            if (plr == null) {return;}
             if ((plr.hasMetadata("Quiver Refill"))) {
                 plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+            }
+            if ((plr.hasMetadata("Cleric"))) {
+                plr.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, true, true), false);
             }
         });
     }
@@ -315,8 +319,12 @@ public class Abilities implements Listener {
         // lifesteal
         double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
         damage = damage * 0.2;
-        double health = player.getHealth();
-        player.setHealth(health+damage);
+        double health = player.getHealth() + damage;
+        if (health < player.getMaxHealth()) {
+            player.setHealth(health);
+        } else {
+            player.setHealth(player.getMaxHealth());
+        }
     }
 
     @EventHandler
@@ -338,12 +346,34 @@ public class Abilities implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             int level = meta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+            if (level > 3) {
+                int level2 = meta.getEnchantLevel(Enchantment.FIRE_ASPECT);
+                if (level2 > 2) {return;}
+                level = level + 1;
+                meta.removeEnchant(Enchantment.FIRE_ASPECT);
+                meta.addEnchant(Enchantment.FIRE_ASPECT, level, true);
+                return;
+            }
             level = level + 1;
             meta.removeEnchant(Enchantment.DAMAGE_ALL);
             meta.addEnchant(Enchantment.DAMAGE_ALL, level, true);
             item.setItemMeta(meta);
         }
         killer.setItemInHand(item);
+    }
+
+    @EventHandler
+    public void onHit2(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        if (!player.hasMetadata("Hit and Run")) {
+            return;
+        }
+
+        // Hit and Run
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, 0, true, false));
     }
     
 }

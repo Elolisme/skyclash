@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
+import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.RemoveTags;
@@ -103,19 +104,25 @@ public class EndGame {
                 player.getInventory().setLeggings(new ItemStack(Material.AIR));
                 player.getInventory().setBoots(new ItemStack(Material.AIR));
                 player.setGameMode(GameMode.ADVENTURE);
-                for (PotionEffect effect : player.getActivePotionEffects())
+                for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
+                }
                 player.setHealth(20);
                 player.setSaturation(20);
                 player.setLevel(0);
                 player.setExp(0);
-                main.playerStatus.put(player.getName(), "lobby");
+                main.playerStatus.put(player.getName(), "ready");
                 main.playerVote.remove(player.getName());
                 LobbyControls.GiveItem(player);
                 if (player.hasMetadata("NoMovement")) {
                     player.removeMetadata("NoMovement", main.getPlugin(main.class));
                 }
                 player.teleport(spawnloc);
+
+                // ender chest
+                player.getEnderChest().setContents(OpenEChest.EnderChestItems.get(player));
+                OpenEChest.EnderChestItems.remove(player);
+
                 new RemoveTags(player);
             }
         });

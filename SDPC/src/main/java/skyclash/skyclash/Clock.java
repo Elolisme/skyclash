@@ -23,12 +23,15 @@ import java.util.List;
 import static skyclash.skyclash.main.*;
 
 public class Clock {
+
+    // GLOBALS pt2
     static Score s;
     static Score s2;
     public static Scoreboard board;
     public static Scoreboard emptyboard;
     public static int timer = 0;
     public static int playersLeft = 0;
+
     public Clock() {
         init();
         new BukkitRunnable(){

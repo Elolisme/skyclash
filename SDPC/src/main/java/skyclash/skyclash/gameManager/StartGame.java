@@ -161,6 +161,9 @@ public class StartGame {
                     player.getInventory().clear();
                     player.setHealth(20);
                     player.setSaturation(20);
+                    for (PotionEffect effect : player.getActivePotionEffects()) {
+                        player.removePotionEffect(effect.getType());
+                    }
                     player.setLevel(0);
                     player.setExp(0);
                     player.setMetadata("NoMovement", new FixedMetadataValue(main.getPlugin(main.class), "1"));

@@ -13,10 +13,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
 public class OpenEChest implements Listener {
+    public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
+
     public OpenEChest(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -27,6 +30,13 @@ public class OpenEChest implements Listener {
         if (!main.playerStatus.get(player.getName()).equals("ingame")) {
             return;
         }
+        ItemStack[] Echestitems = player.getEnderChest().getContents();
+        if (!EnderChestItems.containsKey(player)) {
+            EnderChestItems.put(player, Echestitems);
+            player.getEnderChest().clear();
+        }
+        
+
         Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
 
         if (targetBlock.getState() instanceof Chest) {

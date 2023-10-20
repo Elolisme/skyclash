@@ -84,8 +84,9 @@ public class PlayerDC implements Listener {
         player.setSaturation(20);
         player.setLevel(0);
         player.setExp(0);
-        for (PotionEffect effect : player.getActivePotionEffects())
+        for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
+        }
         main.playerStatus.put(player.getName(), "lobby");
         main.playerVote.remove(player.getName());
         if (player.hasMetadata("NoMovement")) {
