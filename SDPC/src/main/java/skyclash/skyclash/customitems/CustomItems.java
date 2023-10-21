@@ -139,7 +139,9 @@ public class CustomItems implements Listener {
         }
 
         // code
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30, 2));
+        if (!player.hasPotionEffect(PotionEffectType.JUMP)) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 0));
+        }
 
     }
 
@@ -168,15 +170,10 @@ public class CustomItems implements Listener {
         fireball.setIsIncendiary(false);
         Vector velocity = location.getDirection().multiply(1);
         fireball.setVelocity(velocity);
-
-        //remove item
-        ItemStack item = player.getItemInHand();
-        int itemAmount = item.getAmount();
-        if (item.getAmount() == 1) {
-            player.getInventory().remove(item);
-        } else {
-            item.setAmount(itemAmount - 1);
-        }
+        ItemStack fireball_item = player.getItemInHand();
+        fireball_item.setAmount(fireball_item.getAmount()-1);
+        player.setItemInHand(fireball_item);
+        event.setCancelled(true);
     }
 
     @EventHandler

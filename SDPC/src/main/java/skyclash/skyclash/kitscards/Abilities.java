@@ -58,7 +58,10 @@ public class Abilities implements Listener {
         }
 
         // Assassin
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
+        if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            return;
+        }
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20*5, 1));
     }
 
     @EventHandler
@@ -72,7 +75,7 @@ public class Abilities implements Listener {
         }
 
         // Beserker
-        if (player.getHealth() < 12) {
+        if (player.getHealth() < 10) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*6, 1));
         }
     }
@@ -100,7 +103,7 @@ public class Abilities implements Listener {
         double extra_damage = damage - event.getFinalDamage();
         float display_damage = (float) Math.round(extra_damage*1000);
         ((LivingEntity)entity).damage(extra_damage);
-        Cooldown.add(player.getName(), "TrueDamage", 10, System.currentTimeMillis());
+        Cooldown.add(player.getName(), "TrueDamage", 15, System.currentTimeMillis());
         player.sendMessage(ChatColor.GREEN+"Dealt "+display_damage/1000+" more damage");
     }
 
@@ -127,12 +130,12 @@ public class Abilities implements Listener {
 
         // 50% check
         int n = new Random().nextInt(100);
-        if (n<30) {return;}
+        if (n<70) {return;}
 
-        double minAngle = 6.28;
+        double minAngle = 6.283185307179586;
         Entity minEntity = null;
         for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
-            if (player.hasLineOfSight(entity) && (entity instanceof LivingEntity) && !entity.isDead()) {
+            if (player.hasLineOfSight(entity) && (entity instanceof LivingEntity) && !entity.isDead() && main.playerStatus.get(entity.getName()).equals("ingame")) {
                 Vector toTarget = entity.getLocation().toVector().clone().subtract(player.getLocation().toVector());
                 double angle = e.getProjectile().getVelocity().angle(toTarget);
                 if (angle < minAngle) {
@@ -165,8 +168,8 @@ public class Abilities implements Listener {
         Player player = (Player) event.getEntity();
         
         if (!shooter.hasMetadata("Frost_Knight")) {return;}
-        shooter.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*5, 1, false, false), true);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*5, 0, false, false), true);
+        shooter.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*5, 1, false, true), true);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*5, 0, false, true), true);
         shooter.playSound(shooter.getLocation(), Sound.ARROW_HIT, 1, 0.9f);
     }
 
@@ -180,7 +183,7 @@ public class Abilities implements Listener {
             return;
         }
         // Guardian
-        if (player.getHealth() < 6) {
+        if (player.getHealth() < 10) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 1));
         }
     }
@@ -189,7 +192,7 @@ public class Abilities implements Listener {
     public void onJump(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (player.getVelocity().getY() <= 0) {return;}
-        // if (!player.hasMetadata("Jumpman")) {return;}
+        if (!player.hasMetadata("Jumpman")) {return;}
         if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.SLIME_BLOCK) {return;}
         player.setVelocity(player.getVelocity().add(new Vector(0, 0.8, 0)));
         player.playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, null);
@@ -201,9 +204,7 @@ public class Abilities implements Listener {
 
         Player player = event.getPlayer();
         if (!player.hasMetadata("Treasure_hunter")) {return;}
-        player.sendMessage("something chest");
         if (!(event.getBlock().getState() instanceof Chest)) {return;}
-        player.sendMessage("broke chest");
         player.getInventory().addItem(new ItemStack(items[new Random().nextInt(items.length)], 1));
     }
 
@@ -237,7 +238,9 @@ public class Abilities implements Listener {
                 plr.getInventory().addItem(new ItemStack(Material.ARROW, 1));
             }
             if ((plr.hasMetadata("Cleric"))) {
-                plr.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, true, true), false);
+                if (!plr.hasPotionEffect(PotionEffectType.REGENERATION)) {
+                    plr.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, true, false), true);
+                }
             }
         });
     }
@@ -250,7 +253,7 @@ public class Abilities implements Listener {
 
         // 20% check
         int n = new Random().nextInt(100);
-        if (n>20) {return;}
+        if (n>40) {return;}
 
         player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 1));
     }
@@ -270,14 +273,14 @@ public class Abilities implements Listener {
 
         // pacify
         double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
-        damage = damage * 0.8;
+        damage = damage * 0.2;
         player.damage(damage);
         player.sendMessage(ChatColor.GREEN+"Reduced damage");
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onThrowPearl2(ProjectileHitEvent event) {
+    public void onLandPearl(ProjectileHitEvent event) {
         if (!(event.getEntity().getShooter() instanceof Player)) {
             return;
         }
@@ -340,26 +343,34 @@ public class Abilities implements Listener {
         if (!killer.hasMetadata("Monster Hunter")) {
             return;
         }
-
         ItemStack item = killer.getItemInHand();
-        if (item == null) {return;}
+        if (item == null) {
+            return;
+        }
+
         ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            int level = meta.getEnchantLevel(Enchantment.DAMAGE_ALL);
-            if (level > 3) {
-                int level2 = meta.getEnchantLevel(Enchantment.FIRE_ASPECT);
-                if (level2 > 2) {return;}
-                level = level + 1;
-                meta.removeEnchant(Enchantment.FIRE_ASPECT);
-                meta.addEnchant(Enchantment.FIRE_ASPECT, level, true);
-                return;
-            }
+        if (meta == null) {
+            return;
+        }
+        int level = meta.getEnchantLevel(Enchantment.DAMAGE_ALL);
+        int level2 = meta.getEnchantLevel(Enchantment.FIRE_ASPECT);
+        if (level >= 3 && level2 >= 2) {
+            return;
+        }
+
+        if (level >= 3) {
+            level2 = level2 + 1;
+            meta.removeEnchant(Enchantment.FIRE_ASPECT);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, level2, true);
+            item.setItemMeta(meta);
+            killer.setItemInHand(item);
+        } else {
             level = level + 1;
             meta.removeEnchant(Enchantment.DAMAGE_ALL);
             meta.addEnchant(Enchantment.DAMAGE_ALL, level, true);
             item.setItemMeta(meta);
-        }
-        killer.setItemInHand(item);
+            killer.setItemInHand(item);
+        }  
     }
 
     @EventHandler
@@ -373,7 +384,7 @@ public class Abilities implements Listener {
         }
 
         // Hit and Run
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2, 0, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3*20, 0, true, false));
     }
     
 }

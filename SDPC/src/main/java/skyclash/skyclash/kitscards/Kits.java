@@ -81,9 +81,9 @@ public class Kits {
         this.player.getInventory().setBoots(item1);
         Potion item = new Potion(PotionType.STRENGTH);
         item.setSplash(true);
-        item1 = item.toItemStack(2);
+        item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*10, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*10, 0), true);
         meta.setDisplayName(ChatColor.WHITE+"Strength");
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
@@ -126,17 +126,16 @@ public class Kits {
         this.player.getInventory().setChestplate(item1);
         item1 = new ItemStack(Material.COOKED_BEEF, 1);
         this.player.getInventory().addItem(item1);
-        Potion item = new Potion(PotionType.REGEN);
+        Potion item = new Potion(PotionType.WATER);
         item.setSplash(true);
         item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*6, 5), true);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*6, 0), true);
-        meta.setDisplayName(ChatColor.RED+"Beserker Potion");
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*10, 4), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*10, 0), true);
+        meta.setDisplayName(ChatColor.WHITE+"Beserker Potion");
         List<String> lore = new ArrayList<>();
-        lore.add("§6Effect:§e Regeneration 2");
-        lore.add("§6Effect:§e Resistance 1");
-        lore.add("§6Duration:§e 6 seconds");
+        lore.add(ChatColor.GRAY+"Absorption 5 (0:10)");
+        lore.add(ChatColor.GRAY+"Resistance 1 (0:10)");
         meta.setLore(lore);
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
@@ -174,11 +173,13 @@ public class Kits {
         item1.addEnchantment(Enchantment.DAMAGE_UNDEAD, 5);
         item1.addEnchantment(Enchantment.DAMAGE_ALL, 1);
         this.player.getInventory().addItem(item1);
-        Potion item = new Potion(PotionType.INSTANT_HEAL); // CHECK POTION;
-        item.setLevel(1);
-        item.setSplash(true);
-        item1 = item.toItemStack(4);
-        this.player.getInventory().addItem(item1);
+        for (int i=0;i<4;i++) {
+            Potion item = new Potion(PotionType.INSTANT_HEAL);
+            item.setLevel(1);
+            item.setSplash(true);
+            item1 = item.toItemStack(1);
+            this.player.getInventory().addItem(item1);
+        }
         item1 = new ItemStack(Material.GOLDEN_APPLE, 1);
         this.player.getInventory().addItem(item1);
         this.player.setMetadata("Cleric", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
@@ -226,11 +227,10 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(1);
         PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*999, 1), true);
-        meta.setDisplayName(ChatColor.RED+"Absorption Potion");
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*15, 1), true);
+        meta.setDisplayName(ChatColor.WHITE+"Absorption Potion");
         List<String> lore = new ArrayList<>();
-        lore.add("§6Effect:§e Absorption 2");
-        lore.add("§6Duration:§e 15 seconds");
+        lore.add(ChatColor.GRAY+"Absorption 2 (0:15)");
         meta.setLore(lore);
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
@@ -253,7 +253,9 @@ public class Kits {
         this.player.getInventory().addItem(item);
         item = new ItemStack(Material.DIRT, 32);
         this.player.getInventory().addItem(item);
-        item = new ItemStack(Material.WATER_BUCKET, 2);
+        item = new ItemStack(Material.WATER_BUCKET, 1);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.WATER_BUCKET, 1);
         this.player.getInventory().addItem(item);
         Potion item1Potion = new Potion(PotionType.JUMP);
         item1Potion.setLevel(2);
@@ -268,7 +270,7 @@ public class Kits {
         ItemStack item;
         Potion pot;
         item = new ItemStack(Material.DIAMOND_HELMET);
-        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3); // CHECK ENCHANT
+        item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
         this.player.getInventory().setHelmet(item);
         item = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         this.player.getInventory().setChestplate(item);
@@ -276,7 +278,7 @@ public class Kits {
         this.player.getInventory().setLeggings(item);
         item = new ItemStack(Material.CHAINMAIL_BOOTS);
         this.player.getInventory().setBoots(item);
-        pot = new Potion(PotionType.INSTANT_DAMAGE); // CHECK POTION;
+        pot = new Potion(PotionType.INSTANT_DAMAGE);
         pot.setLevel(2);
         pot.setSplash(true);
         item = pot.toItemStack(2);

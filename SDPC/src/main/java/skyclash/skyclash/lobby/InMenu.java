@@ -66,7 +66,7 @@ public class InMenu implements Listener {
             event.setCancelled(true);
 
             // open maps
-            if (event.getSlot() == 1) {
+            if (event.getSlot() == 9) {
                 // menu map selection
                 Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Map Selection");
 
@@ -87,8 +87,6 @@ public class InMenu implements Listener {
                         } else {
                             item = new ItemStack(Material.matchMaterial(material.toUpperCase()));
                         }
-
-
                         item.setAmount(1);
                         ItemMeta meta = item.getItemMeta();
                         if (meta != null) {
@@ -106,7 +104,7 @@ public class InMenu implements Listener {
             }
 
             // ready system
-            else if (event.getSlot() == 3) {
+            else if (event.getSlot() == 11) {
                 player.closeInventory();
                 if (main.playerStatus.get(player.getName()).equals("ready") && !main.isGameActive) {
                     player.sendMessage(ChatColor.YELLOW+"You are no longer ready");
@@ -133,243 +131,21 @@ public class InMenu implements Listener {
 
             }
 
+            // shop
+            else if (event.getSlot() == 13) {
+                player.closeInventory();
+                player.sendMessage(ChatColor.RED+"Shop is coming soon...");
+            }
+
             // open kits
-            else if (event.getSlot() == 5) {
-                Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Kit Selection");
-
-                ItemStack item;
-                ItemMeta meta;
-
-                item = new ItemStack(Material.BOW);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Archer");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(0, item);
-
-                item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Assassin");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(1, item);
-
-                item = new Potion(PotionType.STRENGTH).toItemStack(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Beserker");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(2, item);
-
-                item = new ItemStack(Material.GOLDEN_APPLE);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Cleric");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(3, item);
-
-                item = new ItemStack(Material.SNOW_BALL);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Frost_Knight");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(4, item);
-
-                item = new ItemStack(Material.IRON_CHESTPLATE);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Guardian");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(5, item);
-
-                // jumpman
-                item = new ItemStack(Material.SLIME_BLOCK, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Jumpman");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(6, item);
-
-                item = new SpawnEgg(EntityType.SKELETON).toItemStack(1);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Necromancer");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(7, item);
-                
-                // swordsman
-                item = new ItemStack(Material.IRON_SWORD);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Swordsman");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(8, item);
-
-                item = new ItemStack(Material.GOLD_INGOT);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Treasure_hunter");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(9, item);
-
-                item = new Potion(PotionType.SPEED).toItemStack(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Scout");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(10, item);
-                
-
-
-                player.openInventory(inventory);
+            else if (event.getSlot() == 15) {
+                player.openInventory(kitsInventory(player));
                 player.setMetadata("OpenedMenu3", new FixedMetadataValue(main.getPlugin(main.class), "Kit Selection"));
-
             }
 
             // open cards
-            else if (event.getSlot() == 7) {
-                Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Card Selection");
-
-                ItemStack item;
-                ItemMeta meta;
-
-                item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Creeper");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(0, item);
-
-                item = new ItemStack(Material.TNT);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Bigger Bangs");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(1, item);
-
-                // card
-                item = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
-                item.setAmount(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Damage Potion");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(2, item);
-
-                // card
-                item = new ItemStack(Material.IRON_CHESTPLATE, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Blast Protection");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(3, item);
-
-                // card
-                item = new ItemStack(Material.BOW, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Elven Archer");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(4, item);
-
-                // card
-                item = new ItemStack(Material.ENCHANTED_BOOK, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Quiver Refill");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(5, item);
-
-                // card
-                item = new ItemStack(Material.CHEST, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Apple Finder");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(6, item);
-
-                // card
-                item = new ItemStack(Material.IRON_BOOTS, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Hit and Run");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(7, item);
-
-                // card
-                item = new SpawnEgg(EntityType.ZOMBIE).toItemStack(1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Pacify");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(8, item);
-
-                // card
-                item = new ItemStack(Material.ENDER_PEARL, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Pearl Absorption");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(9, item);
-
-                // card
-                item = new ItemStack(Material.SUGAR, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Sugar Rush");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(10, item);
-
-                // card
-                item = new ItemStack(Material.REDSTONE, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Lifesteal");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(11, item);
-
-                // card
-                item = new ItemStack(Material.ROTTEN_FLESH, 1);
-                meta = item.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + "Monster Hunter");
-                    item.setItemMeta(meta);
-                }
-                inventory.setItem(12, item);
-
-                player.openInventory(inventory);
+            else if (event.getSlot() == 17) {
+                player.openInventory(cardsInventory(player));
                 player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.getPlugin(main.class), "Card Selection"));
             }
         }
@@ -460,5 +236,238 @@ public class InMenu implements Listener {
                 StartGame.EndTasks();
             }
         }
+    }
+
+    private Inventory kitsInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Kit Selection");
+
+        ItemStack item;
+        ItemMeta meta;
+
+        item = new ItemStack(Material.BOW);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Archer");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(0, item);
+
+        item = new Potion(PotionType.INVISIBILITY).toItemStack(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Assassin");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(1, item);
+
+        item = new Potion(PotionType.STRENGTH).toItemStack(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Beserker");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(2, item);
+
+        item = new ItemStack(Material.GOLDEN_APPLE);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Cleric");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(3, item);
+
+        item = new ItemStack(Material.SNOW_BALL);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Frost_Knight");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(4, item);
+
+        item = new ItemStack(Material.IRON_CHESTPLATE);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Guardian");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(5, item);
+
+        // jumpman
+        item = new ItemStack(Material.SLIME_BLOCK, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Jumpman");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(6, item);
+
+        item = new SpawnEgg(EntityType.SKELETON).toItemStack(1);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Necromancer");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(7, item);
+        
+        // swordsman
+        item = new ItemStack(Material.IRON_SWORD);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Swordsman");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(8, item);
+
+        item = new ItemStack(Material.GOLD_INGOT);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Treasure_hunter");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(9, item);
+
+        item = new Potion(PotionType.SPEED).toItemStack(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Scout");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(10, item);
+
+        return inventory;
+    }
+
+    private Inventory cardsInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(player, 27, ChatColor.DARK_BLUE+"Card Selection");
+
+        ItemStack item;
+        ItemMeta meta;
+
+        item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Creeper");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(0, item);
+
+        item = new ItemStack(Material.TNT);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Bigger Bangs");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(1, item);
+
+        // card
+        item = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Damage Potion");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(2, item);
+
+        // card
+        item = new ItemStack(Material.IRON_CHESTPLATE, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Blast Protection");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(3, item);
+
+        // card
+        item = new ItemStack(Material.BOW, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Elven Archer");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(4, item);
+
+        // card
+        item = new ItemStack(Material.ENCHANTED_BOOK, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Quiver Refill");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(5, item);
+
+        // card
+        item = new ItemStack(Material.CHEST, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Apple Finder");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(6, item);
+
+        // card
+        item = new ItemStack(Material.IRON_BOOTS, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Hit and Run");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(7, item);
+
+        // card
+        item = new SpawnEgg(EntityType.ZOMBIE).toItemStack(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Pacify");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(8, item);
+
+        // card
+        item = new ItemStack(Material.ENDER_PEARL, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Pearl Absorption");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(9, item);
+
+        // card
+        item = new ItemStack(Material.SUGAR, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Sugar Rush");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(10, item);
+
+        // card
+        item = new ItemStack(Material.REDSTONE, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Lifesteal");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(11, item);
+
+        // card
+        item = new ItemStack(Material.ROTTEN_FLESH, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Monster Hunter");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(12, item);
+
+        return inventory;
     }
 }

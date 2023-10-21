@@ -37,6 +37,13 @@ public class PlayerDC implements Listener {
     }
 
     private void ingame(Player player) {
+        // drops items hopefully
+        for (ItemStack itemStack : player.getInventory()) {
+            if (itemStack != null) {
+                player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            }
+        }
+
         Clock.playersLeft--;
         Bukkit.broadcastMessage(ChatColor.RED+player.getName()+" has died due to disconnecting");
         

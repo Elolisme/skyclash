@@ -8,14 +8,15 @@
 </div>
 
 ## Resources for development
-### Doc with cards and maps
+
+### All current Kits and Cards
+https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing
+
+### Hypickle cards and maps
 https://docs.google.com/document/d/14_MdE6IKqPPhNbR60T8SELjxTGKBIpSkJubV28Rsv2w/edit?usp=sharing
 
-### Kits
-https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438
-
-#### Rebalanced kits
-https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit
+### Hypickle kits
+https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing
 
 ### Chest locations
 https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
@@ -35,9 +36,16 @@ Builders
 - InfernoPig
 - ElectricEel06
 - TMaster9975
+- GargariniteGulpur
 
 Cool people
 - xEzKillz_
+- TROLLSTAR123
+- 3Delusion
+- DRPFan69
+- iSilkySmooth
+- zapic
+- Chez_E
 
 ## How To Install
 **TODO**
@@ -80,7 +88,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 - Ends the currently running game
 
 `/lootchest <name>`
-- makes a loot table file in `<root>/LootChestst/..` from the current chest you are looking at
+- makes a loot table file in `<root>/LootChests/..` from the current chest you are looking at
 
 `/lobby | /hub`
 - send you to the first spawn point of the default world
@@ -97,7 +105,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 ```
 
 `/spawn [add|remove|list] | /gamespawn`
-- adds a spawnpoint for when games run, wher players start out at
+- adds a spawnpoint for when games run, where players start out at
 - look at block under spawn to set it as one, and use list to show already set coords
 - this also modifies maps.json similarly to /setchest
 
@@ -189,11 +197,11 @@ Exists for admins to start game manually
 ``` 
 
 ### The Gameplay
-Players spawn at preplaced spawnpoints on the most voted map, recieving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
+Players spawn at preplaced spawnpoints on the most voted map, receiving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
 <br>
 Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner.
 <br>
-The game also ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporing them and spectators back.
+The game also ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
 <br>
 If you are in the hub and a game is running, you can spectate the game through the menu.
 
@@ -227,16 +235,51 @@ Example:
 
 # TODO
 Soon
-- [ ] leaderboard command for stats
-- [ ] add worldborder
-- [ ] fix fireball firing twice
-- [ ] initial pearl cooldown of 10 seconds
+- add worldborder
+- add a toggle between not ready, ready, and autoready
+- Upgrade card system and shop for temporary items
 
 Future
-- Upgrade card system and shop for temporary items
+- leaderboard command for stats
 - finish readme
 
 # Changelog
+
+## v1.4.3
+- Fixed players being able to hit each other in lobby
+- Fixed armour not clearing
+- Added initial pearl cooldown of 15 seconds
+- When use fireball only removes 1 item now
+- Pearl cooldown now 2 seconds
+- Fixed player deaths bug where the loot goes to mid           (TODO check)
+- Fixed autoready not working for /lobby | /hub as well as spectators
+- All potions now have nicer formatting for effects
+- Jump boots from slime blocks only effects jumpman now
+- Players drop their items when they disconnect from a game           (TODO check)
+- Menu can only be accessed by right clicking
+- Mid chest can only be opened by right clicking
+
+- Revamped the Menu to include the (non functional) shop
+
+Kits
+- archer was actually 70% -> changed back to 30%
+- homing arrow lifespan is 20 seconds and can only target people in game
+- assassin pearl invis won't override any current invis
+- beserker potion is 10 seconds and absorption 5
+- Cleric potions are unstacked
+- made guardian absorption potion 15s and get resistance 1 when below 5 hearts
+- unstacked the water buckets for jumpman
+- Jumpman winged boots do not override the jump potion now
+- Winged boots are now only jump boost 3 -> 1
+- Swordsman nerf:
+  - Amount of potions 2 -> 1
+  - Strength 2 -> 1
+  - true damage every 10 seconds -> 15 seconds
+
+Cards
+- fixed monster hunter levels not working
+- Apple finder chance to get golden apple from chest break 20 -> 40%
+- Pacify reduces 20% -> 80% damage from "monsters"
 
 ## v1.4.2
 - Fixed some minor bugs related to lifesteal at full health and disconnecting
@@ -331,7 +374,7 @@ Kits:
 4 more kits to go! (and a lot of cards :| )
 
 Code:
-- Fixed everything in the kitgenerator python script (except misinput for enchants), should work much better for generating all other kits and cards kindof
+- Fixed everything in the kitgenerator python script (except misinput for enchants), should work much better for generating all other kits and cards kind of
 
 ## v1.2.0
 Kits:
@@ -355,7 +398,7 @@ GitHub:
 
 ## v1.1.3
 Code:
-- actaully removed tags from players at start and end of game
+- actually removed tags from players at start and end of game
 - fixed players being able to hit each other in lobby
 - fixed dc's
 - fixed armour clearing

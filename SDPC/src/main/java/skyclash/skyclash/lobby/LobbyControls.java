@@ -63,7 +63,7 @@ public class LobbyControls implements Listener {
             GiveItem(player);
         }
 
-        StatsManager.changeStat(player, "joins", 1);
+        StatsManager.changeStat(player, "Joins", 1);
         
     }
 
@@ -73,7 +73,7 @@ public class LobbyControls implements Listener {
         if (!main.playerStatus.containsKey(player.getName())) {
             return;
         }
-        if (main.playerStatus.get(player.getName()).equals("lobby")  && event.getNewGameMode() != GameMode.CREATIVE) {
+        if (main.playerStatus.get(player.getName()).equals("lobby") ^ main.playerStatus.get(player.getName()).equals("ready")) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
             }
@@ -86,7 +86,7 @@ public class LobbyControls implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (main.playerStatus.get(player.getName()).equals("lobby")) {
+        if (main.playerStatus.get(player.getName()).equals("lobby") ^ main.playerStatus.get(player.getName()).equals("ready")) {
             event.setCancelled(true);
         }
     }
@@ -129,6 +129,6 @@ public class LobbyControls implements Listener {
             event.setCancelled(true);
             return;
         }
-        Cooldown.add(player.getName(), "Pearl", 5, System.currentTimeMillis());
+        Cooldown.add(player.getName(), "Pearl", 2, System.currentTimeMillis());
     }
 }

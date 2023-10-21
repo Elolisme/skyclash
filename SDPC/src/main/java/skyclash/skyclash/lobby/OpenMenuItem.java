@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -31,8 +32,8 @@ public class OpenMenuItem implements Listener {
     }
 
     @EventHandler
-    @SuppressWarnings("unchecked")
     public void onUseItem(PlayerInteractEvent event) {
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {return;}
         Player player = event.getPlayer();
         if (!main.playerStatus.containsKey(player.getName())) {
             main.playerStatus.put(player.getName(), "lobby");
@@ -56,109 +57,133 @@ public class OpenMenuItem implements Listener {
 
         // Main menu
         Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Skyclash Menu");
+        ItemStack item;
+        ItemMeta meta;
 
-        // item 1
-        ItemStack item = new ItemStack(Material.PAPER);
+        // player and stats
+        inventory.setItem(4, statItem(player));
+
+        // vote for maps
+        item = new ItemStack(Material.PAPER);
         item.setAmount(1);
-        ItemMeta meta = item.getItemMeta();
+        meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(ChatColor.YELLOW + "Vote For a Map");
+            meta.setDisplayName(ChatColor.WHITE + "Vote For a Map");
             List<String> lore = new ArrayList<>();
             lore.add("Click to access available maps");
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
-        inventory.setItem(1, item);
+        inventory.setItem(9, item);
 
-        // item 2a
-        ItemStack item2 = new Wool(DyeColor.RED).toItemStack();
-        item2.setAmount(1);
-        ItemMeta meta2 = item.getItemMeta();
-        if (meta2 != null) {
-            meta2.setDisplayName(ChatColor.RED + "Ready up for a game");
+        // not ready
+        item = new Wool(DyeColor.RED).toItemStack();
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "You are not ready");
             List<String> lore2 = new ArrayList<>();
             lore2.add("Click to become ready");
-            meta2.setLore(lore2);
-            item2.setItemMeta(meta2);
+            meta.setLore(lore2);
+            item.setItemMeta(meta);
         }
 
-        // item 2b
-        ItemStack item3 = new Wool(DyeColor.GREEN).toItemStack();
-        item3.setAmount(1);
-        ItemMeta meta3 = item.getItemMeta();
-        if (meta3 != null) {
-            meta3.setDisplayName(ChatColor.GREEN + "You are ready for a game");
+        // ready
+        ItemStack item1 = new Wool(DyeColor.GREEN).toItemStack();
+        item1.setAmount(1);
+        meta = item1.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.GREEN + "You are ready");
             List<String> lore3 = new ArrayList<>();
             lore3.add("Click to no longer be ready");
-            meta3.setLore(lore3);
-            item3.setItemMeta(meta3);
+            meta.setLore(lore3);
+            item1.setItemMeta(meta);
         }
 
-        // item 2c
-        ItemStack item6 = new Wool(DyeColor.GRAY).toItemStack();
-        item6.setAmount(1);
-        ItemMeta meta6 = item.getItemMeta();
-        if (meta6 != null) {
-            meta6.setDisplayName(ChatColor.GREEN + "Spectate Active Game");
+        // spectate
+        ItemStack item2 = new Wool(DyeColor.GRAY).toItemStack();
+        item2.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.GRAY + "Spectate Active Game");
             List<String> lore6 = new ArrayList<>();
             lore6.add("Click to spectate current game");
-            meta6.setLore(lore6);
-            item6.setItemMeta(meta6);
+            meta.setLore(lore6);
+            item2.setItemMeta(meta);
         }
 
-        if (main.playerStatus.get(player.getName()).equals("ready") && !main.isGameActive) {
-            inventory.setItem(3, item3);
+        if (main.playerStatus.get(player.getName()).equals("lobby") && !main.isGameActive) {
+            inventory.setItem(11, item);
         }
-        else if (main.playerStatus.get(player.getName()).equals("lobby") && !main.isGameActive){
-            inventory.setItem(3, item2);
+        else if (main.playerStatus.get(player.getName()).equals("ready") && !main.isGameActive){
+            inventory.setItem(11, item1);
         } else {
-            inventory.setItem(3, item6);
+            inventory.setItem(11, item2);
         }
+
+        // shop
+        item = new ItemStack(Material.GOLD_INGOT);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.YELLOW + "Shop");
+            List<String> lore4 = new ArrayList<>();
+            lore4.add("Buy temporary buffs");
+            meta.setLore(lore4);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(13, item);
 
         // kits
-        ItemStack item4 = new ItemStack(Material.DIAMOND_SWORD);
-        item.setAmount(4);
-        ItemMeta meta4 = item.getItemMeta();
-        if (meta4 != null) {
-            meta4.setDisplayName(ChatColor.YELLOW + "Select Kit");
+        item = new ItemStack(Material.DIAMOND_SWORD, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.BLUE + "Select Kit");
             List<String> lore4 = new ArrayList<>();
             lore4.add("Click to change your kit");
-            meta4.setLore(lore4);
-            item4.setItemMeta(meta4);
+            meta.setLore(lore4);
+            item.setItemMeta(meta);
         }
-        inventory.setItem(5, item4);
+        inventory.setItem(15, item);
 
         // cards
-        ItemStack item5 = new ItemStack(Material.ENCHANTED_BOOK);
-        item.setAmount(5);
-        ItemMeta meta5 = item.getItemMeta();
-        if (meta5 != null) {
-            meta5.setDisplayName(ChatColor.YELLOW + "Select Card");
+        item = new ItemStack(Material.ENCHANTED_BOOK, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Select Card");
             List<String> lore5 = new ArrayList<>();
             lore5.add("Click to access your cards");
-            meta5.setLore(lore5);
-            item5.setItemMeta(meta5);
+            meta.setLore(lore5);
+            item.setItemMeta(meta);
         }
-        inventory.setItem(7, item5);
+        inventory.setItem(17, item);
+
+        // set inventory
+        player.openInventory(inventory);
+        player.setMetadata("OpenedMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private ItemStack statItem(Player player) {
+        ItemStack item;
+        ItemMeta meta;
 
         // stats
         DataFiles df = new DataFiles(player);
         PlayerData pdata = df.LoadData();
 
         JSONObject stats = pdata.Stats;
-        
-        item5 = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
-        item.setAmount(5);
-        SkullMeta smeta = (SkullMeta) item5.getItemMeta();
+        item = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+        SkullMeta smeta = (SkullMeta) item.getItemMeta();
         smeta.setOwner(player.getName().toString());
-        item5.setItemMeta(smeta);
-        meta5 = item5.getItemMeta();
-        if (meta5 != null) {
-            meta5.setDisplayName(ChatColor.GREEN + player.getName());
-            List<String> lore5 = new ArrayList<>();
-            lore5.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)pdata.Coins);
-            lore5.add("");
-            lore5.add(ChatColor.GOLD+"Your stats:");
+        item.setItemMeta(smeta);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.GREEN + player.getName());
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)pdata.Coins);
+            lore.add("");
+            lore.add(ChatColor.GOLD+"Your stats:");
 
             Object kdr;
             Object wr;
@@ -171,13 +196,13 @@ public class OpenMenuItem implements Listener {
             try {kdr = ((float) Math.round((long)stats.get("kills") *1000 / (long)stats.get("deaths")))/1000;} catch (Exception e) {kdr = "To infinity and beyond...";}
             try {wr = ((float)Math.round((long)stats.get("wins") *1000 / (long)stats.get("Games")))/10;} catch (Exception e) {wr = "To infinity and beyond...";}
             
-            lore5.add(ChatColor.YELLOW+"KDR: "+ChatColor.BLUE+kdr+" ("+stats.get("kills")+"/"+stats.get("deaths")+")");
+            lore.add(ChatColor.YELLOW+"KDR: "+ChatColor.BLUE+kdr+" ("+stats.get("kills")+"/"+stats.get("deaths")+")");
             stats.remove("kills");
             stats.remove("deaths");
-            lore5.add(ChatColor.YELLOW+"WR: "+ChatColor.BLUE+wr+"% ("+stats.get("wins")+"/"+stats.get("Games")+")");
+            lore.add(ChatColor.YELLOW+"WR: "+ChatColor.BLUE+wr+"% ("+stats.get("wins")+"/"+stats.get("Games")+")");
             stats.remove("wins");
             stats.remove("Games");
-            lore5.add("");
+            lore.add("");
 
             ArrayList<Long> sortStrings = new ArrayList<>();
             stats.forEach((stat, value) -> {sortStrings.add((Long)value);});
@@ -187,16 +212,12 @@ public class OpenMenuItem implements Listener {
 
             sortStrings2.forEach((value) -> {
                 stats.forEach((stat, svalue) -> {
-                    if (value.equals((Long)svalue)) {lore5.add(ChatColor.YELLOW+(String)stat+": "+ChatColor.BLUE+stats.get(stat));}
+                    if (value.equals((Long)svalue)) {lore.add(ChatColor.YELLOW+(String)stat+": "+ChatColor.BLUE+stats.get(stat));}
                 });
             });
-            meta5.setLore(lore5);
-            item5.setItemMeta(meta5);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
         }
-        inventory.setItem(13, item5);
-
-        player.openInventory(inventory);
-        player.setMetadata("OpenedMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));
-
+        return item;
     }
 }

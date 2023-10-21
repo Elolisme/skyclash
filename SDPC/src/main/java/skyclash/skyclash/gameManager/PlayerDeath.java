@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.kitscards.RemoveTags;
@@ -20,15 +19,13 @@ public class PlayerDeath implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    private static Location respawnLoc;
-
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (!main.playerStatus.get(player.getName()).equals("ingame")) {
             return;
         }
-        // code
+
         StatsManager.changeStat(player, "deaths", 1);
         if (Clock.timer > 570) {
             StatsManager.changeStat(player, "30s Deaths", 1);
@@ -36,35 +33,37 @@ public class PlayerDeath implements Listener {
         if (event.getEntity().getLastDamageCause().getCause() == DamageCause.VOID) {
             StatsManager.changeStat(player, "Void deaths", 1);
         }
+
+        main.playerStatus.put(player.getName(), "spectator");
+        player.setGameMode(GameMode.SPECTATOR);
+        Location loc = event.getEntity().getLocation();
+        player.getWorld().strikeLightningEffect(loc);
         
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+            player.spigot().respawn();
+        }, 1);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+            player.teleport(loc);
+            if (player.getLocation().getY() < 64) {
+                Location loc2 = new Location(player.getWorld(), player.getLocation().getX(), 100, player.getLocation().getZ());
+                player.teleport(loc2);
+            }
+        }, 3);
+
+        player.getInventory().clear();
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
-
-        main.playerStatus.put(player.getName(), "spectator");
         Clock.playersLeft--;
-        respawnLoc = event.getEntity().getLocation();
-        player.spigot().respawn();
-        
+        player.sendMessage(ChatColor.RED+"Better luck next time");
         new RemoveTags(player);
 
-        if (Clock.playersLeft <= 1) {
-            new EndGame(false);
-        }
-    }
-
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("spectator")) {
-            return;
-        }
-        player.getWorld().strikeLightningEffect(respawnLoc);
-        player.setGameMode(GameMode.SPECTATOR);
-        player.sendMessage(ChatColor.RED+"Better luck next time");
-        player.getInventory().clear();
-        if (player.getLocation().getY() < 0) {respawnLoc.setY(100);}
-        player.teleport(respawnLoc);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+            if (Clock.playersLeft <= 1) {
+                new EndGame(false);
+            }
+        }, 5);
     }
 
 }

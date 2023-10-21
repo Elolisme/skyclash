@@ -3,6 +3,7 @@ package skyclash.skyclash.gameManager;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -14,6 +15,7 @@ import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.ChestManager;
 import skyclash.skyclash.chestgen.StringToJSON;
+import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.Cards;
@@ -159,6 +161,10 @@ public class StartGame {
                     // player setup for game
                     player.setGameMode(GameMode.SURVIVAL);
                     player.getInventory().clear();
+                    player.getInventory().setHelmet(new ItemStack(Material.AIR));
+                    player.getInventory().setChestplate(new ItemStack(Material.AIR));
+                    player.getInventory().setLeggings(new ItemStack(Material.AIR));
+                    player.getInventory().setBoots(new ItemStack(Material.AIR));
                     player.setHealth(20);
                     player.setSaturation(20);
                     for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -170,6 +176,7 @@ public class StartGame {
                     player.sendMessage("You will be sent to play soon");
                     new RemoveTags(player);
                     main.playerStatus.put(player.getName(), "ingame");
+                    Cooldown.add(player.getName(), "Pearl", 20, System.currentTimeMillis());
                     counter.getAndIncrement();
                 }
             }
