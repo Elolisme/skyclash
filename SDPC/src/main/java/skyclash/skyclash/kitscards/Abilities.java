@@ -135,7 +135,11 @@ public class Abilities implements Listener {
         double minAngle = 6.283185307179586;
         Entity minEntity = null;
         for (Entity entity : player.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
-            if (player.hasLineOfSight(entity) && (entity instanceof LivingEntity) && !entity.isDead() && main.playerStatus.get(entity.getName()).equals("ingame")) {
+            Boolean target = false;
+            // Just checks - if monster, or if player who is ingame, and if not dead and can be seen
+            if (entity instanceof Monster) {target = true;}
+            if (entity instanceof Player) {if (main.playerStatus.get(entity.getName()).equals("ingame")) {target = true;}}
+            if (player.hasLineOfSight(entity) && !entity.isDead() && target) {
                 Vector toTarget = entity.getLocation().toVector().clone().subtract(player.getLocation().toVector());
                 double angle = e.getProjectile().getVelocity().angle(toTarget);
                 if (angle < minAngle) {
@@ -217,7 +221,7 @@ public class Abilities implements Listener {
         if (!player.hasMetadata("Blast Protection")) {
             return;
         }
-        if (!(event.getCause() == DamageCause.ENTITY_EXPLOSION ^ event.getCause() == DamageCause.BLOCK_EXPLOSION)) {
+        if (!(event.getCause() == DamageCause.ENTITY_EXPLOSION || event.getCause() == DamageCause.BLOCK_EXPLOSION)) {
             return;
         }
 

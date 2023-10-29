@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import skyclash.skyclash.fileIO.DataFiles;
-import skyclash.skyclash.kitscards.PlayerData;
+import skyclash.skyclash.fileIO.PlayerData;
 
 public class StatsManager {
 
@@ -55,19 +55,5 @@ public class StatsManager {
         }
 
         files.SetData(pdata);
-    }
-
-    public int getStat(Player player, String stat) {
-        DataFiles files = new DataFiles(player);
-        PlayerData pdata = files.LoadData();
-        if (stat.equals("coins")) {
-            return pdata.Coins;
-        }
-        else if (pdata.Stats.containsKey(stat)) {
-            return Math.toIntExact((long)pdata.Stats.get(stat));
-        }
-        else {
-            return Integer.MIN_VALUE;
-        }
     }
 }

@@ -42,6 +42,10 @@ commands:
     usage: /spawns [add|remove|list]
     permission: sgm.host
     aliases: [spawns, spawn]
+  leaderboard:
+    description: list the top 9 people of a certain stat, as well as your position
+    usage: /leaderboard <stat>
+    permission: sgm.lobby
 
 permissions:
   sgm.lobby:

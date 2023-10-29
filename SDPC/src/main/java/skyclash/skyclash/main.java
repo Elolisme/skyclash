@@ -10,10 +10,8 @@ import skyclash.skyclash.gameManager.InGame;
 import skyclash.skyclash.gameManager.PlayerDC;
 import skyclash.skyclash.gameManager.PlayerDeath;
 import skyclash.skyclash.kitscards.Abilities;
-import skyclash.skyclash.lobby.InMenu;
+import skyclash.skyclash.lobby.MenuLogic;
 import skyclash.skyclash.lobby.LobbyControls;
-import skyclash.skyclash.lobby.OpenMenuItem;
-
 import java.util.HashMap;
 
 public class main extends JavaPlugin {
@@ -29,9 +27,8 @@ public class main extends JavaPlugin {
     @Override
     public void onEnable() {
         // handlers
-        new OpenMenuItem(this);
         new LobbyControls(this);
-        new InMenu(this);
+        new MenuLogic(this);
         new InGame(this);
         new CustomItems(this);
         new PlayerDC(this);
@@ -50,6 +47,7 @@ public class main extends JavaPlugin {
         this.getCommand("lobby").setExecutor(new tolobby());
         this.getCommand("setchest").setExecutor(new setchest());
         this.getCommand("gamespawn").setExecutor(new gamespawn());
+        this.getCommand("leaderboard").setExecutor(new leaderboard());
     }
 
     @Override

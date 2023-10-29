@@ -28,10 +28,7 @@ public class Cooldown {
             return 0.0;
         if (!cooldownPlayers.get(player).cooldownMap.containsKey(ability))
             return 0.0;
-        return UtilTime.convert(
-                (cooldownPlayers.get(player).cooldownMap.get(ability).seconds
-                        + cooldownPlayers.get(player).cooldownMap.get(ability).systime) - System.currentTimeMillis(),
-                UtilTime.TimeUnit.SECONDS, 1);
+        return UtilTime.convert((cooldownPlayers.get(player).cooldownMap.get(ability).seconds + cooldownPlayers.get(player).cooldownMap.get(ability).systime) - System.currentTimeMillis(),UtilTime.TimeUnit.SECONDS,1);
     }
 
     public static void coolDurMessage(Player player, String ability) {

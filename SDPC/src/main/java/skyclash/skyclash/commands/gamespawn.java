@@ -28,7 +28,7 @@ public class gamespawn implements CommandExecutor {
         Player player = (Player) sender;
         Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
 
-        if (args.length == 0 ^ args.length > 1) {
+        if (args.length == 0 || args.length > 1) {
             player.sendMessage("§cPlease specify the correct arguments\nUse /spawn [add|remove|list]");
             return true;
         }

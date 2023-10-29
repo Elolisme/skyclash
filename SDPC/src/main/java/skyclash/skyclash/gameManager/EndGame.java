@@ -10,9 +10,10 @@ import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.chestgen.StringToJSON;
+import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.kitscards.RemoveTags;
-import skyclash.skyclash.lobby.InMenu;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
@@ -44,15 +45,14 @@ public class EndGame {
             });
         }
 
+        // kill stats
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage(ChatColor.DARK_RED+"Top kills:");
-
         ArrayList<Integer> sortStrings = new ArrayList<>();
         StatsManager.killtracker.forEach((player, value) -> {sortStrings.add(value);});
         List<Integer> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
         Collections.sort(sortStrings2);
         Collections.reverse(sortStrings2);
-
         sortStrings2.forEach((value) -> {
             StatsManager.killtracker.forEach((player, svalue) -> {
                 if (value.equals(svalue)) {Bukkit.broadcastMessage("  "+ChatColor.RED+player+": "+ChatColor.YELLOW+value);}
@@ -60,7 +60,6 @@ public class EndGame {
         });
         StatsManager.killtracker = new HashMap<>();
         Bukkit.broadcastMessage("");
-
 
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
@@ -89,7 +88,7 @@ public class EndGame {
 
         // loop for every player
         main.playerStatus.forEach((key, value) -> {
-            if (value.equals("spectator") ^ value.equals("ingame")) {
+            if (value.equals("spectator") || value.equals("ingame")) {
                 Player player = Bukkit.getServer().getPlayer(key);
                 if (isCommand) {
                     player.sendMessage("The game has abruptly ended");
@@ -113,8 +112,13 @@ public class EndGame {
                 player.setSaturation(20);
                 player.setLevel(0);
                 player.setExp(0);
-                main.playerStatus.put(player.getName(), "ready");
-                InMenu.CheckStartGame(true);
+                main.playerStatus.put(player.getName(), "lobby");
+                DataFiles data = new DataFiles(player);
+                PlayerData playerData = data.LoadData();
+                if (playerData.Autoready == true) {
+                    main.playerStatus.put(player.getName(), "ready");
+                }
+                LobbyControls.CheckStartGame(true);
 
                 main.playerVote.remove(player.getName());
                 if (player.hasMetadata("NoMovement")) {

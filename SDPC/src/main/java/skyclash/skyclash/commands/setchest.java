@@ -29,7 +29,7 @@ public class setchest implements CommandExecutor {
         Player player = (Player) sender;
         Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
 
-        if (args.length == 0 ^ args.length > 3) {
+        if (args.length == 0 || args.length > 3) {
             player.sendMessage("§cPlease specify the correct arguments\nUse /chests [add|remove|list|scan]");
             return true;
         }
@@ -150,7 +150,7 @@ public class setchest implements CommandExecutor {
             int y = Integer.valueOf(String.valueOf(array.get(1)));
             int z = Integer.valueOf(String.valueOf(array.get(2)));
             Block worldBlock = player.getWorld().getBlockAt(x, y, z);
-            if ((worldBlock.getState() instanceof Chest) ^ worldBlock.getType() == Material.ENDER_CHEST) {
+            if ((worldBlock.getState() instanceof Chest) || worldBlock.getType() == Material.ENDER_CHEST) {
                 player.sendMessage(ChatColor.YELLOW+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2));
             } else {
                 player.sendMessage(ChatColor.RED+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2)+"     No chest at these coords");
@@ -169,7 +169,7 @@ public class setchest implements CommandExecutor {
                     int x = (int)currentBlock.getX();
                     int y = (int)currentBlock.getY();
                     int z = (int)currentBlock.getZ();
-                    if ((player.getLocation().subtract(radius, radius, radius).add(i, j, k).getBlock().getState() instanceof Chest) ^ player.getLocation().subtract(radius, radius, radius).add(i, j, k).getBlock().getType() == Material.ENDER_CHEST) {
+                    if ((player.getLocation().subtract(radius, radius, radius).add(i, j, k).getBlock().getState() instanceof Chest) || player.getLocation().subtract(radius, radius, radius).add(i, j, k).getBlock().getType() == Material.ENDER_CHEST) {
                         player.sendMessage(ChatColor.YELLOW+ "   Chest found at: "+x+" "+y+" "+z);
                         if (appending) {addChest(player, currentBlock);}
                     }

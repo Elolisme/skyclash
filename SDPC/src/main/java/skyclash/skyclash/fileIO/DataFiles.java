@@ -1,10 +1,10 @@
 package skyclash.skyclash.fileIO;
 
 import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import skyclash.skyclash.kitscards.PlayerData;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,11 +13,16 @@ import java.io.IOException;
 
 @SuppressWarnings("unchecked")
 public class DataFiles {
-    private final Player player;
-    private PlayerData data;
+    public PlayerData data;
+    private String playerName;
 
     public DataFiles(Player player) {
-        this.player = player;
+        this.playerName = player.getName();
+        this.data = LoadData();
+    }
+
+    public DataFiles(String name) {
+        this.playerName = name;
         this.data = LoadData();
     }
     
@@ -34,7 +39,7 @@ public class DataFiles {
             folder.mkdirs();
         }
 
-        File playerFile = new File(path+File.separator+player.getName()+".json");
+        File playerFile = new File(path+File.separator+playerName+".json");
         if(!playerFile.exists()) {
             try {
                 //noinspection ResultOfMethodCallIgnored
@@ -47,7 +52,7 @@ public class DataFiles {
 
     }
     public void SaveData() {
-        String path = "players"+File.separator+player.getName()+".json";
+        String path = "players"+File.separator+playerName+".json";
         JSONObject jsondata = new JSONObject();
         jsondata.put("name", data.Name);
         jsondata.put("card", data.Card);
@@ -55,6 +60,8 @@ public class DataFiles {
         jsondata.put("hasJoined", data.hasJoined);
         jsondata.put("stats", data.Stats);
         jsondata.put("coins", data.Coins);
+        jsondata.put("autoready", data.Autoready);
+        jsondata.put("owned", data.Owned);
 
         try {
             @SuppressWarnings("resource") FileWriter file = new FileWriter(path);
@@ -66,13 +73,15 @@ public class DataFiles {
     }
 
     public PlayerData LoadData() {
-        String path = "players"+File.separator+player.getName()+".json";
+        String path = "players"+File.separator+playerName+".json";
         JSONParser parser = new JSONParser();
         try {
             if (!(new File(path).exists())) {
                 JSONObject arr = new JSONObject();
                 arr.put("temp", 0);
-                data = new PlayerData(player.getName(), "Damage Potion", "Swordsman", false, arr, 0);
+                JSONArray tempArray = new JSONArray();
+                tempArray.add("temp");
+                data = new PlayerData(playerName, "Damage Potion", "Swordsman", false, arr, 0, false, tempArray);
                 CreateFile();
                 return data;
             }
@@ -85,7 +94,11 @@ public class DataFiles {
             JSONObject stats = (JSONObject) jsonObject.get("stats");
             Long coins = (Long) jsonObject.get("coins");
             int coins2 = Math.toIntExact(coins);
-            return new PlayerData(name, card, kit, hasJoined, stats, coins2);
+            Boolean autoready = false;
+            if (jsonObject.containsKey("autoready")) {autoready = (Boolean) jsonObject.get("autoready");}
+            JSONArray owned = new JSONArray();
+            if (jsonObject.containsKey("owned")) {owned = (JSONArray) jsonObject.get("owned");}
+            return new PlayerData(name, card, kit, hasJoined, stats, coins2, autoready, owned);
 
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);

@@ -14,7 +14,6 @@ import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.RemoveTags;
-import skyclash.skyclash.lobby.InMenu;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
@@ -94,7 +93,7 @@ public class PlayerDC implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
-        main.playerStatus.put(player.getName(), "lobby");
+        main.playerStatus.remove(player.getName());
         main.playerVote.remove(player.getName());
         if (player.hasMetadata("NoMovement")) {
             player.removeMetadata("NoMovement", main.getPlugin(main.class));
@@ -104,8 +103,8 @@ public class PlayerDC implements Listener {
     }
 
     private void ready(Player player) {
-        main.playerStatus.put(player.getName(), "lobby");
-        InMenu.CheckStartGame(false);
+        main.playerStatus.remove(player.getName());
+        LobbyControls.CheckStartGame(false);
     }
 
     private void spec(Player player) {
@@ -141,7 +140,7 @@ public class PlayerDC implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
-        main.playerStatus.put(player.getName(), "lobby");
+        main.playerStatus.remove(player.getName());
         LobbyControls.GiveItem(player);
         player.teleport(spawnloc);
     }

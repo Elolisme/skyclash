@@ -19,13 +19,15 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.fileIO.DataFiles;
+import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.StartGame;
 import skyclash.skyclash.gameManager.StatsManager;
-import skyclash.skyclash.kitscards.PlayerData;
 import skyclash.skyclash.main;
 import skyclash.skyclash.cooldowns.Cooldown;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LobbyControls implements Listener {
     public LobbyControls(main plugin) {
@@ -59,8 +61,8 @@ public class LobbyControls implements Listener {
         }
         datafiles.SetData(data);
 
-        if (main.playerStatus.get(player.getName()).equals("lobby") && player.getGameMode() != GameMode.CREATIVE) {
-            GiveItem(player);
+        if (data.Autoready == true) {
+            main.playerStatus.put(player.getName(), "ready");
         }
 
         StatsManager.changeStat(player, "Joins", 1);
@@ -73,7 +75,7 @@ public class LobbyControls implements Listener {
         if (!main.playerStatus.containsKey(player.getName())) {
             return;
         }
-        if (main.playerStatus.get(player.getName()).equals("lobby") ^ main.playerStatus.get(player.getName()).equals("ready")) {
+        if (main.playerStatus.get(player.getName()).equals("lobby") || main.playerStatus.get(player.getName()).equals("ready")) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
             }
@@ -86,7 +88,7 @@ public class LobbyControls implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (main.playerStatus.get(player.getName()).equals("lobby") ^ main.playerStatus.get(player.getName()).equals("ready")) {
+        if (main.playerStatus.get(player.getName()).equals("lobby") || main.playerStatus.get(player.getName()).equals("ready")) {
             event.setCancelled(true);
         }
     }
@@ -94,16 +96,17 @@ public class LobbyControls implements Listener {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        DataFiles dataFiles = new DataFiles(player);
-        PlayerData data4 = dataFiles.LoadData();
+        DataFiles datafiles = new DataFiles(player);
+        PlayerData data = datafiles.LoadData();
         if (event.getItemDrop() == null) {
             return;
         }
-        if ((event.getItemDrop().getItemStack().getType() == Material.NETHER_STAR) && data4.hasJoined && (player.getGameMode() != GameMode.CREATIVE)) {
+        if ((event.getItemDrop().getItemStack().getType() == Material.NETHER_STAR) && data.hasJoined && (player.getGameMode() != GameMode.CREATIVE)) {
             event.setCancelled(true);
         }
     }
 
+    // Main menu item
     public static void GiveItem(Player player) {
         ItemStack item = new ItemStack(Material.NETHER_STAR);
         ItemMeta meta = item.getItemMeta();
@@ -117,6 +120,7 @@ public class LobbyControls implements Listener {
         player.getInventory().setItem(8, item);
     }
 
+    // Pearl Cooldown
     @EventHandler
     public void onUsePearl(ProjectileLaunchEvent event) {
         if (event.getEntityType() != EntityType.ENDER_PEARL) {return;}
@@ -130,5 +134,23 @@ public class LobbyControls implements Listener {
             return;
         }
         Cooldown.add(player.getName(), "Pearl", 2, System.currentTimeMillis());
+    }
+
+    public static void CheckStartGame(boolean started) {
+        AtomicInteger people_ready = new AtomicInteger(0);
+        main.playerStatus.forEach((key, value) -> {
+            if (value.equals("ready")) {
+                people_ready.getAndIncrement();
+            }
+        });
+        if (started && Integer.parseInt(String.valueOf(people_ready)) == 2) {
+            new StartGame(false);
+        }
+        if (!started && Integer.parseInt(String.valueOf(people_ready)) == 1) {
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Game cancelled due to insufficient people ready");
+            if (StartGame.task1 != null) {
+                StartGame.EndTasks();
+            }
+        }
     }
 }

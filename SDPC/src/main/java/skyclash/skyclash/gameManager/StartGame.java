@@ -18,9 +18,9 @@ import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.kitscards.Cards;
 import skyclash.skyclash.kitscards.Kits;
-import skyclash.skyclash.kitscards.PlayerData;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 
@@ -114,14 +114,16 @@ public class StartGame {
         worldManager.loadWorld(VotedMap.get());
         copyWorld(Bukkit.getWorld(VotedMap.get()), "ingame_map");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mv import ingame_map normal");
-        worldManager.unloadWorld(VotedMap.get());
         main.isGameActive = true;
         main.activeWorld = VotedMap.get();
 
         // set world settings
         worldManager.getMVWorld("ingame_map").setAllowMonsterSpawn(false);
+        worldManager.getMVWorld("ingame_map").setBedRespawn(false);
         Bukkit.getWorld("ingame_map").setGameRuleValue("DO_DAYLIGHT_CYCLE", "false");
         Bukkit.getWorld("ingame_map").setTime(6000);
+        Bukkit.getWorld("ingame_map").getWorldBorder().setCenter(0, 0);
+        Bukkit.getWorld("ingame_map").getWorldBorder().setSize(300);
 
         // prepare all ready players
         AtomicInteger counter = new AtomicInteger(1);
@@ -227,8 +229,9 @@ public class StartGame {
                         Kits kit1 = new Kits(data.Kit, player);
                         kit1.GiveKit();
                         Cards card1 = new Cards(data.Card, player);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 254, true));
                         card1.GiveCard();
+                        new giveItems(player);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 254, true));
                         player.setScoreboard(Clock.board);
                         player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.9f);
                     }
@@ -246,5 +249,4 @@ public class StartGame {
         task2 = null;
         task3 = null;
     }
-
 }

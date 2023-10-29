@@ -93,6 +93,10 @@ public class Clock {
                 break;
         }
 
+        if (timer == 420) {
+            Bukkit.getWorld("ingame_map").getWorldBorder().setSize(20, 400);
+        }
+
         if (timer % 5 == 0 && timer != 0) {Abilities.Every5Seconds();} // Quiver refill
     }
 

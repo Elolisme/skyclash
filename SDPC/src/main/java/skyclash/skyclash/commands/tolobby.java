@@ -10,8 +10,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.chestgen.StringToJSON;
+import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
-import skyclash.skyclash.lobby.InMenu;
+import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
@@ -67,8 +68,13 @@ public class tolobby implements CommandExecutor {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
-        main.playerStatus.put(player.getName(), "ready");
-        InMenu.CheckStartGame(true);
+        main.playerStatus.put(player.getName(), "lobby");
+        DataFiles data = new DataFiles(player);
+        PlayerData playerData = data.LoadData();
+        if (playerData.Autoready == true) {
+            main.playerStatus.put(player.getName(), "ready");
+        }
+        LobbyControls.CheckStartGame(true);
         LobbyControls.GiveItem(player);
         if (player.hasMetadata("NoMovement")) {
             player.removeMetadata("NoMovement", main.getPlugin(main.class));

@@ -60,7 +60,7 @@ public class InGame implements Listener {
         killer.sendMessage(ChatColor.YELLOW+"+10 coins for kill");
         StatsManager.addKill(killer);
 
-        if (player.getName().equals("xEzKillz")) {
+        if (player.getName().equals("xEzKillz_")) {
             StatsManager.changeStat(killer, "xEz Killz", 1);
         }
 
@@ -76,7 +76,7 @@ public class InGame implements Listener {
     @EventHandler
     public void onTarget(EntityTargetEvent event) {
         Entity entity = event.getEntity();
-        if (entity.getType() == EntityType.SKELETON ^ entity.getType() == EntityType.ZOMBIE) {
+        if (entity.getType() == EntityType.SKELETON || entity.getType() == EntityType.ZOMBIE) {
             try {
                 if (event.getTarget().hasMetadata("Necromancer")) {
                     event.setCancelled(true);

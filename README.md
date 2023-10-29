@@ -7,6 +7,14 @@
     <strong>Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"</strong>
 </div>
 
+## Quick links
+[Changelog](#changelog)
+
+[TODO](#todo)
+
+[Commands](#commands)
+
+
 ## Resources for development
 
 ### All current Kits and Cards
@@ -22,7 +30,9 @@ https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY7
 https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
 
 ### Server IP
-<strong>mc.elol.gay</strong>
+```
+mc.elol.gay
+```
 
 ## Contributers to Skyclash Remake
 Developer
@@ -109,31 +119,21 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 - look at block under spawn to set it as one, and use list to show already set coords
 - this also modifies maps.json similarly to /setchest
 
+`/leaderboard <stat> | /leaderboard ?`
+- See the top ten people who have the highest of a stat
+- Use `/leaderboard ?` to see the different stats that are available
+
 ### Permissions
 sgm.lobby - default permission for everyone, allows /lobby command
 <br>
 sgm.host - allows opped players access to all other commands
 
 ### Kits and Cards
-Kits:
-- Archer
-- Assassin
-- Beserker
-- Cleric
-- Frost Knight
-- Guardian
-- Jumpman
-- Necromancer
-- Swordsman
-- Treasure hunter
-- Scout
+All the current kits and cards can be found here:
 
-<i>Information for each kit can be found on <a href="https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit#gid=1239566438">this spreadsheet.</a> Some kits have also been rebalanced</i>
+https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing
 
-Cards:
-- Bigger Bangs (just like ur mum)
-- Creeper
-- Damage Potion
+This doc is always up to date with balancing, and just comment if you want a change to occur.
 
 ### Saving Player, World
 When you log in, your data is saved to a file in `<Root folder>/Players/<username>.json`
@@ -177,10 +177,11 @@ Click into menu, then vote
 Click on the block to vote for that map
 <br>
 When a game starts, if 2 maps have equal votes its a 50/50
-```
-/setvotes <map name> <value>
+
+`/setvotes <map name> <value>`
+
 For admins, use this command to change the votes
-```
+
 
 Maps are automatically added for each **multiverse** world after the plugin is reloaded
 
@@ -201,49 +202,71 @@ Players spawn at preplaced spawnpoints on the most voted map, receiving their ki
 <br>
 Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner.
 <br>
-The game also ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
+A worldborder of 300x300 across will be present, and after the first chest refill it moves into a 20x20 over the rest of the game.
+
+The game ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
 <br>
-If you are in the hub and a game is running, you can spectate the game through the menu.
+If you are in the lobby and a game is running, you can spectate the game through the menu.
+
 
 ### Custom Weapons
-Get weapons by using the command 
-<br>
-  ```  /giveitem <item>```
-<br>
-(use lowercase with spaces)
-<br>
-Example:
-  ```
-  /giveitem chicken bow
-  ```
+Get weapons by using the command. These are incorporated through certain kits. 
+`/giveitem <player> <item>`
 
-- Chicken bow
+Example:
+`/giveitem chicken bow`
+
+- chicken bow
   - This shoots a chicken jockey instead of an arrow
   - Has 10 durability
-- Explosive bow
+- explosive bow
   - Shoots tnt instead of arrows
   - Has 5 durability
-- Winged boots
+- winged boots
   - Wearing these leather boots gives you jump boost and less fall damage
-- Fireball
+- fireball
   - Launch a fireball by clicking
   - Consumes item
-- Sword of justice
+- sword of justice
   - Summon lightning 2 blocks in front of you when you hit an enemy
   - Has a cooldown of 2 seconds
 
 
 # TODO
 Soon
-- add worldborder
-- add a toggle between not ready, ready, and autoready
-- Upgrade card system and shop for temporary items
+- QOL for teleporting to already made maps
+- kit: on hit guarantees a kill but also a lot of self damage
+- shop items:
+  - custom items
+  - no pearl cooldowns
+  - resistance potion
 
 Future
-- leaderboard command for stats
-- finish readme
+- Finish readme
+- Ease the difficulty of making new worlds and modifying settings
 
 # Changelog
+
+## v1.5.0
+- no longer unloads maps when playing
+- respawning fixed again
+- added a worldborder
+  - starts at 300 blocks wide
+  - after the first chest refill will move until 20 blocks wide at the end of the game
+- Added a toggle between not ready, ready, and autoready, as well as optimising the code for it
+- Added the leaderboard command
+  - Use `/leaderboard ? ` to view all stats, and `/leaderboard <stat>` to see the top ten players and your ranking
+- optimised the menu code so its easier to follow
+- fixed xEz Killz stat
+
+
+### Cards now cost coins!
+- Cards menu revamped to include a select mode and buy mode
+- Select mode: select a card from top row, which costs 15 coins per game, or from next row which costs 22 per game
+- Buy mode: Permanently buy a card so you don't have to pay for it again, which is 150 or 220 coins respectively
+### New buff shop
+- You can buy temporary buffs from here, that will effect your next game
+- Currently only added the +1 golden apple item as a tester
 
 ## v1.4.3
 - Fixed players being able to hit each other in lobby
@@ -251,14 +274,13 @@ Future
 - Added initial pearl cooldown of 15 seconds
 - When use fireball only removes 1 item now
 - Pearl cooldown now 2 seconds
-- Fixed player deaths bug where the loot goes to mid           (TODO check)
+- Fixed player deaths bug where the loot goes to mid
 - Fixed autoready not working for /lobby | /hub as well as spectators
 - All potions now have nicer formatting for effects
 - Jump boots from slime blocks only effects jumpman now
-- Players drop their items when they disconnect from a game           (TODO check)
+- Players drop their items when they disconnect from a game
 - Menu can only be accessed by right clicking
 - Mid chest can only be opened by right clicking
-
 - Revamped the Menu to include the (non functional) shop
 
 Kits
@@ -267,7 +289,7 @@ Kits
 - assassin pearl invis won't override any current invis
 - beserker potion is 10 seconds and absorption 5
 - Cleric potions are unstacked
-- made guardian absorption potion 15s and get resistance 1 when below 5 hearts
+- Guardian absorption potion 15s and get resistance 1 when below 5 hearts
 - unstacked the water buckets for jumpman
 - Jumpman winged boots do not override the jump potion now
 - Winged boots are now only jump boost 3 -> 1
@@ -279,7 +301,7 @@ Kits
 Cards
 - fixed monster hunter levels not working
 - Apple finder chance to get golden apple from chest break 20 -> 40%
-- Pacify reduces 20% -> 80% damage from "monsters"
+- Pacify reduces 20 -> 80% damage from "monsters"
 
 ## v1.4.2
 - Fixed some minor bugs related to lifesteal at full health and disconnecting
