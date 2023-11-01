@@ -35,14 +35,12 @@ public class DataFiles {
         String path = "players";
         File folder = new File(path);
         if(!folder.exists()) {
-            //noinspection ResultOfMethodCallIgnored
             folder.mkdirs();
         }
 
         File playerFile = new File(path+File.separator+playerName+".json");
         if(!playerFile.exists()) {
             try {
-                //noinspection ResultOfMethodCallIgnored
                 playerFile.createNewFile();
                 SaveData();
             } catch (IOException e) {

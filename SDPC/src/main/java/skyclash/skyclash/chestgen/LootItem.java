@@ -37,14 +37,12 @@ public class LootItem {
 
     @SuppressWarnings("deprecation")
     public ItemStack getItemStack() {
-        //Temporary solution
         if (itemStack == null)
             if (data == 4) {
                 itemStack = new ItemStack(type, amount, (short) 4);
             } else {
                 itemStack = new ItemStack(type, amount, (short) 0, data);
             }
-        //-
 
         return itemStack;
     }

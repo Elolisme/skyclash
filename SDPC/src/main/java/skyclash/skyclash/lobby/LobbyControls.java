@@ -42,10 +42,13 @@ public class LobbyControls implements Listener {
         }
 
         // if they in lobby
-        if (main.playerStatus.get(player.getName()).equals("lobby")  && player.getGameMode() != GameMode.CREATIVE) {
+        if (main.playerStatus.get(player.getName()).equals("lobby")) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
                 player.setScoreboard(Clock.emptyboard);
+            }
+            if (!player.getInventory().contains(Material.EMERALD)) {
+                GiveMapNavItem(player);
             }
         }
         // if they have joined
@@ -79,6 +82,9 @@ public class LobbyControls implements Listener {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
             }
+            if (!player.getInventory().contains(Material.EMERALD)) {
+                GiveMapNavItem(player);
+            }
         }
     }
 
@@ -106,6 +112,19 @@ public class LobbyControls implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDrop2(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        DataFiles datafiles = new DataFiles(player);
+        PlayerData data = datafiles.LoadData();
+        if (event.getItemDrop() == null) {
+            return;
+        }
+        if ((event.getItemDrop().getItemStack().getType() == Material.EMERALD) && data.hasJoined && (player.getGameMode() != GameMode.CREATIVE)) {
+            event.setCancelled(true);
+        }
+    }
+
     // Main menu item
     public static void GiveItem(Player player) {
         ItemStack item = new ItemStack(Material.NETHER_STAR);
@@ -118,6 +137,20 @@ public class LobbyControls implements Listener {
             item.setItemMeta(meta);
         }
         player.getInventory().setItem(8, item);
+    }
+
+    // Main menu item
+    public static void GiveMapNavItem(Player player) {
+        ItemStack item = new ItemStack(Material.EMERALD);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.AQUA + "View and edit maps");
+            List<String> lore = new ArrayList<>();
+            lore.add("Click to access the menu");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        player.getInventory().setItem(7, item);
     }
 
     // Pearl Cooldown

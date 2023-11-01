@@ -30,13 +30,17 @@ public class MenuLogic implements Listener {
         if (!(main.playerStatus.get(player.getName()).equals("lobby") || main.playerStatus.get(player.getName()).equals("ready"))) {
             return;
         }
-        if (player.getItemInHand().getType() != Material.NETHER_STAR) {
+        if (!(player.getItemInHand().getType() == Material.NETHER_STAR || player.getItemInHand().getType() == Material.EMERALD)) {
             return;
         }
         if (!player.getItemInHand().hasItemMeta()) {
             return;
         }
         if (!player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.RED + "Skyclash Menu")) {
+            if (player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "View and edit maps")) {
+                player.openInventory(Inventories.ViewAndEditMaps(player));
+                player.setMetadata("OpenedMapMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));
+            }
             return;
         }
         
@@ -44,7 +48,6 @@ public class MenuLogic implements Listener {
         player.setMetadata("OpenedMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));
     }
 
-    // navigate main menu
     @EventHandler
     public void onMenuClick(InventoryClickEvent event) {
         // Checks
@@ -57,11 +60,11 @@ public class MenuLogic implements Listener {
         }
 
         // Ensure player cant get rid of item
-        if ((event.getCurrentItem().getType() == Material.NETHER_STAR) && (player.getGameMode() != GameMode.CREATIVE)) {
+        if (((event.getCurrentItem().getType() == Material.NETHER_STAR) || (event.getCurrentItem().getType() == Material.EMERALD)) && (player.getGameMode() != GameMode.CREATIVE)) {
             event.setCancelled(true);
         }
 
-        // Open Menus
+        // inside skyclash menu
         if (player.hasMetadata("OpenedMenu")){
             event.setCancelled(true);
             switch (event.getSlot()) {
@@ -79,6 +82,11 @@ public class MenuLogic implements Listener {
             MenuActions.SelectCard(player, event);
         } else if (player.hasMetadata("OpenedMenu5")) {
             MenuActions.BuyItemFromShop(player, event);
+        }
+
+        // inside map menu
+        if (player.hasMetadata("OpenedMapMenu")) {
+            MenuActions.TeleportToMap(player, event);
         }
     }
 
@@ -103,6 +111,9 @@ public class MenuLogic implements Listener {
         }
         if (player.hasMetadata("OpenedMenu5")) {
             player.removeMetadata("OpenedMenu5", main.getPlugin(main.class));
+        }
+        if (player.hasMetadata("OpenedMapMenu")) {
+            player.removeMetadata("OpenedMapMenu", main.getPlugin(main.class));
         }
     }
 }

@@ -2,12 +2,14 @@ package skyclash.skyclash.kitscards;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
@@ -20,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -28,6 +31,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -389,6 +393,55 @@ public class Abilities implements Listener {
 
         // Hit and Run
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3*20, 0, true, false));
+    }
+
+    @EventHandler
+    public void onOpenChest(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+            return;
+        }
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        if (!(targetBlock.getState() instanceof Chest)) {
+            return;
+        }
+        if (!player.hasMetadata("Scout")) {
+            return;
+        }
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 1, false, true), true); 
+
+ 
+    }
+
+    @EventHandler
+    public void onOpenChest2(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+            return;
+        }
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        if (!(targetBlock.getState() instanceof Chest)) {
+            return;
+        }
+
+        Chest chest = (Chest) targetBlock.getState();
+        if (chest.getBlockInventory().containsAtLeast(new ItemStack(Material.SLIME_BLOCK), 1)) {
+            return;
+        }
+        if (!player.hasMetadata("Jumpman")) {
+            return;
+        } 
+
+        int n = new Random().nextInt(100);
+        if (n>50) {return;}
+        chest.getBlockInventory().addItem(new ItemStack(Material.SLIME_BLOCK, 3));
     }
     
 }

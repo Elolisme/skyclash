@@ -13,17 +13,13 @@ public class LootChestIO {
 
     public static void saveChest(LootChest lootChest) {
         
-        //Checks if directory exists and creates it if not existent
         if (!savedChestsDir.exists())
             if (!savedChestsDir.mkdirs()) {
-                //return the method when the directory couldn't be created
                 main.getPlugin(main.class).getLogger().log(Level.SEVERE, "Could not create the folder for saving the LootChests");
                 return;
             }
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try(Writer writer = new FileWriter(savedChestsDir.getAbsolutePath() + File.separator + lootChest.getName() + ".json")) {
             gson.toJson(lootChest, writer);

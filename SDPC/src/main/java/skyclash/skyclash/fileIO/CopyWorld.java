@@ -18,11 +18,10 @@ public class CopyWorld {
             ArrayList<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
             if (!ignore.contains(source.getName())) {
                 if (source.isDirectory()) {
-                    if (!target.exists())
-                        if (!target.mkdirs())
-                            throw new IOException("Couldn't create world directory!");
+                    if (!target.exists() && !target.mkdirs()) {
+                        throw new IOException("Couldn't create world directory!");
+                    } 
                     String[] files = source.list();
-                    //noinspection DataFlowIssue
                     for (String file : files) {
                         File srcFile = new File(source, file);
                         File destFile = new File(target, file);
@@ -43,6 +42,7 @@ public class CopyWorld {
             throw new RuntimeException(e);
         }
     }
+
     public static void copyWorld(World originalWorld, String newWorldName) {
         File copiedFile = new File(Bukkit.getWorldContainer(), newWorldName);
         copyFileStructure(originalWorld.getWorldFolder(), copiedFile);

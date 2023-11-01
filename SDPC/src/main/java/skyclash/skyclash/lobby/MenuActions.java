@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import skyclash.skyclash.Clock;
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
@@ -179,7 +180,7 @@ public class MenuActions {
                     return;
                 }
                 data.Owned.add(selectedCard);
-                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 60 coins\nIt has been selected");
+                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 150 coins\nIt has been selected");
                 data.Coins = data.Coins - Cards.CardCost1;
                 data.Card = selectedCard;
                 datafiles.SetData(data);
@@ -195,7 +196,7 @@ public class MenuActions {
                     return;
                 }
                 data.Owned.add(selectedCard);
-                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 100 coins\nIt has been selected");
+                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 220 coins\nIt has been selected");
                 data.Coins = data.Coins - Cards.CardCost2;
                 data.Card = selectedCard;
                 datafiles.SetData(data);
@@ -236,6 +237,26 @@ public class MenuActions {
             player.sendMessage(ChatColor.YELLOW + "You have bought " + currentSelection + " for " + Cost + " coins");
             data.Coins = data.Coins - Cost;
             datafiles.SetData(data);
+        }
+    }
+
+    public static void TeleportToMap(Player player, InventoryClickEvent event) {
+        event.setCancelled(true);
+        if (0 <= event.getRawSlot() && event.getRawSlot() <= (main.mapVotes.size()-1)) {
+            player.closeInventory();
+            String mapName = event.getCurrentItem().getItemMeta().getDisplayName();
+            player.sendMessage(ChatColor.GREEN + "You will be teleported to "+mapName);
+            if (!main.mvcore.getMVWorldManager().loadWorld(mapName)) {
+                player.sendMessage(ChatColor.RED+"The world is not available");
+                return;
+            }
+            player.teleport(main.mvcore.getMVWorldManager().getMVWorld(mapName).getSpawnLocation());
+            if (player.getGameMode() != GameMode.CREATIVE && !player.isOp()) {
+                player.setGameMode(GameMode.SPECTATOR);
+            }
+        } else if (event.getRawSlot() == 14) {
+            player.closeInventory();
+            Bukkit.dispatchCommand(player, "lobby");
         }
     }
 }

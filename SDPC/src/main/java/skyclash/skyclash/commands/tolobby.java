@@ -76,6 +76,7 @@ public class tolobby implements CommandExecutor {
         }
         LobbyControls.CheckStartGame(true);
         LobbyControls.GiveItem(player);
+        LobbyControls.GiveMapNavItem(player);
         if (player.hasMetadata("NoMovement")) {
             player.removeMetadata("NoMovement", main.getPlugin(main.class));
         }

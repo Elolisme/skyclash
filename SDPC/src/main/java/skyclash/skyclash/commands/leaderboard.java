@@ -28,7 +28,7 @@ public class leaderboard implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Please add arguments for the stat, or ? for a list of all stats\nUse /leaderboard <stat>");
             return true;
         }
-        String stat = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        String stat = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
         
         String PlayerName = "null";
         if (sender instanceof Player) {PlayerName = sender.getName();}

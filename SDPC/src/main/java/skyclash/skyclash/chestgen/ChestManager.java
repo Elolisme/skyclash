@@ -30,10 +30,8 @@ public class ChestManager {
     }
 
     public void loadChestLoot() {
-        // loop over each location in the location list
         locList.forEach((location) -> {
             JSONArray location1 = (JSONArray) location;
-            // get coordinates
             int x = Integer.valueOf(String.valueOf(location1.get(0)));
             int y = Integer.valueOf(String.valueOf(location1.get(1)));
             int z = Integer.valueOf(String.valueOf(location1.get(2)));

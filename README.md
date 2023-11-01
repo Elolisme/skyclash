@@ -234,18 +234,25 @@ Example:
 
 # TODO
 Soon
-- QOL for teleporting to already made maps
 - kit: on hit guarantees a kill but also a lot of self damage
 - shop items:
   - custom items
   - no pearl cooldowns
   - resistance potion
 
+- jester
+  - chainmail chestplate and boots, leather helmet and leggings, stone sword, deck of cards
+
 Future
 - Finish readme
 - Ease the difficulty of making new worlds and modifying settings
 
 # Changelog
+
+## v1.5.1
+- Added item to let you teleport to already made maps
+- Fixed card values showing wrong price in chat
+- Fixed /leaderboard command
 
 ## v1.5.0
 - no longer unloads maps when playing

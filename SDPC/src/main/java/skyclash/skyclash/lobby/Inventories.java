@@ -616,5 +616,76 @@ public class Inventories {
         if (meta != null) {meta.setDisplayName(" ");meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);item.setItemMeta(meta);}
         inventory.setItem(slot, item);
     }
+
+    @SuppressWarnings("unchecked")
+    public static Inventory ViewAndEditMaps(Player player) {
+        Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Map Selection");
+
+        Mapsfile maps = new Mapsfile();
+        maps.read_file(false, false);
+        AtomicInteger count = new AtomicInteger();
+
+        maps.jsonObject.forEach((name, info) -> {
+            JSONObject info1 = (JSONObject) info;
+            boolean ignore = (boolean) info1.get("ignore");
+            if (!ignore) {
+                String name1 = (String) name;
+                String material = (String) info1.get("icon");
+                ItemStack item;
+
+                if (material.equals("purple_wool")) {
+                    item = new Wool(DyeColor.PURPLE).toItemStack();
+                } else {
+                    item = new ItemStack(Material.matchMaterial(material.toUpperCase()));
+                }
+                item.setAmount(1);
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(name1);
+                    List<String> lore = new ArrayList<>();
+                    lore.add("Click to teleport to map");
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
+                inventory.setItem(count.get(), item);
+                count.getAndIncrement();
+            }
+        });
+
+        for (int i=9; i<18; i++) {
+            FillerItems(inventory, i);
+        }
+
+        ItemStack item;
+        ItemMeta meta;
+        item = new ItemStack(Material.COMPASS, 1);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.YELLOW + "Information");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GREEN+"Click a map to teleport to its actual world");
+            lore.add(ChatColor.GRAY+"People who are dont have op will be put in spectator mode");
+            lore.add(ChatColor.DARK_GREEN+"Use /lobby to return");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(13, item);
+
+        // back to lobby
+        item = new ItemStack(Material.BEDROCK, 1);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Spawn");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY+"Click to go back to spawn");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(14, item);
+
+        return inventory;
+    }
     
 }

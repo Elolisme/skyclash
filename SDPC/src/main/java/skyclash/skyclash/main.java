@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 public class main extends JavaPlugin {
 
-    // GLOBALS
     public static HashMap<Integer, Integer> mapVotes = new HashMap<>();
     public static HashMap<String, Integer> playerVote = new HashMap<>();
     public static HashMap<String, String> playerStatus = new HashMap<>();

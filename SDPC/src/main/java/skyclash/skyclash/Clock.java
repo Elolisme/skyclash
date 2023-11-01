@@ -24,7 +24,6 @@ import static skyclash.skyclash.main.*;
 
 public class Clock {
 
-    // GLOBALS pt2
     static Score s;
     static Score s2;
     public static Scoreboard board;
@@ -102,7 +101,6 @@ public class Clock {
 
     Mapsfile maps = new Mapsfile();
     void ChestRefill() {
-        // chest loot generation
         Bukkit.getServer().getOnlinePlayers().forEach((player) -> player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f));
         maps.read_file(false, false);
         JSONObject info2 = (JSONObject) maps.jsonObject.get(activeWorld);
