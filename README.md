@@ -1,44 +1,36 @@
 # Skyclash
+![hi](./Assets/skyclash_front_image.png)
 
-<div align="center">
-    <img src="./Assets/skyclash_front_image.png" style="height:auto;width:60%"/>
-    <br>
-    <br>
-    <strong>Minecraft plugin, reimagining Hypixel's old minigame "Skyclash"</strong>
-</div>
+<strong>Minecraft plugin, reimagining Hypixel's minigame "Skyclash"</strong>
 
 ## Quick links
-[Changelog](#changelog)
-
-[TODO](#todo)
+[Installation](#installation-and-use)
 
 [Commands](#commands)
 
+[Changelog](#changelog)
 
 ## Resources for development
 
-### All current Kits and Cards
-https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing
+### [All current Kits and Cards](https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing)
 
-### Hypickle cards and maps
-https://docs.google.com/document/d/14_MdE6IKqPPhNbR60T8SELjxTGKBIpSkJubV28Rsv2w/edit?usp=sharing
+### [Hypickle cards and maps](https://docs.google.com/document/d/14_MdE6IKqPPhNbR60T8SELjxTGKBIpSkJubV28Rsv2w/edit?usp=sharing)
 
-### Hypickle kits
-https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing
+### [Hypickle kits](https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing)
 
-### Chest locations
-https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing
+### [Chest locations](https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing)
 
-### Server IP
+### Server IP:
 ```
 mc.elol.gay
 ```
 
 ## Contributers to Skyclash Remake
+
 Developer
 - TitanPlayz
 
-Server host / Project Owner
+Server host
 - Elol
 
 Builders
@@ -57,33 +49,28 @@ Cool people
 - zapic
 - Chez_E
 
-## How To Install
-**TODO**
+## Installation and Use
+Please create a new issue if there are any problems.
 
-You need to install the multiverse plugin, this is dependant on that
+### Download
+1) Navigate to the SDPC/target/(latest version).jar and download that file
+2) Ensure you have [Multiverse Plugin](https://github.com/Multiverse/Multiverse-Core) installed, THIS IS REQUIRED FOR SKYCLASH!
+3) Place the SDPC.jar (current version) in the plugins folder of your server
+4) Download the LootChests folder and place it in the server root folder (not plugin folder)
+5) Restart your server and enjoy!
 
-You optionally would want VoidWorld plugin to generate new void worlds for new maps
+### Configure Worlds
+- Use the command `/scworld add` to get started with a new map
+- Any current maps that are in multiverse are automatically added
+- Use `/scworld modify <world name> setLobby` to set a lobby
+- use `/spawns add` in that world to set the spawnpoint
 
-### How to use multiverse:
-```
-/mv tp <ur username> <world name> 
-    TP to a world use 
-/mv list 
-    See all the different worlds
-/mv create <world name> normal -g VoidWorld 
-    Create a new empty world
-```
+Read on to find a full in-depth list of all commands and configurations in skyclash. 
 
 
+**Thanks for downloading skyclash!**
 
-### Preferable settings for a new world:
-- set the world ~ y=64 high up
-- use /mv modify set monsters false to turn of mob spawns
-- use /gamerule doDaylightCycle false,  and use /time set day
-- use /mv modify set gamemode creative to set default to creative
-- use /mv modify set spawn for spawn to be at ur location
-
-## Skyclash's Drug Pollinated Code Plugin
+## Skyclash's Drug Pollinated Code (SDPC) Plugin
 ### Commands
 `/setvotes <map index> <votes>`
 - Used to change votes for a map for admins
@@ -98,7 +85,7 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 - Ends the currently running game
 
 `/lootchest <name>`
-- makes a loot table file in `<root>/LootChests/..` from the current chest you are looking at
+- makes a loot table file in `/LootChests/..` from the current chest you are looking at
 
 `/lobby | /hub`
 - send you to the first spawn point of the default world
@@ -123,6 +110,18 @@ You optionally would want VoidWorld plugin to generate new void worlds for new m
 - See the top ten people who have the highest of a stat
 - Use `/leaderboard ?` to see the different stats that are available
 
+`/scworld [add | modify | list]`
+- create a brand new map to play on, change settings of maps and the lobby, and show a list of worlds in skyclash
+- for /scworld modify, current settings are:
+  - setLobby 
+    - sets the world to be the lobby spawn
+    - to set the location in the world, use `/spawns add`
+  - setIcon
+    - changes the icon of the world to the material specified
+  - isVisible
+    - changes whether the map can be voted and played on, and is seen in the menu
+  
+
 ### Permissions
 sgm.lobby - default permission for everyone, allows /lobby command
 <br>
@@ -135,17 +134,15 @@ https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/
 
 This doc is always up to date with balancing, and just comment if you want a change to occur.
 
-### Saving Player, World
-When you log in, your data is saved to a file in `<Root folder>/Players/<username>.json`
+### Saving Player, World data
+When you log in, your data is saved to a file in `/Players/<username>.json`
 <br>
 Whenever the game needs it, it will read from those files
 
-Also, SDPC will save all multiverse worlds to a JSON in `<root>/plugins/maps.json` which has settings for each world, which automatically update for new worlds. You can manually edit any setting realtime.
-<br>
-You can change the icon of a world (icon:material), whether its a playable map (ignore:boolean), and where chests/spawnpoints are.
+Also, SDPC will save all skyclash worlds to a JSON in `/plugins/maps.json` which has settings for each world, which automatically update for new worlds. Use the `/scworld` command to change settings.
 
 ### Chest Loot
-The plugin will take chest loot from a folder called `<root>/LootChests/..`, where loot tables is stored
+The plugin will take chest loot from a folder called `/LootChests/..`, where loot tables is stored
 <br>
 There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile... It is much easier to just edit the current file.
 
@@ -172,18 +169,11 @@ As well as storing coins, which are gained by killing (10) or winning a game (50
 * Note killing yourself will not award kill credit but counts as a death
 
 ### Voting System
-Click into menu, then vote
-<br>
-Click on the block to vote for that map
-<br>
-When a game starts, if 2 maps have equal votes its a 50/50
+Click into menu, then click on the block to vote for that map
 
 `/setvotes <map name> <value>`
-
+<br>
 For admins, use this command to change the votes
-
-
-Maps are automatically added for each **multiverse** world after the plugin is reloaded
 
 ### Starting the game
 In the menu click the wool to become ready
@@ -192,19 +182,18 @@ When 2 or more people become ready the game starts in 30s
 <br>
 Click the wool again to unready yourself, this will cancel the game if 2 players are no longer ready.
 
-```
-/startgame
+```/startgame``` 
+<br>
 Exists for admins to start game manually
-``` 
 
 ### The Gameplay
 Players spawn at preplaced spawnpoints on the most voted map, receiving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
-<br>
+
 Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner.
 <br>
 A worldborder of 300x300 across will be present, and after the first chest refill it moves into a 20x20 over the rest of the game.
 
-The game ends once all but one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
+The game ends once one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
 <br>
 If you are in the lobby and a game is running, you can spectate the game through the menu.
 
@@ -239,15 +228,21 @@ Soon
   - custom items
   - no pearl cooldowns
   - resistance potion
-
-- jester
+- kit: jester
   - chainmail chestplate and boots, leather helmet and leggings, stone sword, deck of cards
 
 Future
 - Finish readme
-- Ease the difficulty of making new worlds and modifying settings
 
 # Changelog
+
+## v1.5.2
+- Removed need for VoidWorld, now use SDPC!
+- Added a new command that allows map settings to be modified
+  - ```/scworld [add | modify | list]```
+  - use ```/scworld add <world name>``` to create a brand new void map with pre-configured settings
+  - use ```/scworld modify <world name> <setting> <value>``` to change either the default lobby, icon, or visibility of a world
+  - use ```/scworld list``` to show a list of worlds in skyclash settings, similar to `/mv list`
 
 ## v1.5.1
 - Added item to let you teleport to already made maps
@@ -372,10 +367,10 @@ Kits:
 - Rebalanced all the kits to the doc mostly
 
 Code:
-- idk i did some shit
+- stuff
 - added credits to top of readme
 
-<i>What's even the point of numbering these updates, not like anyone ever looks here anyway unless i fucked up somewhere</i>
+<i>What's even the point of numbering these updates, not like anyone ever looks here anyway unless i screwed up somewhere</i>
 
 ## v1.3.1
 NEW SERVER ICON!
@@ -409,7 +404,8 @@ Code:
 Kits:
 - added swordsman true damage every 10 seconds 
 - added beserker resistance on low health (2.5 hearts) passives
-- made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius<br><br>
+- made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
+
 <img src="./Assets/explosion.png"/>
 
 - made bigger bangs spawn with flint and steel and 2 tnt

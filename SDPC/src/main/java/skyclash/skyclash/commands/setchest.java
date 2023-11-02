@@ -84,7 +84,7 @@ public class setchest implements CommandExecutor {
     private void addChest(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
 
@@ -95,7 +95,7 @@ public class setchest implements CommandExecutor {
 
         if (chestsarray.contains(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Location already stored");
-            maps.write_file();
+            maps.writeFile();
             return;
         }
 
@@ -107,13 +107,13 @@ public class setchest implements CommandExecutor {
         maps.jsonObject.remove(world);
         maps.jsonObject.put(world, info);
         player.sendMessage(ChatColor.GREEN+"Added location");
-        maps.write_file();
+        maps.writeFile();
     }
 
     private void removeChest(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
 
@@ -134,13 +134,13 @@ public class setchest implements CommandExecutor {
         maps.jsonObject.remove(world);
         maps.jsonObject.put(world, info);
 
-        maps.write_file();
+        maps.writeFile();
     }
 
     private void listChests(Player player) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");

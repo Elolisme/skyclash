@@ -28,7 +28,7 @@ public class Mapsfile {
     public Mapsfile() {
     }
 
-    public void create_file() {
+    public void createFile() {
         try {
             //noinspection ResultOfMethodCallIgnored
             mapsjson.createNewFile();
@@ -37,7 +37,7 @@ public class Mapsfile {
         }
     }
 
-    public void write_file() {
+    public void writeFile() {
         try (FileWriter file = new FileWriter(mapsjson)){
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(jsonObject, file);
@@ -47,10 +47,10 @@ public class Mapsfile {
         }
     }
 
-    public void read_file(boolean update, boolean write) {
+    public void readFile(boolean update, boolean write) {
         if (!mapsjson.exists()) {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"Warning: You have no 'plugins/maps.json' file, some things will break!");
-            create_file();
+            createFile();
         } else {
             org.json.simple.parser.JSONParser parser = new JSONParser();
             try {
@@ -60,16 +60,16 @@ public class Mapsfile {
             }
         }
         if (update) {
-            update_info();
+            addNewWorld();
         }
         if (write) {
-            write_file();
+            writeFile();
         }
 
     }
 
     @SuppressWarnings("unchecked")
-    public void update_info() {
+    public void addNewWorld() {
         worlds.forEach((world) -> {
             String worldname = world.getName();
             AtomicBoolean exists = new AtomicBoolean(false);

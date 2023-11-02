@@ -251,8 +251,10 @@ public class MenuActions {
                 return;
             }
             player.teleport(main.mvcore.getMVWorldManager().getMVWorld(mapName).getSpawnLocation());
-            if (player.getGameMode() != GameMode.CREATIVE && !player.isOp()) {
-                player.setGameMode(GameMode.SPECTATOR);
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+                    player.setGameMode(GameMode.SPECTATOR);
+                }, 5);
             }
         } else if (event.getRawSlot() == 14) {
             player.closeInventory();

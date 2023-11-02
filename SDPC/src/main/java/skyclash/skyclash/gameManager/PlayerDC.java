@@ -56,7 +56,7 @@ public class PlayerDC implements Listener {
         }, 5);
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicReference<String> default_world = new AtomicReference<>();
         AtomicInteger x = new AtomicInteger();
         AtomicInteger y = new AtomicInteger();
@@ -110,7 +110,7 @@ public class PlayerDC implements Listener {
     private void spec(Player player) {
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicReference<String> default_world = new AtomicReference<>();
         AtomicInteger x = new AtomicInteger();
         AtomicInteger y = new AtomicInteger();

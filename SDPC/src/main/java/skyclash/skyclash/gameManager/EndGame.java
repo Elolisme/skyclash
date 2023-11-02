@@ -63,7 +63,7 @@ public class EndGame {
 
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicReference<String> default_world = new AtomicReference<>();
         AtomicInteger x = new AtomicInteger();
         AtomicInteger y = new AtomicInteger();

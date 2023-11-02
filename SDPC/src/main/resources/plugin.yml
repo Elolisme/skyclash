@@ -46,6 +46,10 @@ commands:
     description: list the top 9 people of a certain stat, as well as your position
     usage: /leaderboard <stat>
     permission: sgm.lobby
+  scworld:
+    description: Allows for easy management of worlds in multiverse for skyclash purposes
+    usage: /scworld <add | modify> <args>
+    permission: sgm.host
 
 permissions:
   sgm.lobby:

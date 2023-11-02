@@ -519,7 +519,7 @@ public class Inventories {
         Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Map Selection");
 
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicInteger count = new AtomicInteger();
 
         maps.jsonObject.forEach((name, info) -> {
@@ -622,7 +622,7 @@ public class Inventories {
         Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Map Selection");
 
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicInteger count = new AtomicInteger();
 
         maps.jsonObject.forEach((name, info) -> {
@@ -670,7 +670,7 @@ public class Inventories {
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
-        inventory.setItem(13, item);
+        inventory.setItem(12, item);
 
         // back to lobby
         item = new ItemStack(Material.BEDROCK, 1);

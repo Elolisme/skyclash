@@ -60,7 +60,7 @@ public class gamespawn implements CommandExecutor {
     private void addSpawn(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
 
@@ -71,7 +71,7 @@ public class gamespawn implements CommandExecutor {
 
         if (chestsarray.contains(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Location already stored");
-            maps.write_file();
+            maps.writeFile();
             return;
         }
 
@@ -83,13 +83,13 @@ public class gamespawn implements CommandExecutor {
         maps.jsonObject.remove(world);
         maps.jsonObject.put(world, info);
         player.sendMessage(ChatColor.GREEN+"Added location");
-        maps.write_file();
+        maps.writeFile();
     }
 
     private void removeSpawn(Player player, Block block) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
 
@@ -110,13 +110,13 @@ public class gamespawn implements CommandExecutor {
         maps.jsonObject.remove(world);
         maps.jsonObject.put(world, info);
 
-        maps.write_file();
+        maps.writeFile();
     }
 
     private void listSpawns(Player player) {
         String world = player.getWorld().getName();
         Mapsfile maps = new Mapsfile();
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info = (JSONObject) maps.jsonObject.get(world);
         JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");

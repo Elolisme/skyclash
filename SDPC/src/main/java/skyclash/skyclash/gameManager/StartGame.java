@@ -24,6 +24,7 @@ import skyclash.skyclash.kitscards.Kits;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -94,7 +95,7 @@ public class StartGame {
         });
 
         // get world with the highest votes
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         AtomicInteger count = new AtomicInteger(1);
         maps.jsonObject.forEach((name, info) -> {
             JSONObject info1 = (JSONObject) info;
@@ -110,6 +111,12 @@ public class StartGame {
         Bukkit.broadcastMessage(ChatColor.GOLD + VotedMap.get() + ChatColor.YELLOW + " will be prepared shortly...");
 
         // copy world files
+        List<World> worlds = Bukkit.getWorlds();
+        for (World world: worlds) {
+            world.save();
+        }
+
+
         MVWorldManager worldManager = main.mvcore.getMVWorldManager();
         worldManager.loadWorld(VotedMap.get());
         copyWorld(Bukkit.getWorld(VotedMap.get()), "ingame_map");
@@ -210,7 +217,7 @@ public class StartGame {
                 Bukkit.broadcastMessage(ChatColor.GREEN + "SKYCLASH!");
 
                 // chest loot generation
-                maps.read_file(false, false);
+                maps.readFile(false, false);
                 JSONObject info2 = (JSONObject) maps.jsonObject.get(VotedMap.get());
                 JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
                 World world1 = Bukkit.getWorld("ingame_map");

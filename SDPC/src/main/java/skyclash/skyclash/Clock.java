@@ -49,7 +49,7 @@ public class Clock {
     void init() {
         // Maps
         Mapsfile maps = new Mapsfile();
-        maps.read_file(true, true);
+        maps.readFile(true, true);
         for (int i = 1; i <= maps.get_size(); i++) {
             mapVotes.put(i, 0);
         }
@@ -102,7 +102,7 @@ public class Clock {
     Mapsfile maps = new Mapsfile();
     void ChestRefill() {
         Bukkit.getServer().getOnlinePlayers().forEach((player) -> player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f));
-        maps.read_file(false, false);
+        maps.readFile(false, false);
         JSONObject info2 = (JSONObject) maps.jsonObject.get(activeWorld);
         JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
         World world1 = Bukkit.getWorld("ingame_map");

@@ -2,6 +2,8 @@ package skyclash.skyclash;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
@@ -13,6 +15,7 @@ import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.MenuLogic;
 import skyclash.skyclash.lobby.LobbyControls;
 import java.util.HashMap;
+import java.util.Random;
 
 public class main extends JavaPlugin {
 
@@ -47,10 +50,26 @@ public class main extends JavaPlugin {
         this.getCommand("setchest").setExecutor(new setchest());
         this.getCommand("gamespawn").setExecutor(new gamespawn());
         this.getCommand("leaderboard").setExecutor(new leaderboard());
+        this.getCommand("scworld").setExecutor(new scworld());
+        
     }
 
     @Override
     public void onDisable() {
         Clock.End();  
+    }
+
+
+
+    // void world generator - https://github.com/chaseoes/VoidWorld
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return new VoidWorldGenerator();
+    }
+
+    public class VoidWorldGenerator extends ChunkGenerator {
+        @Override
+        public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
+            return createChunkData(world);
+        }
     }
 }
