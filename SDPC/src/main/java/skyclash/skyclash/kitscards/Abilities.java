@@ -31,6 +31,9 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -74,11 +77,11 @@ public class Abilities implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (!player.hasMetadata("Beserker")) {
+        if (!player.hasMetadata("Berserker")) {
             return;
         }
 
-        // Beserker
+        // Berserker
         if (player.getHealth() < 10) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*6, 1));
         }
@@ -443,5 +446,63 @@ public class Abilities implements Listener {
         if (n>50) {return;}
         chest.getBlockInventory().addItem(new ItemStack(Material.SLIME_BLOCK, 3));
     }
-    
+
+    @EventHandler
+    public void onClickWatch(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (!main.playerStatus.get(player.getName()).equals("ingame") || !player.hasMetadata("Jester")) {
+            return;
+        }
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        if (player.getItemInHand().getType() == Material.AIR || !player.getItemInHand().hasItemMeta()|| !player.getItemInHand().getItemMeta().hasDisplayName() || !player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.RED+"Deck of Cards")) {
+            return;
+        }
+        if(Cooldown.isCooling(player.getName(), "DrawCard")) {
+            player.sendMessage(ChatColor.GRAY + "Card Cooldown: " + ChatColor.AQUA + Cooldown.getRemaining(player.getName(), "DrawCard") + " Seconds");
+            return;
+        }
+
+        String[] suits = {"Spades", "Hearts", "Clubs", "Diamonds"};
+        String suit = suits[new Random().nextInt(4)];
+        Object number = new Random().nextInt(13);
+
+        new DrawCard(player, suit, (int) number + 1);
+        switch ((int)number + 1) {
+            case 1:number = "ace";break;
+            case 11:number = "jack";break;
+            case 12:number = "queen";break;
+            case 13:number = "king";break;
+        }
+        player.sendMessage(ChatColor.YELLOW+"You have drawn a "+number+" of "+suit);        
+
+        Cooldown.add(player.getName(), "DrawCard", 15, System.currentTimeMillis());
+    }
+
+    // Prevent dropping temp item
+    @EventHandler
+    public void onDropTempItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (!main.playerStatus.get(player.getName()).equals("ingame") || !player.hasMetadata("Jester")) {
+            return;
+        }
+        if (event.getItemDrop().getItemStack().hasItemMeta() && event.getItemDrop().getItemStack().getItemMeta().getLore().get(0).equals("Temporary")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onMoveTempItem(InventoryClickEvent event) {
+        if (!main.playerStatus.get(event.getWhoClicked().getName()).equals("ingame")) {
+            return;
+        }
+        InventoryType invtype = event.getWhoClicked().getOpenInventory().getTopInventory().getType();
+        if (!(invtype == InventoryType.CHEST || invtype == InventoryType.ENDER_CHEST)) {
+            return;
+        }
+        if (event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {
+            event.setCancelled(true);
+        }
+    }
 }

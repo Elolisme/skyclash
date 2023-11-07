@@ -12,10 +12,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.chestgen.ChestManager;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.cooldowns.Cooldown;
+import skyclash.skyclash.fileIO.CopyWorld;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.fileIO.PlayerData;
@@ -29,15 +30,15 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static skyclash.skyclash.fileIO.CopyWorld.copyWorld;
-
 public class StartGame {
-    AtomicReference<String> VotedMap = new AtomicReference<>("");
-    Plugin plugin = main.getPlugin(main.class);
-    Mapsfile maps = new Mapsfile();
-    public static BukkitTask task1;
-    public static BukkitTask task2;
-    public static BukkitTask task3;
+    
+    private AtomicReference<String> VotedMap = new AtomicReference<>("");
+    private Plugin plugin = main.getPlugin(main.class);
+    private Mapsfile maps = new Mapsfile();
+    private static BukkitTask task1;
+    private static BukkitTask task2;
+    private static BukkitTask task3;
+
     public StartGame(boolean isCommand) {
         int delay;
         if (isCommand) {
@@ -76,7 +77,7 @@ public class StartGame {
     }
 
     @SuppressWarnings({"UnnecessaryBoxing", "unchecked"})
-    public void PreGame() {
+    private void PreGame() {
 
         // find map with the highest vote
         AtomicInteger max = new AtomicInteger(-1);
@@ -119,7 +120,7 @@ public class StartGame {
 
         MVWorldManager worldManager = main.mvcore.getMVWorldManager();
         worldManager.loadWorld(VotedMap.get());
-        copyWorld(Bukkit.getWorld(VotedMap.get()), "ingame_map");
+        new CopyWorld().copyWorld(Bukkit.getWorld(VotedMap.get()), "ingame_map");
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mv import ingame_map normal");
         main.isGameActive = true;
         main.activeWorld = VotedMap.get();
@@ -137,7 +138,7 @@ public class StartGame {
         main.playerStatus.forEach((key, value) -> {
             if (value.equals("ready")) {
                 // get spawn information from world
-                Clock.playersLeft++;
+                Scheduler.playersLeft++;
                 Player player = Bukkit.getServer().getPlayer(key);
                 AtomicReference<JSONObject> worldinfo = new AtomicReference<>();
                 maps.jsonObject.forEach((name, info) -> {
@@ -153,19 +154,19 @@ public class StartGame {
                 JSONArray spawnsarray = StringToJSON.convert((String) info2.get("spawns"));
 
                 int length = spawnsarray.size();
-                if (Clock.playersLeft > length) {
+                if (Scheduler.playersLeft > length) {
                     player.sendMessage(ChatColor.RED+"Since this map only supports up to "+length+" players, you were not able to play");
                     main.playerStatus.put(player.getName(), "lobby");
-                    Clock.playersLeft--;
+                    Scheduler.playersLeft--;
                 }
                 else {
-                    JSONArray lists = (JSONArray) spawnsarray.get((Clock.playersLeft -1));
+                    JSONArray lists = (JSONArray) spawnsarray.get((Scheduler.playersLeft -1));
                     int x = Integer.valueOf(String.valueOf(lists.get(0)));
                     int y = Integer.valueOf(String.valueOf(lists.get(1)));
                     int z = Integer.valueOf(String.valueOf(lists.get(2)));
                     Location spawnloc = new Location(Bukkit.getWorld("ingame_map"), x, y, z);
                     player.teleport(spawnloc);
-                    StatsManager.addPlayer(player);
+                    new StatsManager().addPlayer(player);
 
                     // player setup for game
                     player.setGameMode(GameMode.SURVIVAL);
@@ -192,7 +193,7 @@ public class StartGame {
         });
     }
 
-    public void Start() {
+    private void Start() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -221,8 +222,7 @@ public class StartGame {
                 JSONObject info2 = (JSONObject) maps.jsonObject.get(VotedMap.get());
                 JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
                 World world1 = Bukkit.getWorld("ingame_map");
-                ChestManager cm = new ChestManager(chestsarray, world1, "spawn", "mid");
-                cm.loadChestLoot();
+                new ChestManager(chestsarray, world1, "spawn", "mid", true);
 
                 // start game code
                 main.playerStatus.forEach((key, value) -> {
@@ -232,18 +232,16 @@ public class StartGame {
                             player.removeMetadata("NoMovement", main.getPlugin(main.class));
                         }
                         DataFiles datafiles = new DataFiles(player);
-                        PlayerData data = datafiles.LoadData();
-                        Kits kit1 = new Kits(data.Kit, player);
-                        kit1.GiveKit();
-                        Cards card1 = new Cards(data.Card, player);
-                        card1.GiveCard();
+                        PlayerData data = datafiles.data;
+                        new Kits(data.Kit, player).GiveKit();
+                        new Cards(data.Card, player).GiveCard();
                         new giveItems(player);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 254, true));
-                        player.setScoreboard(Clock.board);
+                        player.setScoreboard(Scheduler.board);
                         player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0.9f);
                     }
                 });
-                Clock.timer = 600;
+                Scheduler.timer = 600;
             }
         }.runTaskLater(plugin, 4*20);
     }

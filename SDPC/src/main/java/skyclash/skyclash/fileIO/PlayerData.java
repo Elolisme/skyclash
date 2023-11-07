@@ -13,7 +13,6 @@ public class PlayerData {
     public Boolean Autoready;
     public JSONArray Owned;
 
-
     public PlayerData(String name, String card, String kit, boolean hasJoined, JSONObject stats, int coins, Boolean autoready, JSONArray owned) {
         this.Name = name;
         this.Card = card;

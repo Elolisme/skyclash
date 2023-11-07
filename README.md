@@ -228,16 +228,20 @@ Soon
   - custom items
   - no pearl cooldowns
   - resistance potion
-- kit: jester
-  - chainmail chestplate and boots, leather helmet and leggings, stone sword, deck of cards
 
 Future
 - Finish readme
 
 # Changelog
 
+## v1.5.3
+- Added jester kit as a proof of concept, only spades works
+- Refactored lots of code to be private and non static
+- Fixed many smaller bugs and patches
+- Cards rent cost is now 10 and 16, as well as buy cost of 100 and 160, for lower and higher tier respectively
+
 ## v1.5.2
-- Removed need for VoidWorld, now use SDPC!
+- Removed need for VoidWorld, now use SDPC
 - Added a new command that allows map settings to be modified
   - ```/scworld [add | modify | list]```
   - use ```/scworld add <world name>``` to create a brand new void map with pre-configured settings
@@ -289,7 +293,7 @@ Kits
 - archer was actually 70% -> changed back to 30%
 - homing arrow lifespan is 20 seconds and can only target people in game
 - assassin pearl invis won't override any current invis
-- beserker potion is 10 seconds and absorption 5
+- berserker potion is 10 seconds and absorption 5
 - Cleric potions are unstacked
 - Guardian absorption potion 15s and get resistance 1 when below 5 hearts
 - unstacked the water buckets for jumpman
@@ -393,7 +397,7 @@ Kits:
 - Added Cleric, healer build with higher passive regeneration
 - Added Frost Knight, snowball hits on players give speed to them and slow down opponents
 - Added Guardian, Gets resistance on low health
-- Changed beserker to get regeneration instead of resistance on low health
+- Changed berserker to get regeneration instead of resistance on low health
 
 4 more kits to go! (and a lot of cards :| )
 
@@ -403,7 +407,7 @@ Code:
 ## v1.2.0
 Kits:
 - added swordsman true damage every 10 seconds 
-- added beserker resistance on low health (2.5 hearts) passives
+- added berserker resistance on low health (2.5 hearts) passives
 - made bigger bangs cause nearby explosions within 25 blocks have a greater explosion radius
 
 <img src="./Assets/explosion.png"/>
@@ -435,8 +439,8 @@ Code:
 Kits:
 - swordsman strength level to 1 (from 2)
 - assassin now gets 1 pearl and invis pot (from 2 each)
-- beserker pots are 15 seconds (from 60)
-- beserker pots are regen 2, resistance 1 (from 3, 2)
+- berserker pots are 15 seconds (from 60)
+- berserker pots are regen 2, resistance 1 (from 3, 2)
 
 GitHub:
 - Removed target cause its unnecessary

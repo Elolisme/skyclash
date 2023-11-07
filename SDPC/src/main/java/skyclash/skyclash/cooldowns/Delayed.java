@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 import skyclash.skyclash.main;
 
 public class Delayed implements Listener {
-    private static final Plugin plugin = main.getPlugin(main.class);
+    private final Plugin plugin = main.getPlugin(main.class);
     public Delayed(Runnable runnable) {
         this(runnable, 0);
     }

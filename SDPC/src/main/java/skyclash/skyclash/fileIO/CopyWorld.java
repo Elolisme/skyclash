@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CopyWorld {
-    private static void copyFileStructure(File source, File target) {
+    private void copyFileStructure(File source, File target) {
         try {
             ArrayList<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
             if (!ignore.contains(source.getName())) {
@@ -43,7 +43,7 @@ public class CopyWorld {
         }
     }
 
-    public static void copyWorld(World originalWorld, String newWorldName) {
+    public void copyWorld(World originalWorld, String newWorldName) {
         File copiedFile = new File(Bukkit.getWorldContainer(), newWorldName);
         copyFileStructure(originalWorld.getWorldFolder(), copiedFile);
         new WorldCreator(newWorldName).createWorld();

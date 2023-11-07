@@ -55,13 +55,13 @@ public class InGame implements Listener {
         }
 
         killer.playSound(killer.getLocation(), Sound.WITHER_DEATH, 1, 1.3f);
-        StatsManager.changeStat(killer, "kills", 1);
-        StatsManager.changeStat(killer, "coins", 10);
+        new StatsManager().changeStat(killer, "kills", 1);
+        new StatsManager().changeStat(killer, "coins", 10);
         killer.sendMessage(ChatColor.YELLOW+"+10 coins for kill");
-        StatsManager.addKill(killer);
+        new StatsManager().addKill(killer);
 
         if (player.getName().equals("xEzKillz_")) {
-            StatsManager.changeStat(killer, "xEz Killz", 1);
+            new StatsManager().changeStat(killer, "xEz Killz", 1);
         }
 
         if (killer.hasMetadata("Necromancer")) {

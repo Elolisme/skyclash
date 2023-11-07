@@ -9,7 +9,7 @@ import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
 
 public class giveItems {
-    public Player player;
+    private Player player;
 
     public giveItems(Player player) {
         this.player = player;
@@ -17,9 +17,9 @@ public class giveItems {
     }
 
     @SuppressWarnings("all")
-    public void shopEffects() {
+    private void shopEffects() {
         DataFiles dataFiles = new DataFiles(player);
-        PlayerData data = dataFiles.LoadData();
+        PlayerData data = dataFiles.data;
         JSONArray itemsToRemove = new JSONArray();
         for (Object item: data.Owned) {
             if (item.equals("+1 Golden Apple")) {

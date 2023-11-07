@@ -21,12 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Mapsfile {
     public JSONObject jsonObject = new JSONObject();
-    File mapsjson = new File("plugins"+File.separator+"maps.json");
-    String spawnworld = main.mvcore.getMVWorldManager().getFirstSpawnWorld().getName();
-    Collection<MultiverseWorld> worlds = main.mvcore.getMVWorldManager().getMVWorlds();
-
-    public Mapsfile() {
-    }
+    private File mapsjson = new File("plugins"+File.separator+"maps.json");
+    private String spawnworld = main.mvcore.getMVWorldManager().getFirstSpawnWorld().getName();
+    private Collection<MultiverseWorld> worlds = main.mvcore.getMVWorldManager().getMVWorlds();
 
     public void createFile() {
         try {
@@ -69,7 +66,7 @@ public class Mapsfile {
     }
 
     @SuppressWarnings("unchecked")
-    public void addNewWorld() {
+    private void addNewWorld() {
         worlds.forEach((world) -> {
             String worldname = world.getName();
             AtomicBoolean exists = new AtomicBoolean(false);

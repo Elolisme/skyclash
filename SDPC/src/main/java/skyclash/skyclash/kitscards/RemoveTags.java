@@ -9,7 +9,7 @@ public class RemoveTags {
         Plugin p = main.getPlugin(main.class);
         player.removeMetadata("Assassin", p);
         player.removeMetadata("Swordsman", p);
-        player.removeMetadata("Beserker", p);
+        player.removeMetadata("Berserker", p);
         player.removeMetadata("Archer", p);
         player.removeMetadata("Frost_Knight", p);
         player.removeMetadata("Cleric", p);
@@ -29,6 +29,7 @@ public class RemoveTags {
         player.removeMetadata("Pearl Absorption", p);
         player.removeMetadata("Sugar Rush", p);
         player.removeMetadata("Lifesteal", p);
-        player.removeMetadata("Monster Hunter", p);        
+        player.removeMetadata("Monster Hunter", p);  
+        player.removeMetadata("Jester", p);      
     }
 }

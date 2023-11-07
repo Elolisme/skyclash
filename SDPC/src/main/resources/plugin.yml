@@ -22,11 +22,6 @@ commands:
     usage: /endgame
     aliases: [abort, end_game]
     permission: sgm.host
-  lootchest:
-    description: set loot in chests
-    usage: /lootchest <name>
-    aliases: [chestloot, saveloot]
-    permission: sgm.host
   lobby:
     description: go back to lobby world
     usage: /lobby

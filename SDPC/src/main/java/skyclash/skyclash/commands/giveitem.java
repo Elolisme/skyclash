@@ -38,7 +38,7 @@ public class giveitem implements CommandExecutor{
 
         String arg_full = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        GiveItem.GiveCustomItem(player, arg_full);
+        new GiveItem().GiveCustomItem(player, arg_full);
 
         return true;
     }

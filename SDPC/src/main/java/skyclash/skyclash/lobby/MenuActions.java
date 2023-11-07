@@ -17,7 +17,7 @@ import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
@@ -26,7 +26,7 @@ import skyclash.skyclash.kitscards.Cards;
 public class MenuActions {
     public static void CheckReady(Player player) {
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
 
         player.closeInventory();
         if (main.playerStatus.get(player.getName()).equals("lobby") && !main.isGameActive) {
@@ -51,7 +51,7 @@ public class MenuActions {
             player.sendMessage(ChatColor.RED+"Spectating current game, use /lobby to return to lobby");
             Location spawnloc = new Location(Bukkit.getWorld("ingame_map"), 0, 70, 0);
             main.playerStatus.put(player.getName(), "spectator");
-            player.setScoreboard(Clock.board);
+            player.setScoreboard(Scheduler.board);
             player.teleport(spawnloc);
             player.getInventory().clear();
             new BukkitRunnable() {
@@ -94,10 +94,10 @@ public class MenuActions {
 
     public static void SelectKit(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
-        player.closeInventory();
         if (0 <= event.getRawSlot() && event.getRawSlot() <= 26) {
+            player.closeInventory();
             DataFiles datafiles = new DataFiles(player);
-            PlayerData data = datafiles.LoadData();
+            PlayerData data = datafiles.data;
             data.Kit = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
             player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.Kit + " kit");
             datafiles.SetData(data);
@@ -109,7 +109,7 @@ public class MenuActions {
         event.setCancelled(true);
 
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
 
         String selectedCard = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
         if (event.getInventory().getItem(32).getItemMeta().getDisplayName().equals(ChatColor.BLUE+"Click for Buy Mode")) {
@@ -175,12 +175,12 @@ public class MenuActions {
                     player.sendMessage(ChatColor.YELLOW + "You already own this card");
                     return;
                 }
-                if (data.Coins<60) {
+                if (data.Coins<Cards.CardCost1) {
                     player.sendMessage(ChatColor.RED + "You don't have enough money to buy this card");
                     return;
                 }
                 data.Owned.add(selectedCard);
-                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 150 coins\nIt has been selected");
+                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for "+Cards.CardCost1+" coins\nIt has been selected");
                 data.Coins = data.Coins - Cards.CardCost1;
                 data.Card = selectedCard;
                 datafiles.SetData(data);
@@ -191,12 +191,12 @@ public class MenuActions {
                     player.sendMessage(ChatColor.YELLOW + "You already own this card");
                     return;
                 }
-                if (data.Coins<100) {
+                if (data.Coins<Cards.CardCost2) {
                     player.sendMessage(ChatColor.RED + "You don't have enough money to buy this card");
                     return;
                 }
                 data.Owned.add(selectedCard);
-                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for 220 coins\nIt has been selected");
+                player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for "+Cards.CardCost2+" coins\nIt has been selected");
                 data.Coins = data.Coins - Cards.CardCost2;
                 data.Card = selectedCard;
                 datafiles.SetData(data);
@@ -219,7 +219,7 @@ public class MenuActions {
         event.setCancelled(true);
 
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
 
         if (event.getInventory().getItem(event.getSlot()).getItemMeta().getLore().get(0).equals("Already bought")) {
             player.closeInventory();
@@ -245,16 +245,17 @@ public class MenuActions {
         if (0 <= event.getRawSlot() && event.getRawSlot() <= (main.mapVotes.size()-1)) {
             player.closeInventory();
             String mapName = event.getCurrentItem().getItemMeta().getDisplayName();
-            player.sendMessage(ChatColor.GREEN + "You will be teleported to "+mapName);
+            player.sendMessage(ChatColor.GREEN + "You will be teleported to "+mapName+"\nUse /lobby to teleport back");
             if (!main.mvcore.getMVWorldManager().loadWorld(mapName)) {
                 player.sendMessage(ChatColor.RED+"The world is not available");
                 return;
             }
+
             player.teleport(main.mvcore.getMVWorldManager().getMVWorld(mapName).getSpawnLocation());
-            if (player.getGameMode() != GameMode.CREATIVE) {
+            if (player.getGameMode() != GameMode.CREATIVE || !player.isOp()) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
                     player.setGameMode(GameMode.SPECTATOR);
-                }, 5);
+                }, 3);
             }
         } else if (event.getRawSlot() == 14) {
             player.closeInventory();

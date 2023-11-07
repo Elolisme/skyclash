@@ -7,8 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import skyclash.skyclash.Clock;
-import skyclash.skyclash.chestgen.OpenEChest;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
@@ -38,8 +37,8 @@ public class EndGame {
                 if (value.equals("ingame")) {
                     winner.set(key);
                     Player winr = Bukkit.getPlayer(key);
-                    StatsManager.changeStat(winr, "wins", 1);
-                    StatsManager.changeStat(winr, "coins", 50);
+                    new StatsManager().changeStat(winr, "wins", 1);
+                    new StatsManager().changeStat(winr, "coins", 50);
                     winr.sendMessage(ChatColor.YELLOW+"+50 coins for winning");
                 }
             });
@@ -49,16 +48,16 @@ public class EndGame {
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage(ChatColor.DARK_RED+"Top kills:");
         ArrayList<Integer> sortStrings = new ArrayList<>();
-        StatsManager.killtracker.forEach((player, value) -> {sortStrings.add(value);});
+        main.killtracker.forEach((player, value) -> {sortStrings.add(value);});
         List<Integer> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
         Collections.sort(sortStrings2);
         Collections.reverse(sortStrings2);
         sortStrings2.forEach((value) -> {
-            StatsManager.killtracker.forEach((player, svalue) -> {
+            main.killtracker.forEach((player, svalue) -> {
                 if (value.equals(svalue)) {Bukkit.broadcastMessage("  "+ChatColor.RED+player+": "+ChatColor.YELLOW+value);}
             });
         });
-        StatsManager.killtracker = new HashMap<>();
+        main.killtracker = new HashMap<>();
         Bukkit.broadcastMessage("");
 
         // get lobby spawn location
@@ -95,9 +94,9 @@ public class EndGame {
                 } else {
                     player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
                     player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
-                    StatsManager.changeStat(player, "Games", 1);
+                    new StatsManager().changeStat(player, "Games", 1);
                 }
-                player.setScoreboard(Clock.emptyboard);
+                player.setScoreboard(Scheduler.emptyboard);
                 player.getInventory().clear();
                 player.getInventory().setHelmet(new ItemStack(Material.AIR));
                 player.getInventory().setChestplate(new ItemStack(Material.AIR));
@@ -113,9 +112,9 @@ public class EndGame {
                 player.setLevel(0);
                 player.setExp(0);
                 main.playerStatus.put(player.getName(), "lobby");
-                DataFiles data = new DataFiles(player);
-                PlayerData playerData = data.LoadData();
-                if (playerData.Autoready == true) {
+                DataFiles datafiles = new DataFiles(player);
+                PlayerData playerdata = datafiles.data;
+                if (playerdata.Autoready == true) {
                     main.playerStatus.put(player.getName(), "ready");
                 }
                 LobbyControls.CheckStartGame(true);
@@ -128,9 +127,9 @@ public class EndGame {
                 LobbyControls.GiveItem(player);
 
                 // ender chest
-                if (OpenEChest.EnderChestItems.containsKey(player)) {
-                    player.getEnderChest().setContents(OpenEChest.EnderChestItems.get(player));
-                    OpenEChest.EnderChestItems.remove(player);
+                if (main.EnderChestItems.containsKey(player)) {
+                    player.getEnderChest().setContents(main.EnderChestItems.get(player));
+                    main.EnderChestItems.remove(player);
                 }
 
                 new RemoveTags(player);
@@ -142,7 +141,7 @@ public class EndGame {
             main.activeWorld = null;
         }
         main.isGameActive = false;
-        Clock.playersLeft = 0;
-        Clock.timer = 0;
+        Scheduler.playersLeft = 0;
+        Scheduler.timer = 0;
     }
 }

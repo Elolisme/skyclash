@@ -12,12 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
 
-import java.util.HashMap;
 import java.util.Set;
 
 public class OpenEChest implements Listener {
-    public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
-
     public OpenEChest(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -31,8 +28,8 @@ public class OpenEChest implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 
         ItemStack[] Echestitems = player.getEnderChest().getContents();
-        if (!EnderChestItems.containsKey(player)) {
-            EnderChestItems.put(player, Echestitems);
+        if (!main.EnderChestItems.containsKey(player)) {
+            main.EnderChestItems.put(player, Echestitems);
             player.getEnderChest().clear();
         }
         

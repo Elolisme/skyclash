@@ -74,9 +74,9 @@ public class leaderboard implements CommandExecutor {
         return true;
     }
 
-    private static int getStat(String player, String stat) {
-        DataFiles files = new DataFiles(player);
-        PlayerData pdata = files.LoadData();
+    private int getStat(String player, String stat) {
+        DataFiles dfiles = new DataFiles(player);
+        PlayerData pdata = dfiles.data;
         if (stat.equals("coins")) {
             return pdata.Coins;
         }
@@ -88,7 +88,7 @@ public class leaderboard implements CommandExecutor {
         }
     }
 
-    private static HashMap<String, Integer> PlayersWithStat(String stat) {
+    private HashMap<String, Integer> PlayersWithStat(String stat) {
         HashMap<String, Integer> statList = new HashMap<>();
         File dir = new File("players");
         File[] dirList = dir.listFiles();

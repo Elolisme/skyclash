@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffect;
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 
@@ -26,12 +26,12 @@ public class PlayerDeath implements Listener {
             return;
         }
 
-        StatsManager.changeStat(player, "deaths", 1);
-        if (Clock.timer > 570) {
-            StatsManager.changeStat(player, "30s Deaths", 1);
+        new StatsManager().changeStat(player, "deaths", 1);
+        if (Scheduler.timer > 570) {
+            new StatsManager().changeStat(player, "30s Deaths", 1);
         }
         if (event.getEntity().getLastDamageCause().getCause() == DamageCause.VOID) {
-            StatsManager.changeStat(player, "Void deaths", 1);
+            new StatsManager().changeStat(player, "Void deaths", 1);
         }
 
         main.playerStatus.put(player.getName(), "spectator");
@@ -55,12 +55,12 @@ public class PlayerDeath implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
-        Clock.playersLeft--;
+        Scheduler.playersLeft--;
         player.sendMessage(ChatColor.RED+"Better luck next time");
         new RemoveTags(player);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
-            if (Clock.playersLeft <= 1) {
+            if (Scheduler.playersLeft <= 1) {
                 new EndGame(false);
             }
         }, 5);

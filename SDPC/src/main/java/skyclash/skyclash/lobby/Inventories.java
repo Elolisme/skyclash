@@ -36,7 +36,7 @@ public class Inventories {
         ItemMeta meta;
 
         DataFiles datafiles = new DataFiles(player);
-        PlayerData playerdata = datafiles.LoadData();
+        PlayerData playerdata = datafiles.data;
 
         // player and stats
         inventory.setItem(4, statItem(player));
@@ -194,7 +194,7 @@ public class Inventories {
         item = new Potion(PotionType.STRENGTH).toItemStack(1);
         meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(ChatColor.RED + "Beserker");
+            meta.setDisplayName(ChatColor.RED + "Berserker");
             item.setItemMeta(meta);
         }
         inventory.setItem(2, item);
@@ -271,6 +271,14 @@ public class Inventories {
         }
         inventory.setItem(10, item);
 
+        item = new ItemStack(Material.WATCH);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Jester");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(11, item);
+
         for (int i=27; i<36; i++) {
             FillerItems(inventory, i);
         }
@@ -291,13 +299,13 @@ public class Inventories {
         return inventory;
     }
 
+    // cards
     public static Inventory cardsInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 36, ChatColor.DARK_BLUE+"Card Selection");
 
         ItemStack item;
         ItemMeta meta;
 
-        // card
         item = new ItemStack(Material.CHEST, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -315,7 +323,6 @@ public class Inventories {
         }
         inventory.setItem(1, item);
 
-        // card
         item = new Potion(PotionType.INSTANT_DAMAGE).toItemStack(1);
         item.setAmount(1);
         meta = item.getItemMeta();
@@ -325,7 +332,6 @@ public class Inventories {
         }
         inventory.setItem(2, item);
 
-        // card
         item = new ItemStack(Material.BOW, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -334,7 +340,6 @@ public class Inventories {
         }
         inventory.setItem(3, item);
 
-        // card
         item = new ItemStack(Material.IRON_BOOTS, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -343,7 +348,6 @@ public class Inventories {
         }
         inventory.setItem(4, item);
 
-        // card
         item = new SpawnEgg(EntityType.ZOMBIE).toItemStack(1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -352,7 +356,6 @@ public class Inventories {
         }
         inventory.setItem(5, item);
 
-        // card
         item = new ItemStack(Material.ENDER_PEARL, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -360,8 +363,7 @@ public class Inventories {
             item.setItemMeta(meta);
         }
         inventory.setItem(6, item);
-
-        // card
+        
         item = new ItemStack(Material.SUGAR, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -370,7 +372,6 @@ public class Inventories {
         }
         inventory.setItem(7, item);
         
-        // card
         item = new ItemStack(Material.IRON_CHESTPLATE, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -379,7 +380,6 @@ public class Inventories {
         }
         inventory.setItem(9, item);
 
-        // card
         item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
         item.setAmount(1);
         meta = item.getItemMeta();
@@ -389,7 +389,6 @@ public class Inventories {
         }
         inventory.setItem(10, item);
 
-        // card
         item = new ItemStack(Material.REDSTONE, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -398,7 +397,6 @@ public class Inventories {
         }
         inventory.setItem(11, item);
 
-        // card
         item = new ItemStack(Material.ROTTEN_FLESH, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -407,7 +405,6 @@ public class Inventories {
         }
         inventory.setItem(12, item);
         
-        // card
         item = new ItemStack(Material.ENCHANTED_BOOK, 1);
         meta = item.getItemMeta();
         if (meta != null) {
@@ -555,8 +552,8 @@ public class Inventories {
         ItemMeta meta;
 
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
-        JSONObject stats = data.Stats;
+        PlayerData playerdata = datafiles.data;
+        JSONObject stats = playerdata.Stats;
 
         // item
         item = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
@@ -569,7 +566,7 @@ public class Inventories {
         List<String> lore = new ArrayList<>();
 
         // Coins
-        lore.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)data.Coins);
+        lore.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)playerdata.Coins);
         lore.add("");
         lore.add(ChatColor.GOLD+"Your stats:");
 
@@ -670,7 +667,7 @@ public class Inventories {
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
-        inventory.setItem(12, item);
+        inventory.setItem(13, item);
 
         // back to lobby
         item = new ItemStack(Material.BEDROCK, 1);

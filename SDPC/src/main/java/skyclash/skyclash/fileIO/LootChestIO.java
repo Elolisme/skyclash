@@ -12,7 +12,6 @@ public class LootChestIO {
     private static final File savedChestsDir = new File( "LootChests" + File.separator);
 
     public static void saveChest(LootChest lootChest) {
-        
         if (!savedChestsDir.exists())
             if (!savedChestsDir.mkdirs()) {
                 main.getPlugin(main.class).getLogger().log(Level.SEVERE, "Could not create the folder for saving the LootChests");

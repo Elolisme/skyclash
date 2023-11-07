@@ -9,9 +9,9 @@ import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
 
 public class HomingTask extends BukkitRunnable {
-    Arrow arrow;
-    LivingEntity target;
-    int time;
+    private Arrow arrow;
+    private LivingEntity target;
+    private int time;
 
     public HomingTask(Arrow arrow, LivingEntity target) {
         this.arrow = arrow;

@@ -48,9 +48,9 @@ public class MenuLogic implements Listener {
         player.setMetadata("OpenedMenu", new FixedMetadataValue(main.getPlugin(main.class), "Skyclash Menu"));
     }
 
+    // click an item in menu
     @EventHandler
     public void onMenuClick(InventoryClickEvent event) {
-        // Checks
         Player player = (Player) event.getWhoClicked();
         if (!main.playerStatus.containsKey(player.getName()) || event.getCurrentItem() == null) {
             return;

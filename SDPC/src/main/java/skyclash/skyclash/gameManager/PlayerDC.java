@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.RemoveTags;
@@ -20,11 +20,11 @@ import skyclash.skyclash.main;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-@SuppressWarnings({"unchecked", "UnnecessaryBoxing"})
 public class PlayerDC implements Listener {
     public PlayerDC(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+    
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
@@ -35,6 +35,7 @@ public class PlayerDC implements Listener {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void ingame(Player player) {
         // drops items hopefully
         for (ItemStack itemStack : player.getInventory()) {
@@ -43,14 +44,14 @@ public class PlayerDC implements Listener {
             }
         }
 
-        Clock.playersLeft--;
+        Scheduler.playersLeft--;
         Bukkit.broadcastMessage(ChatColor.RED+player.getName()+" has died due to disconnecting");
         
-        StatsManager.changeStat(player, "deaths", 1);
-        StatsManager.changeStat(player, "Disconnect deaths", 1);
+        new StatsManager().changeStat(player, "deaths", 1);
+        new StatsManager().changeStat(player, "Disconnect deaths", 1);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
-            if (Clock.playersLeft <= 1) {
+            if (Scheduler.playersLeft <= 1) {
                 new EndGame(false);
             }
         }, 5);
@@ -79,7 +80,7 @@ public class PlayerDC implements Listener {
         World w = Bukkit.getWorld(default_world.get());
         Location spawnloc = new Location(w, x.get(), y.get(), z.get());
 
-        player.setScoreboard(Clock.emptyboard);
+        player.setScoreboard(Scheduler.emptyboard);
         player.getInventory().clear();
         player.getInventory().setHelmet(new ItemStack(Material.AIR));
         player.getInventory().setChestplate(new ItemStack(Material.AIR));
@@ -107,6 +108,7 @@ public class PlayerDC implements Listener {
         LobbyControls.CheckStartGame(false);
     }
 
+    @SuppressWarnings("unchecked")
     private void spec(Player player) {
         // get lobby spawn location
         Mapsfile maps = new Mapsfile();
@@ -134,7 +136,7 @@ public class PlayerDC implements Listener {
         Location spawnloc = new Location(w, x.get(), y.get(), z.get());
 
         // player setup
-        player.setScoreboard(Clock.emptyboard);
+        player.setScoreboard(Scheduler.emptyboard);
         player.getInventory().clear();
         player.getEquipment().clear();
         player.setGameMode(GameMode.ADVENTURE);

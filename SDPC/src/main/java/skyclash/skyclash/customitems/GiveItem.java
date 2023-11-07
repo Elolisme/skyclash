@@ -11,12 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class GiveItem {
-    public static void GiveCustomItem(Player player, String itemInput) {
-
+    public void GiveCustomItem(Player player, String itemInput) {
         ItemStack item;
         ItemMeta meta;
         String arg_full = itemInput;
-
 
         // custom item master spark (definitely not a Touhou reference)
         item = new ItemStack(Material.FIREWORK_CHARGE);

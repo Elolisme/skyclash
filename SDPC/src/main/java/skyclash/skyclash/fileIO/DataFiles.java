@@ -31,7 +31,7 @@ public class DataFiles {
         SaveData();
     }
 
-    public void CreateFile() {
+    private void CreateFile() {
         String path = "players";
         File folder = new File(path);
         if(!folder.exists()) {
@@ -49,7 +49,7 @@ public class DataFiles {
         }
 
     }
-    public void SaveData() {
+    private void SaveData() {
         String path = "players"+File.separator+playerName+".json";
         JSONObject jsondata = new JSONObject();
         jsondata.put("name", data.Name);
@@ -70,7 +70,7 @@ public class DataFiles {
         }
     }
 
-    public PlayerData LoadData() {
+    private PlayerData LoadData() {
         String path = "players"+File.separator+playerName+".json";
         JSONParser parser = new JSONParser();
         try {

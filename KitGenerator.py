@@ -17,7 +17,7 @@ code2 = ""
 enchant = [""]
 print("Please answer questions, or leave blank and press enter to choose nothing\nAll kits can be found here:\n    https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing \n    (Please do level 1 kits for now)")
 name = input("Kit name (eg: Swordsman): ")
-code = code + f"public void {name}() {{\n    ItemStack item;\n    Potion pot;"
+code = code + f"private void {name}() {{\n    ItemStack item;\n    Potion pot;"
 
 icon = input("Item for icon of kit: ")
 code2 = code2 + f"item = new ItemStack(Material.{icon.upper()});\nitem.setAmount(1);\nmeta = item.getItemMeta();\nif (meta != null) {{\n    meta.setDisplayName(ChatColor.RED + \"{name}\");\n    item.setItemMeta(meta);\n}}\ninventory.setItem(2, item);"

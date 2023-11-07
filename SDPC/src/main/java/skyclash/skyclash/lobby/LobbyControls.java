@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.gameManager.StartGame;
@@ -45,7 +45,7 @@ public class LobbyControls implements Listener {
         if (main.playerStatus.get(player.getName()).equals("lobby")) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
-                player.setScoreboard(Clock.emptyboard);
+                player.setScoreboard(Scheduler.emptyboard);
             }
             if (!player.getInventory().contains(Material.EMERALD)) {
                 GiveMapNavItem(player);
@@ -53,7 +53,7 @@ public class LobbyControls implements Listener {
         }
         // if they have joined
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
         if (!(data.hasJoined)) {
             main.playerStatus.put(player.getName(), "lobby");
             player.sendMessage(ChatColor.GREEN+"Welcome to skyclash!\nClick the nether star to access the menu\n\nGLHF (plugin by TitanPlayz)");
@@ -68,7 +68,7 @@ public class LobbyControls implements Listener {
             main.playerStatus.put(player.getName(), "ready");
         }
 
-        StatsManager.changeStat(player, "Joins", 1);
+        new StatsManager().changeStat(player, "Joins", 1);
         
     }
 
@@ -103,7 +103,7 @@ public class LobbyControls implements Listener {
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
         if (event.getItemDrop() == null) {
             return;
         }
@@ -116,7 +116,7 @@ public class LobbyControls implements Listener {
     public void onDrop2(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         DataFiles datafiles = new DataFiles(player);
-        PlayerData data = datafiles.LoadData();
+        PlayerData data = datafiles.data;
         if (event.getItemDrop() == null) {
             return;
         }
@@ -181,9 +181,8 @@ public class LobbyControls implements Listener {
         }
         if (!started && Integer.parseInt(String.valueOf(people_ready)) == 1) {
             Bukkit.broadcastMessage(ChatColor.YELLOW + "Game cancelled due to insufficient people ready");
-            if (StartGame.task1 != null) {
-                StartGame.EndTasks();
-            }
+            StartGame.EndTasks();
+            
         }
     }
 }

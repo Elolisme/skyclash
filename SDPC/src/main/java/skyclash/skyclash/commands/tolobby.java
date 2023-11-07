@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import skyclash.skyclash.Clock;
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
@@ -62,16 +62,16 @@ public class tolobby implements CommandExecutor {
         Location spawnloc = new Location(w, x.get(), y.get(), z.get());
 
         // player setup
-        player.setScoreboard(Clock.emptyboard);
+        player.setScoreboard(Scheduler.emptyboard);
         player.getInventory().clear();
         player.getEquipment().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
         main.playerStatus.put(player.getName(), "lobby");
-        DataFiles data = new DataFiles(player);
-        PlayerData playerData = data.LoadData();
-        if (playerData.Autoready == true) {
+        DataFiles datafiles = new DataFiles(player);
+        PlayerData playerdata = datafiles.data;
+        if (playerdata.Autoready == true) {
             main.playerStatus.put(player.getName(), "ready");
         }
         LobbyControls.CheckStartGame(true);

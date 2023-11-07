@@ -18,14 +18,14 @@ import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
 
 public class Cards {
-    String card;
-    Player player;
+    private String card;
+    private Player player;
 
-    public static final int CardRent1 = 15;
-    public static final int CardRent2 = 22;
+    public static final int CardRent1 = 10;
+    public static final int CardRent2 = 16;
 
-    public static final int CardCost1 = 150;
-    public static final int CardCost2 = 220;
+    public static final int CardCost1 = 100;
+    public static final int CardCost2 = 160;
 
 
     public Cards(String Card, Player player) {
@@ -44,7 +44,7 @@ public class Cards {
                 item.setItemMeta(meta);
             }
             this.player.getInventory().addItem(item);
-            GiveItem.GiveCustomItem(player, "explosive bow");
+            new GiveItem().GiveCustomItem(player, "explosive bow");
             player.setMetadata("Creeper", new FixedMetadataValue(main.getPlugin(main.class), "card"));
         }
         if (this.card.equals("Bigger Bangs")) {
@@ -66,7 +66,7 @@ public class Cards {
         }
         if (this.card.equals("Blast Protection")) {
             if (!CanBuy(CardRent2)) {return;}
-            for (int i = 0; i < 2; i++) {GiveItem.GiveCustomItem(player, "fireball");}
+            for (int i = 0; i < 2; i++) {new GiveItem().GiveCustomItem(player, "fireball");}
             player.setMetadata("Blast Protection", new FixedMetadataValue(main.getPlugin(main.class), "card"));
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999999, 0, true, false));
         }
@@ -109,20 +109,20 @@ public class Cards {
 
     }
 
-    public Boolean CanBuy(int Cost) {
+    private Boolean CanBuy(int Cost) {
         // coin system
-        DataFiles dataFiles = new DataFiles(this.player);
-        PlayerData data = dataFiles.LoadData();
+        DataFiles datafiles = new DataFiles(this.player);
+        PlayerData data = datafiles.data;
         JSONArray owned = data.Owned;
         if (!owned.contains(this.card)) {
             if (Cost>data.Coins) {
                 player.sendMessage(ChatColor.RED+"You do not have enough money to use your card");
                 data.Card = "No Card";
-                dataFiles.SetData(data);
+                datafiles.SetData(data);
                 return false;
             } else {
                 data.Coins = data.Coins - Cost;
-                dataFiles.SetData(data);
+                datafiles.SetData(data);
             }
         }
         return true;

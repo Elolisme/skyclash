@@ -1,5 +1,7 @@
 package skyclash.skyclash.gameManager;
 
+import static skyclash.skyclash.main.killtracker;
+
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
@@ -7,24 +9,20 @@ import org.bukkit.entity.Player;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
 
+
 public class StatsManager {
-
-    // Kills for 1 game
-    public static HashMap<String, Integer> killtracker = new HashMap<>();
-
-    public static void addPlayer(Player player) {
+    public void addPlayer(Player player) {
         killtracker.put(player.getName(), 0);
     }
-    public static void addKill(Player player) {
+    public void addKill(Player player) {
         killtracker.put(player.getName(), killtracker.get(player.getName()) + 1);
     }
 
-
     // all other stats
     @SuppressWarnings("unchecked")
-    public static void changeStat(Player player, String stat, int change) {
+    public void changeStat(Player player, String stat, int change) {
         DataFiles files = new DataFiles(player);
-        PlayerData pdata = files.LoadData();
+        PlayerData pdata = files.data;
         pdata.Stats.remove("temp");
 
         // remove obselete stats
