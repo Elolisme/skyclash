@@ -19,6 +19,7 @@ import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.lobby.VoteMap;
 
 public class scworld implements CommandExecutor {
     @Override
@@ -94,9 +95,7 @@ public class scworld implements CommandExecutor {
 
         Mapsfile maps = new Mapsfile();
         maps.readFile(true, true);
-        for (int i = 1; i <= maps.get_size(); i++) {
-            main.mapVotes.put(i, 0);
-        }
+        new VoteMap().addMap(new VoteMap().mapSize()+1);
     }
 
     public void modify(String world, String setting, String value, CommandSender sender) {
@@ -113,19 +112,10 @@ public class scworld implements CommandExecutor {
             return;
         }
         switch (setting) {
-            case "setLobby":
-                setDefault(world, sender);
-                break;
-            case "setIcon":
-                setIcon(world, value, sender);
-
-                break;
-            case "isVisible":
-                setIgnore(world, value, sender);
-
-                break;
-            default:
-                sender.sendMessage(ChatColor.RED+"That setting does not exist"+ChatColor.GRAY+"\nCurrent settings are:\n setLobby\n setIcon <material>\n isVisible <true/false>");
+            case "setLobby": setDefault(world, sender);break;
+            case "setIcon": setIcon(world, value, sender);break;
+            case "isVisible": setIgnore(world, value, sender);break;
+            default: sender.sendMessage(ChatColor.RED+"That setting does not exist"+ChatColor.GRAY+"\nCurrent settings are:\n setLobby\n setIcon <material>\n isVisible <true/false>");
                 break;  
         }
     }
@@ -156,9 +146,11 @@ public class scworld implements CommandExecutor {
     public void setIcon(String world, String value, CommandSender sender) {
         if (value == null) {
             sender.sendMessage(ChatColor.RED+"Please add the block you want as the icon for the world\n/scworld modify <world> setIcon <material>");
+            return;
         }
         if (Material.getMaterial(value.toUpperCase()) == null) {
             sender.sendMessage(ChatColor.RED+"Please use a valid material (block/item)\n/scworld modify <world> setIcon <material>");
+            return;
         }
         Mapsfile maps = new Mapsfile();
         maps.readFile(false, false);

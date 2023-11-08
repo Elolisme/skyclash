@@ -15,6 +15,7 @@ import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.VoteMap;
 import skyclash.skyclash.main;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,10 +29,11 @@ public class PlayerDC implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        switch (main.playerStatus.get(player.getName())) {
-            case "ingame": ingame(player); break;
-            case "ready": ready(player); break;
-            case "spectator": spec(player); break;
+        switch (PlayerStatus.StatusMap.get(player.getName())) {
+            case INGAME: ingame(player); break;
+            case READY: ready(player); break;
+            case SPECTATOR: spec(player); break;
+            case LOBBY: ready(player); break;
         }
     }
 
@@ -50,7 +52,7 @@ public class PlayerDC implements Listener {
         new StatsManager().changeStat(player, "deaths", 1);
         new StatsManager().changeStat(player, "Disconnect deaths", 1);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
             if (Scheduler.playersLeft <= 1) {
                 new EndGame(false);
             }
@@ -94,17 +96,17 @@ public class PlayerDC implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
-        main.playerStatus.remove(player.getName());
-        main.playerVote.remove(player.getName());
+        PlayerStatus.StatusMap.remove(player.getName());
+        VoteMap.playerVote.remove(player.getName());
         if (player.hasMetadata("NoMovement")) {
-            player.removeMetadata("NoMovement", main.getPlugin(main.class));
+            player.removeMetadata("NoMovement", main.plugin);
         }
         player.teleport(spawnloc);
         new RemoveTags(player);
     }
 
     private void ready(Player player) {
-        main.playerStatus.remove(player.getName());
+        PlayerStatus.StatusMap.remove(player.getName());
         LobbyControls.CheckStartGame(false);
     }
 
@@ -142,7 +144,7 @@ public class PlayerDC implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
-        main.playerStatus.remove(player.getName());
+        PlayerStatus.StatusMap.remove(player.getName());
         LobbyControls.GiveItem(player);
         player.teleport(spawnloc);
     }

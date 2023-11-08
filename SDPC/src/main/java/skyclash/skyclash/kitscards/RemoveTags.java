@@ -6,7 +6,7 @@ import skyclash.skyclash.main;
 
 public class RemoveTags {
     public RemoveTags(Player player) {
-        Plugin p = main.getPlugin(main.class);
+        Plugin p = main.plugin;
         player.removeMetadata("Assassin", p);
         player.removeMetadata("Swordsman", p);
         player.removeMetadata("Berserker", p);

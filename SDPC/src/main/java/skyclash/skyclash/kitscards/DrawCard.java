@@ -1,13 +1,18 @@
 package skyclash.skyclash.kitscards;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.md_5.bungee.api.ChatColor;
@@ -27,7 +32,7 @@ public class DrawCard {
             public void run() {
                 ClearTempItems(player);
             }
-        }.runTaskLater(main.getPlugin(main.class), 20*15);
+        }.runTaskLater(main.plugin, 20*15);
     }
 
     private void Spades(Player player, int num) {
@@ -103,25 +108,43 @@ public class DrawCard {
     }
 
     // TODO:
+    @SuppressWarnings("Depreciated")
     private void Hearts(Player player, int num) {
+        ItemStack item;
+        ItemMeta meta;
         switch (num) {
             case 1:
-                // god apple
+                item = new ItemStack(Material.GOLDEN_APPLE, 1, (short)1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 2:
-                // pufferfish, poison 2
+                item = new ItemStack(Material.POISONOUS_POTATO);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20*20, 1));
             break;
             case 3:
-                // rotten flesh, poison
+                item = new ItemStack(Material.ROTTEN_FLESH, 5);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 15*20, 0));
             break;
             case 4:
-                // chicken
+                item = new ItemStack(Material.RAW_CHICKEN, 5);
+                player.getInventory().addItem(addLore(item));
             break;
             case 5:
-                // coocked fish
+                item = new ItemStack(Material.COOKED_FISH, 5);
+                player.getInventory().addItem(addLore(item));
             break;
             case 6:
-                // saturation pot
+                item = new Potion(PotionType.WATER).toItemStack(1);
+                PotionMeta potmeta = (PotionMeta) item.getItemMeta();
+                potmeta.addCustomEffect(new PotionEffect(PotionEffectType.SATURATION, 15*20, 2), true);
+                potmeta.setDisplayName(ChatColor.WHITE+"Saturation Potion");
+                List<String> lore = new ArrayList<>();
+                lore.add(ChatColor.GRAY+"Saturation 3 (0:15)");
+                potmeta.setLore(lore);
+                item.setItemMeta(potmeta);
+                player.getInventory().addItem(addLore(item));
             break;
             case 7:
                 // saturation

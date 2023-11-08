@@ -234,11 +234,17 @@ Future
 
 # Changelog
 
-## v1.5.3
+## v1.5.3 
+### part 1
 - Added jester kit as a proof of concept, only spades works
 - Refactored lots of code to be private and non static
 - Fixed many smaller bugs and patches
 - Cards rent cost is now 10 and 16, as well as buy cost of 100 and 160, for lower and higher tier respectively
+
+### part 2
+- Refactored more code -> specifically the playerStatus, playerVote and mapVote systems
+
+
 
 ## v1.5.2
 - Removed need for VoidWorld, now use SDPC

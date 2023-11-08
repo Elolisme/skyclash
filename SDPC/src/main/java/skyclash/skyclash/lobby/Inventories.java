@@ -27,6 +27,9 @@ import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
+import skyclash.skyclash.kitscards.Cards;
 
 public class Inventories {
     public static Inventory mainInventory(Player player) {
@@ -37,6 +40,8 @@ public class Inventories {
 
         DataFiles datafiles = new DataFiles(player);
         PlayerData playerdata = datafiles.data;
+
+        PlayerStatus pstatus = new PlayerStatus();
 
         // player and stats
         inventory.setItem(4, statItem(player));
@@ -114,9 +119,9 @@ public class Inventories {
             item4.setItemMeta(meta);
         }
 
-        if (main.playerStatus.get(player.getName()).equals("lobby") && !main.isGameActive) {
+        if (pstatus.PlayerEqualsStatus(player, PlayerState.LOBBY) && !main.isGameActive) {
             inventory.setItem(11, item);
-        } else if (main.playerStatus.get(player.getName()).equals("ready") && !main.isGameActive){
+        } else if (pstatus.PlayerEqualsStatus(player, PlayerState.READY) && !main.isGameActive){
             if (playerdata.Autoready == false) {
                 inventory.setItem(11, item1);
             } else {
@@ -424,10 +429,10 @@ public class Inventories {
             meta.setDisplayName(ChatColor.YELLOW + "Information");
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GREEN+"Cards are passive buffs or items for an entire game.");
-            lore.add(ChatColor.DARK_GREEN+"The top row will cost 15 coins each game to play");
-            lore.add(ChatColor.DARK_GREEN+"    and 150 coins to permanently buy.");
-            lore.add(ChatColor.DARK_GREEN+"The next row will cost 22 coins each game to play");
-            lore.add(ChatColor.DARK_GREEN+"    and 220 coins to permanently buy.");
+            lore.add(ChatColor.DARK_GREEN+"The top row will cost "+Cards.CardRent1+" coins each game to play");
+            lore.add(ChatColor.DARK_GREEN+"    and "+Cards.CardCost1+" coins to permanently buy.");
+            lore.add(ChatColor.DARK_GREEN+"The next row will cost "+Cards.CardRent2+" coins each game to play");
+            lore.add(ChatColor.DARK_GREEN+"    and "+Cards.CardCost2+" coins to permanently buy.");
             lore.add(ChatColor.GREEN+"Click \"Buy Mode\" to permanently buy a card");
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -527,15 +532,15 @@ public class Inventories {
                 String material = (String) info1.get("icon");
                 ItemStack item;
 
-                if (material.equals("purple_wool")) {
-                    item = new Wool(DyeColor.PURPLE).toItemStack();
-                } else {
-                    item = new ItemStack(Material.matchMaterial(material.toUpperCase()));
+                switch (material) {
+                    case "purple_wool": item = new Wool(DyeColor.PURPLE).toItemStack();break;
+                    default:            item = new ItemStack(Material.matchMaterial(material.toUpperCase()));break;
                 }
+
                 item.setAmount(1);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + name1 + ": " +main.mapVotes.get(count.get()+1)+" Votes");
+                    meta.setDisplayName(ChatColor.RED + name1 + ": " +new VoteMap().getMapValue(count.get()+1)+" Votes");
                     item.setItemMeta(meta);
                 }
                 inventory.setItem(count.get(), item);
@@ -545,7 +550,6 @@ public class Inventories {
         return inventory;
     }
 
-    
     @SuppressWarnings("unchecked")
     public static ItemStack statItem(Player player) {
         ItemStack item;
@@ -662,7 +666,7 @@ public class Inventories {
             meta.setDisplayName(ChatColor.YELLOW + "Information");
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GREEN+"Click a map to teleport to its actual world");
-            lore.add(ChatColor.GRAY+"People who are dont have op will be put in spectator mode");
+            lore.add(ChatColor.GRAY+"People who don't have op will be put in spectator mode");
             lore.add(ChatColor.DARK_GREEN+"Use /lobby to return");
             meta.setLore(lore);
             item.setItemMeta(meta);

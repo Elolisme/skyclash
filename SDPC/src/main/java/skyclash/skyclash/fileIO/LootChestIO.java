@@ -14,7 +14,7 @@ public class LootChestIO {
     public static void saveChest(LootChest lootChest) {
         if (!savedChestsDir.exists())
             if (!savedChestsDir.mkdirs()) {
-                main.getPlugin(main.class).getLogger().log(Level.SEVERE, "Could not create the folder for saving the LootChests");
+                main.plugin.getLogger().log(Level.SEVERE, "Could not create the folder for saving the LootChests");
                 return;
             }
 
@@ -22,11 +22,11 @@ public class LootChestIO {
 
         try(Writer writer = new FileWriter(savedChestsDir.getAbsolutePath() + File.separator + lootChest.getName() + ".json")) {
             gson.toJson(lootChest, writer);
-            main.getPlugin(main.class).getLogger().log(Level.INFO, "LootChest: '" + lootChest.getName() + "' was successfully saved!");
+            main.plugin.getLogger().log(Level.INFO, "LootChest: '" + lootChest.getName() + "' was successfully saved!");
 
         } catch (IOException e) {
-            main.getPlugin(main.class).getLogger().log(Level.SEVERE, "Couldn't save the LootChest: '" + lootChest.getName() + "'!");
-            main.getPlugin(main.class).getLogger().log(Level.SEVERE, e.getMessage());
+            main.plugin.getLogger().log(Level.SEVERE, "Couldn't save the LootChest: '" + lootChest.getName() + "'!");
+            main.plugin.getLogger().log(Level.SEVERE, e.getMessage());
         }
     }
 
@@ -39,8 +39,8 @@ public class LootChestIO {
             lootChest = gson.fromJson(reader,LootChest.class);
             reader.close();
         } catch (IOException e) {
-            main.getPlugin(main.class).getLogger().log(Level.SEVERE, "Couldn't load the LootChest: '" + name + "'!");
-            main.getPlugin(main.class).getLogger().log(Level.SEVERE, e.getMessage());
+            main.plugin.getLogger().log(Level.SEVERE, "Couldn't load the LootChest: '" + name + "'!");
+            main.plugin.getLogger().log(Level.SEVERE, e.getMessage());
         }
 
         return lootChest;

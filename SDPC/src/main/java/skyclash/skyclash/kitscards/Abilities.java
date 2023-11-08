@@ -45,11 +45,15 @@ import org.bukkit.util.Vector;
 
 import skyclash.skyclash.main;
 import skyclash.skyclash.cooldowns.Cooldown;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 public class Abilities implements Listener {
     public Abilities(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+
+    private PlayerStatus playerstatus = new PlayerStatus();
 
     @EventHandler
     public void onThrowPearl(ProjectileHitEvent event) {
@@ -132,7 +136,7 @@ public class Abilities implements Listener {
         // homing arrows; credit to BlingHomingArrows
         if (!(e.getEntity() instanceof Player)) {return;}
         Player player = (Player) e.getEntity();
-        if (!(main.playerStatus.get(player.getName()).equals("ingame"))) {return;}
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {return;}
         if (!(player.hasMetadata("Archer"))) {return;}
 
         // 50% check
@@ -145,7 +149,7 @@ public class Abilities implements Listener {
             Boolean target = false;
             // Just checks - if monster, or if player who is ingame, and if not dead and can be seen
             if (entity instanceof Monster) {target = true;}
-            if (entity instanceof Player) {if (main.playerStatus.get(entity.getName()).equals("ingame")) {target = true;}}
+            if (entity instanceof Player) {if (playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {target = true;}}
             if (player.hasLineOfSight(entity) && !entity.isDead() && target) {
                 Vector toTarget = entity.getLocation().toVector().clone().subtract(player.getLocation().toVector());
                 double angle = e.getProjectile().getVelocity().angle(toTarget);
@@ -242,7 +246,7 @@ public class Abilities implements Listener {
 
     // quiver refill in clock class
     public static void Every5Seconds() {
-        main.playerStatus.forEach((player, status) -> {
+        PlayerStatus.StatusMap.forEach((player, status) -> {
             Player plr = Bukkit.getPlayer(player);
             if (plr == null) {return;}
             if ((plr.hasMetadata("Quiver Refill"))) {
@@ -401,7 +405,7 @@ public class Abilities implements Listener {
     @EventHandler
     public void onOpenChest(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
             return;
         }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -423,7 +427,7 @@ public class Abilities implements Listener {
     @EventHandler
     public void onOpenChest2(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
             return;
         }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -450,7 +454,7 @@ public class Abilities implements Listener {
     @EventHandler
     public void onClickWatch(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("ingame") || !player.hasMetadata("Jester")) {
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME) || !player.hasMetadata("Jester")) {
             return;
         }
         if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
@@ -484,7 +488,7 @@ public class Abilities implements Listener {
     @EventHandler
     public void onDropTempItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("ingame") || !player.hasMetadata("Jester")) {
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME) || !player.hasMetadata("Jester")) {
             return;
         }
         if (event.getItemDrop().getItemStack().hasItemMeta() && event.getItemDrop().getItemStack().getItemMeta().getLore().get(0).equals("Temporary")) {
@@ -494,14 +498,14 @@ public class Abilities implements Listener {
 
     @EventHandler
     public void onMoveTempItem(InventoryClickEvent event) {
-        if (!main.playerStatus.get(event.getWhoClicked().getName()).equals("ingame")) {
+        if (!playerstatus.PlayerEqualsStatus(event.getWhoClicked().getName(), PlayerState.INGAME)) {
             return;
         }
         InventoryType invtype = event.getWhoClicked().getOpenInventory().getTopInventory().getType();
         if (!(invtype == InventoryType.CHEST || invtype == InventoryType.ENDER_CHEST)) {
             return;
         }
-        if (event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {
+        if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasLore() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {
             event.setCancelled(true);
         }
     }

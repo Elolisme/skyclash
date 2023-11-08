@@ -17,6 +17,7 @@ import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.gameManager.EndGame;
 import skyclash.skyclash.kitscards.Abilities;
+import skyclash.skyclash.lobby.VoteMap;
 
 import java.util.List;
 
@@ -32,26 +33,29 @@ public class Scheduler {
     public static int playersLeft = 0;
 
     public Scheduler() {
+
+        // Start plugin
         init();
         new BukkitRunnable(){
             @Override
             public void run(){
                 Tick();
             }
-        }.runTaskTimer(main.getPlugin(main.class), 0L, 1);
+        }.runTaskTimer(main.plugin, 0L, 1);
         new BukkitRunnable(){
             @Override
             public void run(){
                 Second();
             }
-        }.runTaskTimer(main.getPlugin(main.class), 0L, 20);
+        }.runTaskTimer(main.plugin, 0L, 20);
     }
+
     public void init() {
         // Maps
         Mapsfile maps = new Mapsfile();
         maps.readFile(true, true);
         for (int i = 1; i <= maps.get_size(); i++) {
-            mapVotes.put(i, 0);
+            new VoteMap().addMap(i);
         }
 
         // Scoreboard
@@ -69,7 +73,9 @@ public class Scheduler {
     public void Tick() {
         Cooldown.handleCooldowns();
     }
+
     public void Second() {
+        // Setting worlds
         List<World> world = Bukkit.getWorlds();
         world.forEach(world1 -> {
             world1.setStorm(false);

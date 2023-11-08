@@ -13,16 +13,19 @@ import org.bukkit.potion.PotionEffect;
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 public class PlayerDeath implements Listener {
     public PlayerDeath(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    private PlayerStatus pStatus = new PlayerStatus();
+
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (!pStatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
             return;
         }
 
@@ -34,16 +37,16 @@ public class PlayerDeath implements Listener {
             new StatsManager().changeStat(player, "Void deaths", 1);
         }
 
-        main.playerStatus.put(player.getName(), "spectator");
+        pStatus.SetStatus(player, PlayerState.SPECTATOR);
         player.setGameMode(GameMode.SPECTATOR);
         Location loc = event.getEntity().getLocation();
         player.getWorld().strikeLightningEffect(loc);
         
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
             player.spigot().respawn();
         }, 1);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
             player.teleport(loc);
             if (player.getLocation().getY() < 64) {
                 Location loc2 = new Location(player.getWorld(), player.getLocation().getX(), 100, player.getLocation().getZ());
@@ -59,7 +62,7 @@ public class PlayerDeath implements Listener {
         player.sendMessage(ChatColor.RED+"Better luck next time");
         new RemoveTags(player);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
             if (Scheduler.playersLeft <= 1) {
                 new EndGame(false);
             }

@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 import java.util.Set;
 
@@ -22,7 +24,7 @@ public class OpenEChest implements Listener {
     @EventHandler
     public void onOpenEChest(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (!new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME)) {
             return;
         }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}

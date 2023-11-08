@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
@@ -21,17 +22,17 @@ import java.util.Random;
 
 public class main extends JavaPlugin {
 
-    public static HashMap<Integer, Integer> mapVotes = new HashMap<>();
-    public static HashMap<String, Integer> playerVote = new HashMap<>();
-    public static HashMap<String, String> playerStatus = new HashMap<>();
     public static String activeWorld;
     public static boolean isGameActive = false;
     public static MultiverseCore mvcore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+    public static Plugin plugin;
     public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
     public static HashMap<String, Integer> killtracker = new HashMap<>();
 
     @Override
     public void onEnable() {
+        plugin = main.getPlugin(main.class);
+
         // handlers
         new LobbyControls(this);
         new MenuLogic(this);

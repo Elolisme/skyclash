@@ -45,11 +45,11 @@ public class Cards {
             }
             this.player.getInventory().addItem(item);
             new GiveItem().GiveCustomItem(player, "explosive bow");
-            player.setMetadata("Creeper", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Creeper", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Bigger Bangs")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Bigger Bangs", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Bigger Bangs", new FixedMetadataValue(main.plugin, "card"));
             ItemStack item1 = new ItemStack(Material.FLINT_AND_STEEL);
             this.player.getInventory().addItem(item1);
             item1 = new ItemStack(Material.TNT);
@@ -67,44 +67,44 @@ public class Cards {
         if (this.card.equals("Blast Protection")) {
             if (!CanBuy(CardRent2)) {return;}
             for (int i = 0; i < 2; i++) {new GiveItem().GiveCustomItem(player, "fireball");}
-            player.setMetadata("Blast Protection", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Blast Protection", new FixedMetadataValue(main.plugin, "card"));
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999999, 0, true, false));
         }
         if (this.card.equals("Elven Archer")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Elven Archer", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Elven Archer", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Quiver Refill")) {
             if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Quiver Refill", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Quiver Refill", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Apple Finder")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Apple Finder", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Apple Finder", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Hit and Run")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Hit and Run", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Hit and Run", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Pacify")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Pacify", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Pacify", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Pearl Absorption")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Pearl Absorption", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Pearl Absorption", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Sugar Rush")) {
             if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Sugar Rush", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Sugar Rush", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Lifesteal")) {
             if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Lifesteal", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Lifesteal", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Monster Hunter")) {
             if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Monster Hunter", new FixedMetadataValue(main.getPlugin(main.class), "card"));
+            player.setMetadata("Monster Hunter", new FixedMetadataValue(main.plugin, "card"));
         }
 
     }

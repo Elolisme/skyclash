@@ -1,6 +1,8 @@
 package skyclash.skyclash.gameManager;
 
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
+import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,11 +11,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.chestgen.StringToJSON;
-import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
-import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.VoteMap;
 import skyclash.skyclash.main;
 
 import java.util.ArrayList;
@@ -28,13 +30,13 @@ import java.util.stream.Collectors;
 public class EndGame {
     public EndGame(boolean isCommand) {
         // reset all map votes
-        main.mapVotes.forEach((key1, value1) -> main.mapVotes.put(key1, 0));
+        new VoteMap().resetMaps();
         AtomicReference<String> winner = new AtomicReference<>("no one");
 
         if (!isCommand) {
             // check for winner
-            main.playerStatus.forEach((key, value) -> {
-                if (value.equals("ingame")) {
+            PlayerStatus.StatusMap.forEach((key, value) -> {
+                if (value == PlayerState.INGAME) {
                     winner.set(key);
                     Player winr = Bukkit.getPlayer(key);
                     new StatsManager().changeStat(winr, "wins", 1);
@@ -86,8 +88,8 @@ public class EndGame {
         Location spawnloc = new Location(w, x.get(), y.get(), z.get());
 
         // loop for every player
-        main.playerStatus.forEach((key, value) -> {
-            if (value.equals("spectator") || value.equals("ingame")) {
+        PlayerStatus.StatusMap.forEach((key, value) -> {
+            if (value == PlayerState.SPECTATOR || value == PlayerState.INGAME) {
                 Player player = Bukkit.getServer().getPlayer(key);
                 if (isCommand) {
                     player.sendMessage("The game has abruptly ended");
@@ -111,20 +113,15 @@ public class EndGame {
                 player.setSaturation(20);
                 player.setLevel(0);
                 player.setExp(0);
-                main.playerStatus.put(player.getName(), "lobby");
-                DataFiles datafiles = new DataFiles(player);
-                PlayerData playerdata = datafiles.data;
-                if (playerdata.Autoready == true) {
-                    main.playerStatus.put(player.getName(), "ready");
-                }
-                LobbyControls.CheckStartGame(true);
+                new PlayerStatus().SetLobbyOrReady(player);
 
-                main.playerVote.remove(player.getName());
+                VoteMap.playerVote.remove(player.getName());
                 if (player.hasMetadata("NoMovement")) {
-                    player.removeMetadata("NoMovement", main.getPlugin(main.class));
+                    player.removeMetadata("NoMovement", main.plugin);
                 }
                 player.teleport(spawnloc);
                 LobbyControls.GiveItem(player);
+                LobbyControls.GiveMapNavItem(player);
 
                 // ender chest
                 if (main.EnderChestItems.containsKey(player)) {
@@ -135,11 +132,20 @@ public class EndGame {
                 new RemoveTags(player);
             }
         });
-        String ingamemap = main.mvcore.getMVWorldManager().getMVWorld("ingame_map").getName();
-        if (ingamemap != null) {
-            main.mvcore.getMVWorldManager().deleteWorld(ingamemap, true, true);
-            main.activeWorld = null;
+        AtomicInteger people_ready = new AtomicInteger(0);
+        PlayerStatus.StatusMap.forEach((key, value) -> {
+            if (value == PlayerState.INGAME) {
+                people_ready.getAndIncrement();
+            }
+        });
+        if (Integer.parseInt(String.valueOf(people_ready)) >= 2) {
+            new StartGame(false);
         }
+        MultiverseWorld ingamemap = main.mvcore.getMVWorldManager().getMVWorld("ingame_map");
+        if (ingamemap != null) {
+            main.mvcore.getMVWorldManager().deleteWorld(ingamemap.getName(), true, true);
+        }
+        main.activeWorld = null;
         main.isGameActive = false;
         Scheduler.playersLeft = 0;
         Scheduler.timer = 0;

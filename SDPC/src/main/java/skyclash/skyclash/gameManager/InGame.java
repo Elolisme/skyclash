@@ -17,11 +17,14 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.main;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 public class InGame implements Listener {
     public InGame(main plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
+
+    private PlayerStatus pStatus = new PlayerStatus();
 
     // event handlers
     @EventHandler
@@ -39,14 +42,14 @@ public class InGame implements Listener {
             return;
         }
         Player player = event.getEntity();
-        if (!main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (!pStatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
             return;
         }
         if (!(event.getEntity().getKiller() instanceof Player)) {
             return;
         }
         Player killer = event.getEntity().getKiller();
-        if (!main.playerStatus.get(killer.getName()).equals("ingame")) {
+        if (!pStatus.PlayerEqualsStatus(killer, PlayerState.INGAME)) {
             return;
         }
         if (event.getEntity().getName() == killer.getName()) {

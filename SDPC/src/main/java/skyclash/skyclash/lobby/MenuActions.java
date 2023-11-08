@@ -21,6 +21,8 @@ import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.kitscards.Cards;
 
 public class MenuActions {
@@ -28,21 +30,23 @@ public class MenuActions {
         DataFiles datafiles = new DataFiles(player);
         PlayerData data = datafiles.data;
 
+        PlayerStatus pStatus = new PlayerStatus();
+
         player.closeInventory();
-        if (main.playerStatus.get(player.getName()).equals("lobby") && !main.isGameActive) {
+        if (pStatus.PlayerEqualsStatus(player, PlayerState.LOBBY) && !main.isGameActive) {
             player.sendMessage(ChatColor.YELLOW+"You are now ready");
-            main.playerStatus.put(player.getName(), "ready");
+            pStatus.SetStatus(player, PlayerState.READY);
             data.Autoready = false;
             LobbyControls.CheckStartGame(true);
         } 
-        else if (main.playerStatus.get(player.getName()).equals("ready") && !main.isGameActive){
+        else if (pStatus.PlayerEqualsStatus(player, PlayerState.READY) && !main.isGameActive){
             if (data.Autoready == false) {
                 player.sendMessage(ChatColor.YELLOW+"You will now automatically ready up");
                 data.Autoready = true;
             } 
             else {
                 player.sendMessage(ChatColor.YELLOW+"You are no longer ready");
-                main.playerStatus.put(player.getName(), "lobby");
+                pStatus.SetStatus(player, PlayerState.LOBBY);
                 data.Autoready = false;
                 LobbyControls.CheckStartGame(false);
             }
@@ -50,7 +54,7 @@ public class MenuActions {
         else if (main.isGameActive) {
             player.sendMessage(ChatColor.RED+"Spectating current game, use /lobby to return to lobby");
             Location spawnloc = new Location(Bukkit.getWorld("ingame_map"), 0, 70, 0);
-            main.playerStatus.put(player.getName(), "spectator");
+            pStatus.SetStatus(player, PlayerState.SPECTATOR);
             player.setScoreboard(Scheduler.board);
             player.teleport(spawnloc);
             player.getInventory().clear();
@@ -59,7 +63,7 @@ public class MenuActions {
                 public void run() {
                     player.setGameMode(GameMode.SPECTATOR);
                 }
-            }.runTaskLater(main.getPlugin(main.class), 3);
+            }.runTaskLater(main.plugin, 3);
         } 
         else {
             player.sendMessage("Please use /lobby to go back to skyclash");
@@ -68,28 +72,35 @@ public class MenuActions {
         datafiles.SetData(data);
     }
 
-    public static void VoteMap(Player player, InventoryClickEvent event) {
+    public static void VoteForMap(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
         player.closeInventory();
-        if (0 <= event.getRawSlot() && event.getRawSlot() <= (main.mapVotes.size()-1)) {
-            int slot = event.getSlot() + 1;
-            if (main.playerVote.containsKey(player.getName())) {
-                int oldmap = main.playerVote.get(player.getName());
-                if (oldmap == slot) {
-                    player.sendMessage(ChatColor.RED + "You have already voted for this map!");
-                    return;
-                }
-                Integer num = main.mapVotes.get(oldmap);
-                num--;
-                main.mapVotes.put(oldmap, num);
-            }
-            Integer num = main.mapVotes.get(slot);
-            num++;
-            main.mapVotes.put(slot, num);
-            main.playerVote.put(player.getName(), slot);
-            String[] display = event.getCurrentItem().getItemMeta().getDisplayName().split(":");
-            player.sendMessage(ChatColor.GREEN + "You have voted for "+ display[0]);
+
+        VoteMap votemap = new VoteMap();
+        int slot = event.getSlot() + 1;
+        Integer currentMapValue = votemap.getMapValue(slot);
+
+        if (!(0 <= event.getRawSlot() && event.getRawSlot() <= (votemap.mapSize()-1))) {
+            return;
         }
+
+        if (VoteMap.playerVote.containsKey(player.getName())) {
+            int oldmap = VoteMap.playerVote.get(player.getName());
+            if (oldmap == slot) {
+                player.sendMessage(ChatColor.RED + "You have already voted for this map!");
+                return;
+            }
+            Integer num = votemap.getMapValue(oldmap);
+            num--;
+            votemap.setMapValue(oldmap, num);
+            votemap.addMap(num);
+        }
+
+        currentMapValue++;
+        votemap.setMapValue(slot, currentMapValue);
+        VoteMap.playerVote.put(player.getName(), slot);
+        String[] display = event.getCurrentItem().getItemMeta().getDisplayName().split(":");
+        player.sendMessage(ChatColor.GREEN + "You have voted for "+ display[0]);
     }
 
     public static void SelectKit(Player player, InventoryClickEvent event) {
@@ -209,7 +220,7 @@ public class MenuActions {
                     item.setItemMeta(meta);
                 }
                 player.openInventory(Inventories.cardsInventory(player));
-                player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.getPlugin(main.class), "Card Selection"));
+                player.setMetadata("OpenedMenu4", new FixedMetadataValue(main.plugin, "Card Selection"));
             }
         }
     }
@@ -242,7 +253,7 @@ public class MenuActions {
 
     public static void TeleportToMap(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
-        if (0 <= event.getRawSlot() && event.getRawSlot() <= (main.mapVotes.size()-1)) {
+        if (0 <= event.getRawSlot() && event.getRawSlot() <= (new VoteMap().mapSize()-1)) {
             player.closeInventory();
             String mapName = event.getCurrentItem().getItemMeta().getDisplayName();
             player.sendMessage(ChatColor.GREEN + "You will be teleported to "+mapName+"\nUse /lobby to teleport back");
@@ -253,7 +264,7 @@ public class MenuActions {
 
             player.teleport(main.mvcore.getMVWorldManager().getMVWorld(mapName).getSpawnLocation());
             if (player.getGameMode() != GameMode.CREATIVE || !player.isOp()) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(main.getPlugin(main.class), () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
                     player.setGameMode(GameMode.SPECTATOR);
                 }, 3);
             }

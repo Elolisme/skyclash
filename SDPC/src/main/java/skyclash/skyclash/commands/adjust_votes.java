@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import skyclash.skyclash.main;
+import skyclash.skyclash.lobby.VoteMap;
 
 public class adjust_votes implements CommandExecutor {
     /*
@@ -14,6 +14,7 @@ public class adjust_votes implements CommandExecutor {
      <map index> references to the hashmap of all the maps and the order its in, which is also taken from the map.json file
      <value> is any integer to set votes to
     */
+    private VoteMap votemap = new VoteMap();
 
 
     @Override
@@ -24,7 +25,6 @@ public class adjust_votes implements CommandExecutor {
             return true;
         }
         if (args.length == 1) { //Sender only typed '/setvotes <map index>' and nothing else
-            sender.sendMessage(ChatColor.RED+"Fucking idiot, please specify a value");
             sender.sendMessage(ChatColor.RED + "Use /setvotes <map index> <value>");
             return true;
         }
@@ -34,29 +34,30 @@ public class adjust_votes implements CommandExecutor {
         }
         String map = args[0];
         String value = args[1];
-        int value1;
+
+        int mapIndex;
         try {
-            value1 = Integer.parseInt(value);
+            mapIndex = Integer.parseInt(map);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(ChatColor.RED+"Map index must be an integer");
+            return true;
+        }
+        if (mapIndex > votemap.mapSize()) {
+            sender.sendMessage(ChatColor.RED+"Map index must be valid");
+            return true;
+        }
+
+        int voteAmount;
+        try {
+            voteAmount = Integer.parseInt(value);
         } catch (NumberFormatException e) {
             sender.sendMessage(ChatColor.RED+"Value must be an integer");
             return true;
         }
 
-        int value2;
-        try {
-            value2 = Integer.parseInt(map);
-        } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED+"Map index must be an integer");
-            return true;
-        }
-        if (!main.mapVotes.containsKey(value2)) {
-            sender.sendMessage(ChatColor.RED+"Map index must be valid");
-            return true;
-        }
-
         // adjust value
-        main.mapVotes.put(value2, value1);
-        sender.sendMessage(ChatColor.YELLOW+ "You have set the map with id "+value2+" to have "+value1+" votes");
+        votemap.setMapValue(mapIndex, voteAmount);
+        sender.sendMessage(ChatColor.YELLOW+ "You have set the map with id "+mapIndex+" to have "+voteAmount+" votes");
         return true;
     }
 }

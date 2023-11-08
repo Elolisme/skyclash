@@ -45,7 +45,7 @@ while item != "":
     item = input("Other items: ")
 buff = input("Describe buff shortly: ")
 notes = input("Any final notes or questions: ")
-code = code + f"\n    this.player.setMetadata(\"{name}\", new FixedMetadataValue(main.getPlugin(main.class), \"kit\"));\n}}"
+code = code + f"\n    this.player.setMetadata(\"{name}\", new FixedMetadataValue(main.plugin, \"kit\"));\n}}"
 code = code + f"\n// Buff: {buff}\n// {notes}"
 
 print(f"\nHere is the code:\n<--------kitscards/Kits.java------------>\n")

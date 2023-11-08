@@ -22,7 +22,7 @@ public class setchest implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            main.getPlugin(main.class).getLogger().log(Level.INFO, "This command is player only");
+            main.plugin.getLogger().log(Level.INFO, "This command is player only");
             return true;
         }
 

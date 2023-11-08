@@ -20,24 +20,27 @@ import skyclash.skyclash.fileIO.CopyWorld;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.kitscards.Cards;
 import skyclash.skyclash.kitscards.Kits;
 import skyclash.skyclash.kitscards.RemoveTags;
+import skyclash.skyclash.lobby.VoteMap;
 import skyclash.skyclash.main;
 
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StartGame {
     
     private AtomicReference<String> VotedMap = new AtomicReference<>("");
-    private Plugin plugin = main.getPlugin(main.class);
+    private Plugin plugin = main.plugin;
     private Mapsfile maps = new Mapsfile();
     private static BukkitTask task1;
     private static BukkitTask task2;
     private static BukkitTask task3;
+
+    private PlayerStatus pStatus = new PlayerStatus();
 
     public StartGame(boolean isCommand) {
         int delay;
@@ -79,23 +82,9 @@ public class StartGame {
     @SuppressWarnings({"UnnecessaryBoxing", "unchecked"})
     private void PreGame() {
 
-        // find map with the highest vote
-        AtomicInteger max = new AtomicInteger(-1);
-        AtomicInteger max_map = new AtomicInteger();
-        main.mapVotes.forEach((mapid, votes) -> {
-            if(votes > max.get()) {
-                max.set(votes);
-                max_map.set(mapid);
-            } else if (votes == max.get()) {
-                Random rd = new Random();
-                if (rd.nextBoolean()) {
-                    max.set(votes);
-                    max_map.set(mapid);
-                }
-            }
-        });
+        // get map and wprld with the highest votes
+        Integer maxMap = new VoteMap().getMaxMap();
 
-        // get world with the highest votes
         maps.readFile(false, false);
         AtomicInteger count = new AtomicInteger(1);
         maps.jsonObject.forEach((name, info) -> {
@@ -103,7 +92,7 @@ public class StartGame {
             String name1 = (String) name;
             boolean ignore = (boolean) info1.get("ignore");
             if (!ignore) {
-                if (max_map.get() == count.get()) {
+                if (maxMap == count.get()) {
                     VotedMap.set(name1);
                 }
                 count.getAndIncrement();
@@ -111,13 +100,12 @@ public class StartGame {
         });
         Bukkit.broadcastMessage(ChatColor.GOLD + VotedMap.get() + ChatColor.YELLOW + " will be prepared shortly...");
 
-        // copy world files
         List<World> worlds = Bukkit.getWorlds();
         for (World world: worlds) {
             world.save();
         }
-
-
+        
+        // copy world files
         MVWorldManager worldManager = main.mvcore.getMVWorldManager();
         worldManager.loadWorld(VotedMap.get());
         new CopyWorld().copyWorld(Bukkit.getWorld(VotedMap.get()), "ingame_map");
@@ -135,11 +123,12 @@ public class StartGame {
 
         // prepare all ready players
         AtomicInteger counter = new AtomicInteger(1);
-        main.playerStatus.forEach((key, value) -> {
-            if (value.equals("ready")) {
+        PlayerStatus.StatusMap.forEach((key, value) -> {
+            if (value == PlayerState.READY) {
                 // get spawn information from world
                 Scheduler.playersLeft++;
                 Player player = Bukkit.getServer().getPlayer(key);
+                player.spigot().respawn();
                 AtomicReference<JSONObject> worldinfo = new AtomicReference<>();
                 maps.jsonObject.forEach((name, info) -> {
                     String name1 = (String) name;
@@ -156,7 +145,7 @@ public class StartGame {
                 int length = spawnsarray.size();
                 if (Scheduler.playersLeft > length) {
                     player.sendMessage(ChatColor.RED+"Since this map only supports up to "+length+" players, you were not able to play");
-                    main.playerStatus.put(player.getName(), "lobby");
+                    pStatus.SetLobbyOrReady(player);
                     Scheduler.playersLeft--;
                 }
                 else {
@@ -182,10 +171,10 @@ public class StartGame {
                     }
                     player.setLevel(0);
                     player.setExp(0);
-                    player.setMetadata("NoMovement", new FixedMetadataValue(main.getPlugin(main.class), "1"));
+                    player.setMetadata("NoMovement", new FixedMetadataValue(main.plugin, "1"));
                     player.sendMessage("You will be sent to play soon");
                     new RemoveTags(player);
-                    main.playerStatus.put(player.getName(), "ingame");
+                    pStatus.SetStatus(player, PlayerState.INGAME);
                     Cooldown.add(player.getName(), "Pearl", 20, System.currentTimeMillis());
                     counter.getAndIncrement();
                 }
@@ -221,18 +210,18 @@ public class StartGame {
                 maps.readFile(false, false);
                 JSONObject info2 = (JSONObject) maps.jsonObject.get(VotedMap.get());
                 JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
-                World world1 = Bukkit.getWorld("ingame_map");
-                new ChestManager(chestsarray, world1, "spawn", "mid", true);
+                new ChestManager(chestsarray, Bukkit.getWorld("ingame_map"), "spawn", "mid", true);
 
                 // start game code
-                main.playerStatus.forEach((key, value) -> {
-                    if (main.playerStatus.get(key).equals("ingame")) {
-                        Player player = Bukkit.getServer().getPlayer(key);
+                PlayerStatus.StatusMap.forEach((key, value) -> {
+                    Player player = Bukkit.getServer().getPlayer(key);
+                    DataFiles datafiles = new DataFiles(player);
+                    PlayerData data = datafiles.data;
+                    
+                    if (pStatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
                         if (player.hasMetadata("NoMovement")) {
-                            player.removeMetadata("NoMovement", main.getPlugin(main.class));
+                            player.removeMetadata("NoMovement", main.plugin);
                         }
-                        DataFiles datafiles = new DataFiles(player);
-                        PlayerData data = datafiles.data;
                         new Kits(data.Kit, player).GiveKit();
                         new Cards(data.Card, player).GiveCard();
                         new giveItems(player);

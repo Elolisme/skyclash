@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,7 +44,7 @@ public class leaderboard implements CommandExecutor {
             return true;
         }
 
-        Bukkit.broadcastMessage(ChatColor.DARK_RED+">-----"+stat+"-----<");
+        sender.sendMessage(ChatColor.DARK_RED+">-----"+stat+"-----<");
         ArrayList<Integer> sortStrings = new ArrayList<>();
         statList.forEach((name, value) -> {sortStrings.add(value);});
         List<Integer> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
@@ -58,13 +57,13 @@ public class leaderboard implements CommandExecutor {
                 if (value.equals(entry.getValue())) {
                     if (count <= 10) {
                         if (name.equals(PlayerName)) {
-                            Bukkit.broadcastMessage(ChatColor.GOLD+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
+                            sender.sendMessage(ChatColor.GOLD+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
                         } else {
-                            Bukkit.broadcastMessage(ChatColor.RED+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
+                            sender.sendMessage(ChatColor.RED+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
                         }
                     } else {
                         if (name.equals(PlayerName)) {
-                            Bukkit.broadcastMessage(ChatColor.GOLD+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
+                            sender.sendMessage(ChatColor.GOLD+""+count+". "+name+ChatColor.YELLOW+" ("+value+")");
                         }
                     }
                 }

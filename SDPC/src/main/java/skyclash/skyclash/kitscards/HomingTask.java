@@ -17,7 +17,7 @@ public class HomingTask extends BukkitRunnable {
         this.arrow = arrow;
         this.time = 0;
         this.target = target;
-        runTaskTimer(main.getPlugin(main.class), 1L, 1L);
+        runTaskTimer(main.plugin, 1L, 1L);
     }
 
     public void run() {

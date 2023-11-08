@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -154,6 +155,10 @@ public class CustomItems implements Listener {
             return;
         }
 
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
         String displayname = player.getItemInHand().getItemMeta().getDisplayName();
         if (displayname == null) {
             return;
@@ -166,7 +171,7 @@ public class CustomItems implements Listener {
         // code to run
         Location location = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
         Fireball fireball = (Fireball) player.getWorld().spawnEntity(location, EntityType.FIREBALL);
-        fireball.setYield(2);
+        fireball.setYield(1);
         fireball.setIsIncendiary(false);
         Vector velocity = location.getDirection().multiply(1);
         fireball.setVelocity(velocity);

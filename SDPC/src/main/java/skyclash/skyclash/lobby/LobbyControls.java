@@ -20,8 +20,10 @@ import org.bukkit.projectiles.ProjectileSource;
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.StartGame;
 import skyclash.skyclash.gameManager.StatsManager;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.main;
 import skyclash.skyclash.cooldowns.Cooldown;
 
@@ -34,15 +36,17 @@ public class LobbyControls implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    private PlayerStatus playerstatus = new PlayerStatus();
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.containsKey(player.getName())) {
-            main.playerStatus.put(player.getName(), "lobby");
+        if (!playerstatus.ContainsName(player)) {
+            playerstatus.SetStatus(player, PlayerState.LOBBY);
         }
 
         // if they in lobby
-        if (main.playerStatus.get(player.getName()).equals("lobby")) {
+        if (playerstatus.PlayerEqualsStatus(player, PlayerState.LOBBY)) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
                 player.setScoreboard(Scheduler.emptyboard);
@@ -55,7 +59,7 @@ public class LobbyControls implements Listener {
         DataFiles datafiles = new DataFiles(player);
         PlayerData data = datafiles.data;
         if (!(data.hasJoined)) {
-            main.playerStatus.put(player.getName(), "lobby");
+            playerstatus.SetStatus(player, PlayerState.LOBBY);
             player.sendMessage(ChatColor.GREEN+"Welcome to skyclash!\nClick the nether star to access the menu\n\nGLHF (plugin by TitanPlayz)");
             data.hasJoined = true;
             data.Kit = "Swordsman";
@@ -65,7 +69,7 @@ public class LobbyControls implements Listener {
         datafiles.SetData(data);
 
         if (data.Autoready == true) {
-            main.playerStatus.put(player.getName(), "ready");
+            playerstatus.SetStatus(player, PlayerState.READY);
         }
 
         new StatsManager().changeStat(player, "Joins", 1);
@@ -75,10 +79,10 @@ public class LobbyControls implements Listener {
     @EventHandler
     public void onGamemodeSwitch(PlayerGameModeChangeEvent event) {
         Player player = event.getPlayer();
-        if (!main.playerStatus.containsKey(player.getName())) {
+        if (!playerstatus.ContainsName(player)) {
             return;
         }
-        if (main.playerStatus.get(player.getName()).equals("lobby") || main.playerStatus.get(player.getName()).equals("ready")) {
+        if (playerstatus.PlayerEqualsStatus(player, PlayerState.LOBBY) || playerstatus.PlayerEqualsStatus(player, PlayerState.READY)) {
             if (!player.getInventory().contains(Material.NETHER_STAR)) {
                 GiveItem(player);
             }
@@ -94,7 +98,7 @@ public class LobbyControls implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (main.playerStatus.get(player.getName()).equals("lobby") || main.playerStatus.get(player.getName()).equals("ready")) {
+        if (playerstatus.PlayerEqualsStatus(player, PlayerState.LOBBY) || playerstatus.PlayerEqualsStatus(player, PlayerState.READY)) {
             event.setCancelled(true);
         }
     }
@@ -171,8 +175,8 @@ public class LobbyControls implements Listener {
 
     public static void CheckStartGame(boolean started) {
         AtomicInteger people_ready = new AtomicInteger(0);
-        main.playerStatus.forEach((key, value) -> {
-            if (value.equals("ready")) {
+        PlayerStatus.StatusMap.forEach((key, value) -> {
+            if (value == PlayerState.READY) {
                 people_ready.getAndIncrement();
             }
         });
@@ -182,7 +186,6 @@ public class LobbyControls implements Listener {
         if (!started && Integer.parseInt(String.valueOf(people_ready)) == 1) {
             Bukkit.broadcastMessage(ChatColor.YELLOW + "Game cancelled due to insufficient people ready");
             StartGame.EndTasks();
-            
         }
     }
 }

@@ -91,7 +91,7 @@ public class Kits {
         meta.setDisplayName(ChatColor.WHITE+"Strength");
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
-        player.setMetadata("Swordsman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        player.setMetadata("Swordsman", new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Assassin() {
         ItemStack item1 = new ItemStack(Material.DIAMOND_SWORD);
@@ -117,7 +117,7 @@ public class Kits {
         meta.setDisplayName(ChatColor.RED+"Invisibility");
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Assassin", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Assassin", new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Berserker() {
         ItemStack item1 = new ItemStack(Material.DIAMOND_AXE);
@@ -144,7 +144,7 @@ public class Kits {
         item1.setItemMeta(meta);
         this.player.getInventory().addItem(item1);
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 99999, 0, true, true), false);
-        this.player.setMetadata("Berserker", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Berserker", new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Archer() {
         ItemStack item1;
@@ -157,7 +157,7 @@ public class Kits {
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.ARROW, 16);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Archer", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Archer", new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Cleric() {
         ItemStack item1;
@@ -186,7 +186,7 @@ public class Kits {
         }
         item1 = new ItemStack(Material.GOLDEN_APPLE, 1);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Cleric", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Cleric", new FixedMetadataValue(main.plugin, "kit"));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, true, true), false);
     }
     private void Frost_Knight() {
@@ -219,7 +219,7 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(1);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Frost_Knight", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Frost_Knight", new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Guardian() {
         ItemStack item1;
@@ -243,7 +243,7 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(2);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Guardian", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Guardian", new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Jumpman() {
@@ -267,7 +267,7 @@ public class Kits {
         item = item1Potion.toItemStack(3);
         this.player.getInventory().addItem(item);
         new GiveItem().GiveCustomItem(player, "winged boots");
-        this.player.setMetadata("Jumpman", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Jumpman", new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Necromancer() {
@@ -292,7 +292,7 @@ public class Kits {
         item = new ItemStack(Material.ARROW, 10);
         this.player.getInventory().addItem(item);
         new GiveItem().GiveCustomItem(player, "chicken bow");
-        this.player.setMetadata("Necromancer", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Necromancer", new FixedMetadataValue(main.plugin, "kit"));
     }
     
     private void Treasure_hunter() {
@@ -314,7 +314,7 @@ public class Kits {
         this.player.getInventory().addItem(item);
         item = new ItemStack(Material.WEB, 6);
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Treasure_hunter", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Treasure_hunter", new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Scout() {
@@ -335,7 +335,7 @@ public class Kits {
         pot.setSplash(true);
         item = pot.toItemStack(1);
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Scout", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Scout", new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Jester() {
@@ -361,6 +361,6 @@ public class Kits {
             item.setItemMeta(meta);
         }
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Jester", new FixedMetadataValue(main.getPlugin(main.class), "kit"));
+        this.player.setMetadata("Jester", new FixedMetadataValue(main.plugin, "kit"));
     }
 }

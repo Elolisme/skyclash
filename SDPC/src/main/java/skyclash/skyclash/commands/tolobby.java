@@ -13,6 +13,8 @@ import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.main;
 
@@ -20,6 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class tolobby implements CommandExecutor {
+    private PlayerStatus playerstatus = new PlayerStatus();
+
     @SuppressWarnings({"UnnecessaryBoxing", "unchecked"})
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -31,7 +35,7 @@ public class tolobby implements CommandExecutor {
         Player player = (Player) sender;
 
         // If player is still playing game
-        if (main.playerStatus.get(player.getName()).equals("ingame")) {
+        if (playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
             player.sendMessage(ChatColor.RED + "You cannot give up!");
             return true;
         }
@@ -68,17 +72,17 @@ public class tolobby implements CommandExecutor {
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
         player.setSaturation(20);
-        main.playerStatus.put(player.getName(), "lobby");
+        playerstatus.SetStatus(player, PlayerState.LOBBY);
         DataFiles datafiles = new DataFiles(player);
         PlayerData playerdata = datafiles.data;
         if (playerdata.Autoready == true) {
-            main.playerStatus.put(player.getName(), "ready");
-        }
+            playerstatus.SetStatus(player, PlayerState.READY);
+        }        
         LobbyControls.CheckStartGame(true);
         LobbyControls.GiveItem(player);
         LobbyControls.GiveMapNavItem(player);
         if (player.hasMetadata("NoMovement")) {
-            player.removeMetadata("NoMovement", main.getPlugin(main.class));
+            player.removeMetadata("NoMovement", main.plugin);
         }
 
         player.teleport(spawnloc);
