@@ -15,10 +15,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.main;
+import skyclash.skyclash.WorldManager.Multiverse;
+import skyclash.skyclash.WorldManager.SCWorlds;
 import skyclash.skyclash.fileIO.DataFiles;
 import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.gameManager.PlayerStatus;
@@ -53,17 +53,12 @@ public class MenuActions {
         } 
         else if (main.isGameActive) {
             player.sendMessage(ChatColor.RED+"Spectating current game, use /lobby to return to lobby");
-            Location spawnloc = new Location(Bukkit.getWorld("ingame_map"), 0, 70, 0);
+            Location spawnloc = new Location(new Multiverse().GetBukkitWorld(SCWorlds.INGAME_MAP), 0, 70, 0);
             pStatus.SetStatus(player, PlayerState.SPECTATOR);
             player.setScoreboard(Scheduler.board);
             player.teleport(spawnloc);
             player.getInventory().clear();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.setGameMode(GameMode.SPECTATOR);
-                }
-            }.runTaskLater(main.plugin, 3);
+            new Scheduler().scheduleTask(()->player.setGameMode(GameMode.SPECTATOR), 3);
         } 
         else {
             player.sendMessage("Please use /lobby to go back to skyclash");
@@ -257,12 +252,12 @@ public class MenuActions {
             player.closeInventory();
             String mapName = event.getCurrentItem().getItemMeta().getDisplayName();
             player.sendMessage(ChatColor.GREEN + "You will be teleported to "+mapName+"\nUse /lobby to teleport back");
-            if (!main.mvcore.getMVWorldManager().loadWorld(mapName)) {
+            if (!new Multiverse().LoadWorld(mapName)) {
                 player.sendMessage(ChatColor.RED+"The world is not available");
                 return;
             }
 
-            player.teleport(main.mvcore.getMVWorldManager().getMVWorld(mapName).getSpawnLocation());
+            player.teleport(new Multiverse().GetWorld(mapName).getSpawnLocation());
             if (player.getGameMode() != GameMode.CREATIVE || !player.isOp()) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(main.plugin, () -> {
                     player.setGameMode(GameMode.SPECTATOR);

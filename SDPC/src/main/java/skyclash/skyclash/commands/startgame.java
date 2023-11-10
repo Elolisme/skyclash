@@ -13,7 +13,7 @@ public class startgame implements CommandExecutor {
             sender.sendMessage("A game is already active");
             return true;
         }
-        new StartGame(true);
+        new StartGame().AllReadyCommand();
         return true;
     }
 }

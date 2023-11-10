@@ -29,7 +29,6 @@ import skyclash.skyclash.cooldowns.Cooldown;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class LobbyControls implements Listener {
     public LobbyControls(main plugin) {
@@ -173,19 +172,14 @@ public class LobbyControls implements Listener {
         Cooldown.add(player.getName(), "Pearl", 2, System.currentTimeMillis());
     }
 
-    public static void CheckStartGame(boolean started) {
-        AtomicInteger people_ready = new AtomicInteger(0);
-        PlayerStatus.StatusMap.forEach((key, value) -> {
-            if (value == PlayerState.READY) {
-                people_ready.getAndIncrement();
-            }
-        });
-        if (started && Integer.parseInt(String.valueOf(people_ready)) == 2) {
-            new StartGame(false);
+    public static void CheckStartGame(boolean countUp) {
+        int people_ready = new PlayerStatus().CountPeopleWithStatus(PlayerState.READY);
+        if (countUp && people_ready == 2) {
+            new StartGame().AllReady();
         }
-        if (!started && Integer.parseInt(String.valueOf(people_ready)) == 1) {
+        if (!countUp && people_ready == 1) {
             Bukkit.broadcastMessage(ChatColor.YELLOW + "Game cancelled due to insufficient people ready");
-            StartGame.EndTasks();
+            new StartGame().CancelEvents();
         }
     }
 }

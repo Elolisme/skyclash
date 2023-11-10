@@ -1,6 +1,7 @@
 package skyclash.skyclash.gameManager;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.entity.Player;
 
@@ -54,5 +55,16 @@ public class PlayerStatus {
         if (playerdata.Autoready == true) {
             SetStatus(player, PlayerState.READY);
         }
+    }
+
+    public int CountPeopleWithStatus(PlayerState state) {
+        AtomicInteger count = new AtomicInteger(0);
+        PlayerStatus.StatusMap.forEach((key, value) -> {
+            if (value == state) {
+                count.getAndIncrement();
+            }
+        });
+
+        return count.get();
     }
 }

@@ -13,9 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.main;
 import skyclash.skyclash.cooldowns.Cooldown;
-import skyclash.skyclash.cooldowns.Delayed;
 
 public class CustomItems implements Listener {
     public CustomItems(main plugin) {
@@ -24,6 +25,7 @@ public class CustomItems implements Listener {
 
     // event handler
     @EventHandler
+    @Deprecated
     public void onWeaponUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -45,7 +47,7 @@ public class CustomItems implements Listener {
             for (int i = 0; i <= 6; i++) {
                 float move_distance_current = 0.5f;
                 int j1 = j;
-                new Delayed(() -> player.spigot().playEffect(location.add(player.getLocation().getDirection().multiply(move_distance_current * j1)), Effect.FLAME, 0, 0, 0.01f, 0.01f, 0.01f, 0.1f, 10, 50), 5L * i);
+                new Scheduler().scheduleTask(() -> player.spigot().playEffect(location.add(player.getLocation().getDirection().multiply(move_distance_current * j1)), Effect.FLAME, 0, 0, 0.01f, 0.01f, 0.01f, 0.1f, 10, 50), 5 * i);
             }
         }
 

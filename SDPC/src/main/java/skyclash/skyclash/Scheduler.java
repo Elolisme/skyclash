@@ -1,27 +1,26 @@
 package skyclash.skyclash;
 
+import static skyclash.skyclash.main.activeWorld;
+import static skyclash.skyclash.main.isGameActive;
+
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import skyclash.skyclash.chestgen.ChestManager;
-import skyclash.skyclash.chestgen.StringToJSON;
+
+import skyclash.skyclash.WorldManager.Multiverse;
+import skyclash.skyclash.WorldManager.SCWorlds;
 import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.gameManager.EndGame;
 import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.VoteMap;
-
-import java.util.List;
-
-import static skyclash.skyclash.main.*;
 
 public class Scheduler {
 
@@ -32,29 +31,15 @@ public class Scheduler {
     public static int timer = 0;
     public static int playersLeft = 0;
 
-    public Scheduler() {
-
-        // Start plugin
-        init();
-        new BukkitRunnable(){
-            @Override
-            public void run(){
-                Tick();
-            }
-        }.runTaskTimer(main.plugin, 0L, 1);
-        new BukkitRunnable(){
-            @Override
-            public void run(){
-                Second();
-            }
-        }.runTaskTimer(main.plugin, 0L, 20);
-    }
-
     public void init() {
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
+        scheduleRepeatingTask(()->Tick(), 1);
+        scheduleRepeatingTask(()->Second(), 20);
+
         // Maps
         Mapsfile maps = new Mapsfile();
         maps.readFile(true, true);
-        for (int i = 1; i <= maps.get_size(); i++) {
+        for (int i = 1; i <= maps.getMapArraySize(); i++) {
             new VoteMap().addMap(i);
         }
 
@@ -66,8 +51,6 @@ public class Scheduler {
         s = o.getScore(ChatColor.YELLOW+"Time left: ");
         s2 = o.getScore(ChatColor.YELLOW+"Players left: ");
         emptyboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
     }
 
     public void Tick() {
@@ -75,56 +58,49 @@ public class Scheduler {
     }
 
     public void Second() {
-        // Setting worlds
+        // world settings
         List<World> world = Bukkit.getWorlds();
         world.forEach(world1 -> {
             world1.setStorm(false);
             world1.setThundering(false);
         });
+
+        // timer related events
         if (timer > 0) {
             timer = timer - 1;
+            s.setScore(timer);
+            s2.setScore(playersLeft);
         }
-        s.setScore(timer);
-        s2.setScore(playersLeft);
 
         switch (timer) {
-            case 420:
-            case 60:
-            case 240:
-                ChestRefill();
-                break;
-            case 1:
-                new EndGame(true);
-                break;
+            case 60: new SCWorlds().generateChestLoot(activeWorld, true);break;
+            case 240: new SCWorlds().generateChestLoot(activeWorld, true);break;
+            case 420: new SCWorlds().generateChestLoot(activeWorld, true);
+                    new Multiverse().GetBukkitWorld(SCWorlds.INGAME_MAP).getWorldBorder().setSize(20, 400);break;
+            case 1:new EndGame(true);break;
         }
-
-        if (timer == 420) {
-            Bukkit.getWorld("ingame_map").getWorldBorder().setSize(20, 400);
-        }
-        
-        // Quiver refill
-        if (timer % 5 == 0 && timer != 0) {
-            Abilities.Every5Seconds();
-        } 
+        if (timer % 5 == 0 && timer != 0) {Abilities.Every5Seconds();} 
     }
 
-    private void ChestRefill() {
-        Mapsfile maps = new Mapsfile();
-        Bukkit.getServer().getOnlinePlayers().forEach((player) -> player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f));
-        maps.readFile(false, false);
-        JSONObject info2 = (JSONObject) maps.jsonObject.get(activeWorld);
-        JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
-        World world1 = Bukkit.getWorld("ingame_map");
-        new ChestManager(chestsarray, world1, "spawn", "mid", true);
-
-        Bukkit.broadcastMessage(ChatColor.YELLOW+"Chests have been refilled");
-    }
-
-    public static void End() {
-        if (isGameActive) {
-            new EndGame(true);
-        }
-
+    public static void CloseServer() {
+        if (isGameActive) {new EndGame(true);}
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"Closing SDPC");
+    }
+
+    public BukkitTask scheduleTask(Runnable task, int delay) {
+        return new BukkitRunnable() {
+            @Override
+            public void run() {
+                task.run();
+            }
+        }.runTaskLater(main.plugin, delay);
+    }
+
+    public void scheduleRepeatingTask(Runnable task, int periodTicks) {
+        new BukkitRunnable(){@Override
+            public void run() {
+                task.run();
+            }
+        }.runTaskTimer(main.plugin, 0L, periodTicks);
     }
 }

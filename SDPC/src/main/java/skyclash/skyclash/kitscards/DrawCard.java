@@ -13,10 +13,8 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import net.md_5.bungee.api.ChatColor;
-import skyclash.skyclash.main;
+import skyclash.skyclash.Scheduler;
 
 public class DrawCard {
     public DrawCard(Player player, String suit, int number) {
@@ -26,13 +24,7 @@ public class DrawCard {
             case "Clubs": Clubs(player, number);break;
             case "Diamonds": Diamonds(player, number);break;
         }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                ClearTempItems(player);
-            }
-        }.runTaskLater(main.plugin, 20*15);
+        new Scheduler().scheduleTask(()->ClearTempItems(player), 15*20);
     }
 
     private void Spades(Player player, int num) {
@@ -108,10 +100,8 @@ public class DrawCard {
     }
 
     // TODO:
-    @SuppressWarnings("Depreciated")
     private void Hearts(Player player, int num) {
         ItemStack item;
-        ItemMeta meta;
         switch (num) {
             case 1:
                 item = new ItemStack(Material.GOLDEN_APPLE, 1, (short)1);
@@ -272,15 +262,13 @@ public class DrawCard {
     }
 
     private void ClearTempItems(Player player) {
+        player.closeInventory();
         player.sendMessage(ChatColor.YELLOW+"Your temporary items have been cleared");
         ItemStack[] items = player.getInventory().getContents();
         for (ItemStack item: items) {
             if (item != null && item.hasItemMeta()&& item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
                 player.getInventory().remove(item);
             }
-        }
-        if (player.getItemOnCursor() != null && player.getItemOnCursor().hasItemMeta() && player.getItemOnCursor().getItemMeta().getLore().get(0).equals("Temporary")) {
-            player.getItemOnCursor().setType(Material.AIR);
         }
     }
 }

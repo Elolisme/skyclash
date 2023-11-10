@@ -502,7 +502,7 @@ public class Abilities implements Listener {
             return;
         }
         InventoryType invtype = event.getWhoClicked().getOpenInventory().getTopInventory().getType();
-        if (!(invtype == InventoryType.CHEST || invtype == InventoryType.ENDER_CHEST)) {
+        if (!(invtype == InventoryType.CHEST || invtype == InventoryType.ENDER_CHEST || invtype == InventoryType.WORKBENCH)) {
             return;
         }
         if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasLore() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {

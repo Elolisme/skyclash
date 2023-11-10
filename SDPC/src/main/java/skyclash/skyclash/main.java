@@ -1,7 +1,5 @@
 package skyclash.skyclash;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -24,15 +22,12 @@ public class main extends JavaPlugin {
 
     public static String activeWorld;
     public static boolean isGameActive = false;
-    public static MultiverseCore mvcore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
     public static Plugin plugin;
     public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
     public static HashMap<String, Integer> killtracker = new HashMap<>();
 
     @Override
     public void onEnable() {
-        plugin = main.getPlugin(main.class);
-
         // handlers
         new LobbyControls(this);
         new MenuLogic(this);
@@ -54,12 +49,13 @@ public class main extends JavaPlugin {
         this.getCommand("leaderboard").setExecutor(new leaderboard());
         this.getCommand("scworld").setExecutor(new scworld());
         
-        new Scheduler();
+        plugin = main.getPlugin(main.class);
+        new Scheduler().init();
     }
 
     @Override
     public void onDisable() {
-        Scheduler.End();  
+        Scheduler.CloseServer();  
     }
 
 

@@ -2,32 +2,27 @@ package skyclash.skyclash.fileIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import skyclash.skyclash.main;
-
+import skyclash.skyclash.WorldManager.Multiverse;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Mapsfile {
     public JSONObject jsonObject = new JSONObject();
     private File mapsjson = new File("plugins"+File.separator+"maps.json");
-    private String spawnworld = main.mvcore.getMVWorldManager().getFirstSpawnWorld().getName();
-    private Collection<MultiverseWorld> worlds = main.mvcore.getMVWorldManager().getMVWorlds();
+    private String spawnworld = new Multiverse().getSpawnWorld().getName();
 
     public void createFile() {
         try {
-            //noinspection ResultOfMethodCallIgnored
             mapsjson.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -67,7 +62,7 @@ public class Mapsfile {
 
     @SuppressWarnings("unchecked")
     private void addNewWorld() {
-        worlds.forEach((world) -> {
+        new Multiverse().getMultiverseWorlds().forEach((world) -> {
             String worldname = world.getName();
             AtomicBoolean exists = new AtomicBoolean(false);
 
@@ -99,7 +94,7 @@ public class Mapsfile {
     }
 
     @SuppressWarnings("unchecked")
-    public int get_size() {
+    public int getMapArraySize() {
         AtomicInteger size = new AtomicInteger();
         jsonObject.forEach((name, info) -> {
             JSONObject info1 = (JSONObject) info;
@@ -108,7 +103,6 @@ public class Mapsfile {
                 size.getAndIncrement();
             }
         });
-
         return size.get();
     }
 }

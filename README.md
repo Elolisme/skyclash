@@ -242,9 +242,14 @@ Future
 - Cards rent cost is now 10 and 16, as well as buy cost of 100 and 160, for lower and higher tier respectively
 
 ### part 2
-- Refactored more code -> specifically the playerStatus, playerVote and mapVote systems
+- Refactored more code
+  - made playerStatus more clear
+  - playerVote and mapVote systems are in one file
 
-
+### part 3
+- Yippee refactoring!
+  - Multiverse in 1 file to more easily change
+  - Organised things better and reduced repeated code
 
 ## v1.5.2
 - Removed need for VoidWorld, now use SDPC
