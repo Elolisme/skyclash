@@ -1,5 +1,7 @@
 package skyclash.skyclash.lobby;
 
+import java.util.HashMap;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +14,8 @@ import skyclash.skyclash.main;
 import skyclash.skyclash.WorldManager.SCWorlds;
 
 public class PlayerControls {
+    public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
+
     public void resetPlayer(Player player) {
         player.spigot().respawn();
         player.setGameMode(GameMode.SURVIVAL);
@@ -39,9 +43,9 @@ public class PlayerControls {
         player.teleport(spawnloc);
         LobbyControls.GiveItem(player);
         LobbyControls.GiveMapNavItem(player);
-        if (main.EnderChestItems.containsKey(player)) {
-            player.getEnderChest().setContents(main.EnderChestItems.get(player));
-            main.EnderChestItems.remove(player);
+        if (EnderChestItems.containsKey(player)) {
+            player.getEnderChest().setContents(EnderChestItems.get(player));
+            EnderChestItems.remove(player);
         }
     }
 }

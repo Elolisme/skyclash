@@ -1,14 +1,148 @@
 # Skyclash
-![hi](./Assets/skyclash_front_image.png)
+![joe](./Assets/skyclash_front_image.png)
 
-<strong>Minecraft plugin, reimagining Hypixel's minigame "Skyclash"</strong>
+<strong>Reimagining Hypixel's minigame "Skyclash"</strong>
 
 ## Quick links
-[Installation](#installation-and-use)
-
 [Commands](#commands)
 
 [Changelog](#changelog)
+
+[Resources and Contributors](#resources-for-development)
+
+## Installation and Use
+### Download
+1) Navigate to the SDPC/target/(latest version).jar and download that file
+2) Ensure you have [Multiverse Plugin](https://github.com/Multiverse/Multiverse-Core) installed in your server
+3) Place the SDPC.jar (current version) in the plugins folder of your server
+4) Download the LootChests folder and place it in the server root folder (not plugin folder)
+5) Restart your server, configure any necessary things listed below, and enjoy!
+
+### Configure Worlds
+- Use the command `/scworld add` to get started with a new map
+- Any current maps that are loaded in multiverse are automatically added
+- Use `/scworld modify <world name> setLobby` to set a lobby
+- use `/spawns add` in that world to set the spawnpoint
+- Use `/lobby` to leleport to a lobby
+
+**Thanks for downloading skyclash!**
+
+## Skyclash's Drug Pollinated Code
+### Commands
+`/setvotes <map index> <votes>`
+- Used to change votes for a map for admins
+
+`/startgame`
+- Start the game earlier (5 seconds), may result in 0 player games where u need to /endgame
+
+`/giveitem <player> <item>` | `/customitem <player> <item>`
+- lets you get custom items from this plugin
+
+`/endgame` | `/abort`
+- Ends the currently running game
+
+`/lobby` | `/hub`
+- send you to the first spawn point of the default world
+
+`/chest [add|remove|list|scan] <radius> <add chests found>`
+- lets you add/remove a chest in a world where loot will spawn, once a game starts on that world
+- Takes the current chest you are looking at in a specific world
+- This technically just edits maps.json, so you can manually input coords in the file
+- /chest list will just list coords already set in the world
+
+Example: 
+```
+/chest scan 10 true
+```
+Finds chests/enderchests in a 20x20x20 around player and adds them to maps.json
+
+`/spawn [add|remove|list]`
+- adds a spawnpoint for when games run, where players start out at
+- look at block under spawn to set it as one, and use list to show already set coords
+- this also modifies maps.json similarly to /setchest
+
+`/leaderboard <stat>`
+- See the top ten people who have the highest of a stat
+- Use `/leaderboard ?` to see the different stats that are available
+
+`/scworld [add | modify | list]`
+- create a brand new map to play on, change settings of maps and the lobby, and show a list of worlds in skyclash
+- for /scworld modify, current settings are:
+  - setLobby 
+    - sets the world to be the lobby spawn
+    - to set the location in the world, use `/spawns add`
+  - setIcon
+    - changes the icon of the world to the material specified
+  - isVisible
+    - changes whether the map can be voted and played on, and is seen in the menu
+  
+
+### Permissions
+sgm.lobby - default permission for everyone, allows /lobby, /leaderboard
+<br>
+sgm.host - allows opped players access to all other commands
+
+### Kits and Cards
+All the current kits and cards can be [found here.](https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing)
+<br>
+This doc is always up to date with balancing, comment if you want a change to occur.
+
+### Saving Player, World data
+When you log in, your data is saved to a file in `/Players/<username>.json`. Whenever the game needs it, it will read from those files
+
+Also, SDPC will save all skyclash worlds to a JSON in `/plugins/maps.json` which has settings for each world, which automatically update for new worlds. Use the `/scworld` command to change settings.
+
+### Chest Loot
+The plugin will take chest loot from a folder called `/LootChests/..`, where loot tables is stored. There are a default of 2, one for spawn and one for mid.
+
+<img src="./Assets/chest_loot_spawn.png" />
+
+<img src="./Assets/chest_loot_mid.png"/>
+
+- lapis lazuli has been added to spawn chests
+
+<i>Note: This code was mostly taken <a href="https://github.com/Veraimt/CustomLootChest">from this repo </a>but modified heavily.</i>
+
+### Lifetime Statistics
+The current statistics saved for each player are:
+- Kills
+- Deaths
+- Wins
+- Games
+- Joins
+- Coins
+- Times died in first 30 seconds
+- Deaths to the void
+- Times killed xezkillz
+
+Use `/leaderboard ?` to see each stat, and `/leaderboard <stat>` to see your and the top 10 people with that stat.
+
+Coins are also stored, gained by killing (10) or winning a game (50).
+
+### Voting for a map
+Click into menu, then click on the block to vote for that map. For admins, use `/setvotes <map name> <value>` change the votes
+
+### Starting the game
+In the menu click the wool to become ready. When 2 or more people become ready the game will start automatically in 20s, and will stop when someone becomes unready. Click the wool again to permenantly stay ready, even after disconnecting.
+
+
+For admins, use `/startgame`  to start the game faster.
+
+### The Gameplay
+Players spawn at preplaced spawnpoints on the most voted map, receiving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
+
+Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner. A worldborder of 300x300 across will be present, and after the first chest refill it moves into a 20x20 over the rest of the game.
+
+The game ends once one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back. If you are in the lobby and a game is running, you can spectate the game through the menu.
+
+
+### Custom Weapons
+Get custom weapons by using `/giveitem <player> <item>`,  incorporated through certain kits. 
+- chicken bow
+- explosive bow
+- winged boots
+- fireball
+- sword of justice (not used)
 
 ## Resources for development
 
@@ -18,15 +152,12 @@
 
 ### [Hypickle kits](https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing)
 
-### [Chest locations](https://docs.google.com/spreadsheets/d/1B-bbUVI84wnbqoIyJHG1DLEuIvmKJaStwKW8BKYEctg/edit?usp=sharing)
-
 ### Server IP:
 ```
 mc.elol.gay
 ```
 
 ## Contributers to Skyclash Remake
-
 Developer
 - TitanPlayz
 
@@ -49,207 +180,40 @@ Cool people
 - zapic
 - Chez_E
 
-## Installation and Use
-Please create a new issue if there are any problems.
-
-### Download
-1) Navigate to the SDPC/target/(latest version).jar and download that file
-2) Ensure you have [Multiverse Plugin](https://github.com/Multiverse/Multiverse-Core) installed, THIS IS REQUIRED FOR SKYCLASH!
-3) Place the SDPC.jar (current version) in the plugins folder of your server
-4) Download the LootChests folder and place it in the server root folder (not plugin folder)
-5) Restart your server and enjoy!
-
-### Configure Worlds
-- Use the command `/scworld add` to get started with a new map
-- Any current maps that are in multiverse are automatically added
-- Use `/scworld modify <world name> setLobby` to set a lobby
-- use `/spawns add` in that world to set the spawnpoint
-
-Read on to find a full in-depth list of all commands and configurations in skyclash. 
-
-
-**Thanks for downloading skyclash!**
-
-## Skyclash's Drug Pollinated Code (SDPC) Plugin
-### Commands
-`/setvotes <map index> <votes>`
-- Used to change votes for a map for admins
-
-`/startgame`
-- Start the game earlier (5 seconds), may result in 0 player games where u need to /endgame
-
-`/giveitem <player> <item> | /customitem <player> <item>`
-- lets you get custom items from this plugin
-
-`/endgame | /abort`
-- Ends the currently running game
-
-`/lootchest <name>`
-- makes a loot table file in `/LootChests/..` from the current chest you are looking at
-
-`/lobby | /hub`
-- send you to the first spawn point of the default world
-
-`/chest [add|remove|list|scan] <radius> <add chests found>` | /setchest
-- lets you add/remove a chest in a world where loot will spawn, once a game starts on that world
-- Takes the current chest you are looking at in a specific world
-- This technically just edits maps.json, so you can manually input coords in the file
-- /chest list will just list coords already set in the world
-- Example: 
-```
-/chest scan 10 true
-- Finds chests/enderchests in a 20x20x20 around player and adds them to maps.json
-```
-
-`/spawn [add|remove|list] | /gamespawn`
-- adds a spawnpoint for when games run, where players start out at
-- look at block under spawn to set it as one, and use list to show already set coords
-- this also modifies maps.json similarly to /setchest
-
-`/leaderboard <stat> | /leaderboard ?`
-- See the top ten people who have the highest of a stat
-- Use `/leaderboard ?` to see the different stats that are available
-
-`/scworld [add | modify | list]`
-- create a brand new map to play on, change settings of maps and the lobby, and show a list of worlds in skyclash
-- for /scworld modify, current settings are:
-  - setLobby 
-    - sets the world to be the lobby spawn
-    - to set the location in the world, use `/spawns add`
-  - setIcon
-    - changes the icon of the world to the material specified
-  - isVisible
-    - changes whether the map can be voted and played on, and is seen in the menu
-  
-
-### Permissions
-sgm.lobby - default permission for everyone, allows /lobby command
-<br>
-sgm.host - allows opped players access to all other commands
-
-### Kits and Cards
-All the current kits and cards can be found here:
-
-https://docs.google.com/document/d/1uG-ECW3m7Ds7CggNtAK1Lahfh34M-sN9P6o0iTQjv0c/edit?usp=sharing
-
-This doc is always up to date with balancing, and just comment if you want a change to occur.
-
-### Saving Player, World data
-When you log in, your data is saved to a file in `/Players/<username>.json`
-<br>
-Whenever the game needs it, it will read from those files
-
-Also, SDPC will save all skyclash worlds to a JSON in `/plugins/maps.json` which has settings for each world, which automatically update for new worlds. Use the `/scworld` command to change settings.
-
-### Chest Loot
-The plugin will take chest loot from a folder called `/LootChests/..`, where loot tables is stored
-<br>
-There are a default of 2, one for spawn and one for mid. You can technically add more using /lootchest but you have to manually configure it in the plugin and recompile... It is much easier to just edit the current file.
-
-<img src="./Assets/chest_loot_spawn.png" />
-
-<img src="./Assets/chest_loot_mid.png"/>
-
-<i>Note: lapis lazuli has been added to spawn chests</i>
-
-This code was mostly taken <a href="https://github.com/Veraimt/CustomLootChest">from this repo </a>but modified heavily to integrate with SDPC
-
-### Lifetime Statistics
-The current statistics saved for each player are:
-- Kills
-- Deaths
-- Wins
-- Games
-- Joins
-- Times died in first 30 seconds
-- Deaths to the void
-- Times killed xezkillz
-
-As well as storing coins, which are gained by killing (10) or winning a game (50)
-* Note killing yourself will not award kill credit but counts as a death
-
-### Voting System
-Click into menu, then click on the block to vote for that map
-
-`/setvotes <map name> <value>`
-<br>
-For admins, use this command to change the votes
-
-### Starting the game
-In the menu click the wool to become ready
-<br>
-When 2 or more people become ready the game starts in 30s
-<br>
-Click the wool again to unready yourself, this will cancel the game if 2 players are no longer ready.
-
-```/startgame``` 
-<br>
-Exists for admins to start game manually
-
-### The Gameplay
-Players spawn at preplaced spawnpoints on the most voted map, receiving their kit and card. They must use loot from chests and enderchests to kill other players, gaining **10 coins** per kill. If you die you enter spectator mode and cannot participate further. You can go back to the lobby using ```/lobby or /hub```. Disconnecting from a game will be treated the same as losing, but items don't drop. 
-
-Chests will refill every 3 minutes, or 180 seconds. This will happen 3 times in a game. When the timer reaches 0, the game will instantly end with no winner.
-<br>
-A worldborder of 300x300 across will be present, and after the first chest refill it moves into a 20x20 over the rest of the game.
-
-The game ends once one player is left in battle, at which point they are awarded winner and gain **50 coins**, and the map is deleted after teleporting them and spectators back.
-<br>
-If you are in the lobby and a game is running, you can spectate the game through the menu.
-
-
-### Custom Weapons
-Get weapons by using the command. These are incorporated through certain kits. 
-`/giveitem <player> <item>`
-
-Example:
-`/giveitem chicken bow`
-
-- chicken bow
-  - This shoots a chicken jockey instead of an arrow
-  - Has 10 durability
-- explosive bow
-  - Shoots tnt instead of arrows
-  - Has 5 durability
-- winged boots
-  - Wearing these leather boots gives you jump boost and less fall damage
-- fireball
-  - Launch a fireball by clicking
-  - Consumes item
-- sword of justice
-  - Summon lightning 2 blocks in front of you when you hit an enemy
-  - Has a cooldown of 2 seconds
-
-
 # TODO
-Soon
-- kit: on hit guarantees a kill but also a lot of self damage
-- shop items:
-  - custom items
-  - no pearl cooldowns
-  - resistance potion
-
-Future
-- Finish readme
+- Maybe start adding tier 2 and 3 cards
+- rebalance chest loot
 
 # Changelog
 
+## v1.5.4
+- finished jester kit
+- added grim reaper kit
+- added custom items to the shop
+- added no pearl cooldown to shop
+- added resistance potion to shop
+- moved every static variable where it should go, main.java is cleaner, and has all the credits
+
+Message of the day
+- basically, if there is a file called motdList.txt in the plugins folder, it will take that and randomise a line from there to be the motd of the server
+
 ## v1.5.3 
-### part 1
-- Added jester kit as a proof of concept, only spades works
+part 1
+- Added jester kit as a proof of concept, only spades suit works
 - Refactored lots of code to be private and non static
 - Fixed many smaller bugs and patches
 - Cards rent cost is now 10 and 16, as well as buy cost of 100 and 160, for lower and higher tier respectively
 
-### part 2
+part 2
 - Refactored more code
   - made playerStatus more clear
   - playerVote and mapVote systems are in one file
 
-### part 3
+part 3
 - Yippee refactoring!
   - Multiverse in 1 file to more easily change
   - Organised things better and reduced repeated code
+- removed lootchest command
 
 ## v1.5.2
 - Removed need for VoidWorld, now use SDPC
@@ -342,8 +306,7 @@ Kits and cards
 
 ## v1.4.1
 - Added all the rest of the cards (~10 new cards)
-  - blast protection
-    - now gets 2x fireballs
+  - blast protection -> now gets 2x fireballs
   - elven archer
   - quiver refill
   - apple finder

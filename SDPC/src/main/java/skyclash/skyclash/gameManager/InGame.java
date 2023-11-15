@@ -26,7 +26,6 @@ public class InGame implements Listener {
 
     private PlayerStatus pStatus = new PlayerStatus();
 
-    // event handlers
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();

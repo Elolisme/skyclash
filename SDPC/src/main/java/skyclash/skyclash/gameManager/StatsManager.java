@@ -1,7 +1,5 @@
 package skyclash.skyclash.gameManager;
 
-import static skyclash.skyclash.main.killtracker;
-
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
@@ -11,6 +9,8 @@ import skyclash.skyclash.fileIO.PlayerData;
 
 
 public class StatsManager {
+    public static HashMap<String, Integer> killtracker = new HashMap<>();
+
     public void addPlayer(Player player) {
         killtracker.put(player.getName(), 0);
     }

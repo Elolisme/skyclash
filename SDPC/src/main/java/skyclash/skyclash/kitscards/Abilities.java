@@ -29,6 +29,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -39,10 +40,12 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.main;
 import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.gameManager.PlayerStatus;
@@ -133,7 +136,6 @@ public class Abilities implements Listener {
 
     @EventHandler
     public void onShoot(EntityShootBowEvent e) {
-        // homing arrows; credit to BlingHomingArrows
         if (!(e.getEntity() instanceof Player)) {return;}
         Player player = (Player) e.getEntity();
         if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {return;}
@@ -470,10 +472,10 @@ public class Abilities implements Listener {
 
         String[] suits = {"Spades", "Hearts", "Clubs", "Diamonds"};
         String suit = suits[new Random().nextInt(4)];
-        Object number = new Random().nextInt(13);
+        Object number = new Random().nextInt(13)+1;
 
-        new DrawCard(player, suit, (int) number + 1);
-        switch ((int)number + 1) {
+        new DrawCard(player, suit, (int) number);
+        switch ((int)number) {
             case 1:number = "ace";break;
             case 11:number = "jack";break;
             case 12:number = "queen";break;
@@ -508,5 +510,67 @@ public class Abilities implements Listener {
         if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasLore() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onReaperHit(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getDamager();
+        if (!playerstatus.PlayerEqualsStatus(player, PlayerState.INGAME) || !player.hasMetadata("Grim_Reaper")) {
+            return;
+        }
+        
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player hurtPlayer = (Player) event.getEntity();
+        if (player.getItemInHand().getType() != Material.SHEARS || !player.getItemInHand().hasItemMeta()|| !player.getItemInHand().getItemMeta().hasDisplayName() || !player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.RED+"Death Scythe")) {
+            return;
+        }
+        
+        // Grim reaper
+        player.sendMessage(ChatColor.GREEN+"Marked "+hurtPlayer.getName()+" for doom");
+        player.setItemInHand(new ItemStack(Material.AIR));
+        player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*30, 1));
+        player.damage(player.getHealth() / 2);
+
+        hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 1 minute otherwise you will instantly die");
+        hurtPlayer.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
+        hurtPlayer.setMetadata("Doomed", new FixedMetadataValue(main.plugin, player.getName()));
+
+        new Scheduler().scheduleTask(()->{
+            killTaggedPlayers();
+        }, 60*20);
+    }
+
+    private void killTaggedPlayers() {
+        PlayerStatus.StatusMap.forEach((player, state) -> {
+            Player player2 = Bukkit.getPlayerExact(player);
+            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && player2.hasMetadata("Doomed")) {
+                player2.damage(player2.getHealth());
+            }
+        });
+    }
+
+    @EventHandler
+    public void onReaperDied(PlayerDeathEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player reaper = (Player) event.getEntity();
+        if (!playerstatus.PlayerEqualsStatus(reaper, PlayerState.INGAME) || !reaper.hasMetadata("Grim_Reaper")) {
+            return;
+        }
+        
+        PlayerStatus.StatusMap.forEach((name, state) -> {
+            Player markedPlayer = Bukkit.getPlayerExact(name);
+            if (new PlayerStatus().PlayerEqualsStatus(name, PlayerState.INGAME) && markedPlayer.hasMetadata("Doomed") && markedPlayer.getMetadata("Doomed").get(0) == new FixedMetadataValue(main.plugin, reaper.getName())) {
+                markedPlayer.removeMetadata("Doomed", main.plugin);
+                markedPlayer.sendMessage("You have successfully removed your mark");
+            }
+        });
     }
 }

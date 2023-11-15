@@ -53,7 +53,6 @@ public class SCWorlds {
         new CopyWorld().copyWorld(multiverse.GetBukkitWorld(worldName), INGAME_MAP);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mv import "+INGAME_MAP+" normal");
         main.isGameActive = true;
-        main.activeWorld = worldName;
     }
 
     @SuppressWarnings("unchecked")
@@ -86,11 +85,13 @@ public class SCWorlds {
         JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
         new ChestManager(chestsarray, multiverse.GetBukkitWorld(INGAME_MAP), "spawn", "mid", true);
 
-        if (notify) {
-            Bukkit.getServer().getOnlinePlayers().forEach((player) -> {
-                player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f);
-                player.sendMessage(ChatColor.YELLOW+"Chests have been refilled");
-            });
+        if (!notify) {
+            return;
         }
+        
+        Bukkit.getServer().getOnlinePlayers().forEach((player) -> {
+            player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f);
+            player.sendMessage(ChatColor.YELLOW+"Chests have been refilled");
+        });
     }
 }

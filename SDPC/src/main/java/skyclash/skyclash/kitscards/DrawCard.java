@@ -13,6 +13,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+
 import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.Scheduler;
 
@@ -24,7 +25,7 @@ public class DrawCard {
             case "Clubs": Clubs(player, number);break;
             case "Diamonds": Diamonds(player, number);break;
         }
-        new Scheduler().scheduleTask(()->ClearTempItems(player), 15*20);
+        new Scheduler().scheduleTask(()->ClearTempItems(player), 13*20);
     }
 
     private void Spades(Player player, int num) {
@@ -99,7 +100,6 @@ public class DrawCard {
         }
     }
 
-    // TODO:
     private void Hearts(Player player, int num) {
         ItemStack item;
         switch (num) {
@@ -128,7 +128,7 @@ public class DrawCard {
             case 6:
                 item = new Potion(PotionType.WATER).toItemStack(1);
                 PotionMeta potmeta = (PotionMeta) item.getItemMeta();
-                potmeta.addCustomEffect(new PotionEffect(PotionEffectType.SATURATION, 15*20, 2), true);
+                potmeta.addCustomEffect(new PotionEffect(PotionEffectType.SATURATION, 15*20, 0), true);
                 potmeta.setDisplayName(ChatColor.WHITE+"Saturation Potion");
                 List<String> lore = new ArrayList<>();
                 lore.add(ChatColor.GRAY+"Saturation 3 (0:15)");
@@ -137,115 +137,163 @@ public class DrawCard {
                 player.getInventory().addItem(addLore(item));
             break;
             case 7:
-                // saturation
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 15*20, 2));
             break;
             case 8:
-                // instant health 1 pot
+                Potion item1 = new Potion(PotionType.INSTANT_HEAL);
+                item1.setLevel(1);
+                item1.setSplash(true);
+                item = item1.toItemStack(1);
+                player.getInventory().addItem(item);
             break;
             case 9:
-                // regen
-            break;
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15*20, 1));         
+                break;
             case 10:
-                // regen, abs
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15*20, 1));         
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 15*20, 1));         
             break;
             case 11:
-                // regen, abs 2
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15*20, 2));         
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 15*20, 2));     
             break;
             case 12:
-                // regen 2, abs 3
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 15*20, 3));         
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 15*20, 3));     
             break;
             case 13:
-                // golden apples
+                item = new ItemStack(Material.GOLDEN_APPLE, 10);
+                player.getInventory().addItem(addLore(item));
             break;
         }
     }
 
-    // TODO:
     private void Clubs(Player player, int num) {
+        ItemStack item;
         switch (num) {
             case 1:
-                // Sharp V, Fire Aspect, Pearl
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+                item.addEnchantment(Enchantment.FIRE_ASPECT, 1);
+                player.getInventory().addItem(addLore(item));
+                item = new ItemStack(Material.ENDER_PEARL);
+                player.getInventory().addItem(addLore(item));
             break;
             case 2:
-                // Mining fatigue 2 20s, Wooden Stick
+                item = new ItemStack(Material.STICK);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20*20, 1));
             break;
             case 3:
-                // Mining Fatigue, Wooden Sword
+                item = new ItemStack(Material.WOOD_SWORD);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20*15, 0));
             break;
             case 4:
-                // wood sword
+                item = new ItemStack(Material.WOOD_SWORD);
+                player.getInventory().addItem(addLore(item));
             break;
             case 5:
-                // stone sword
+                item = new ItemStack(Material.STONE_SWORD);
+                player.getInventory().addItem(addLore(item));
             break;
             case 6:
-                // sharpenss wood sword
+                item = new ItemStack(Material.WOOD_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 7:
-                // sharpenss stone sword
+                item = new ItemStack(Material.STONE_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 8:
-                // iron sword
+                item = new ItemStack(Material.IRON_SWORD);
+                player.getInventory().addItem(addLore(item));
             break;
             case 9:
-                // diamond sword
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                player.getInventory().addItem(addLore(item));
             break;
             case 10:
-                // ds knockback 2
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                item.addEnchantment(Enchantment.KNOCKBACK, 2);
+                player.getInventory().addItem(addLore(item));
             break;
             case 11:
-                // ds sharpness
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 12:
-                // sharp, fire
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                item.addEnchantment(Enchantment.FIRE_ASPECT, 1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 13:
-                // sharp 3, fire, pearl
+                item = new ItemStack(Material.DIAMOND_SWORD);
+                item.addEnchantment(Enchantment.DAMAGE_ALL, 3);
+                item.addEnchantment(Enchantment.FIRE_ASPECT, 1);
+                player.getInventory().addItem(addLore(item));
+                item = new ItemStack(Material.ENDER_PEARL);
+                player.getInventory().addItem(addLore(item));
             break;
         }
     }
 
-    // TODO:
     private void Diamonds(Player player, int num) {
+        ItemStack item;
         switch (num) {
             case 1:
-                // resistance 5
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 4));
             break;
             case 2:
-                // leather boots, slowness 2
+                item = new ItemStack(Material.LEATHER_BOOTS);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*20, 1));
             break;
             case 3:
-                // leather helmet, slowness 1
+                item = new ItemStack(Material.LEATHER_HELMET);
+                player.getInventory().addItem(addLore(item));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*15, 0));
             break;
             case 4:
-                // chain helmet
+                item = new ItemStack(Material.CHAINMAIL_HELMET);
+                player.getInventory().addItem(addLore(item));
             break;
             case 5:
-                // iron helmet
+                item = new ItemStack(Material.IRON_HELMET);
+                player.getInventory().addItem(addLore(item));
             break;
             case 6:
-                // iron chestplate
+                item = new ItemStack(Material.IRON_CHESTPLATE);
+                player.getInventory().addItem(addLore(item));
             break;
             case 7:
-                // resistance 1
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 0));                
             break;
             case 8:
-                // diamond leggings
+                item = new ItemStack(Material.DIAMOND_LEGGINGS);
+                player.getInventory().addItem(addLore(item));
             break;
             case 9:
-                // diamond chestplate
+                item = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                player.getInventory().addItem(addLore(item));
             break;
             case 10:
-                // resistance 2
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 1));
             break;
             case 11:
-                // Diamond chestplate prot 2
+                item = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                item.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                player.getInventory().addItem(addLore(item));
             break;
             case 12:
-                // resistance 3
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 2));
             break;
             case 13:
-                // resistance 4
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*15, 3));
             break;
         }
     }
@@ -265,6 +313,12 @@ public class DrawCard {
         player.closeInventory();
         player.sendMessage(ChatColor.YELLOW+"Your temporary items have been cleared");
         ItemStack[] items = player.getInventory().getContents();
+        for (ItemStack item: items) {
+            if (item != null && item.hasItemMeta()&& item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
+                player.getInventory().remove(item);
+            }
+        }
+        items = player.getInventory().getArmorContents();
         for (ItemStack item: items) {
             if (item != null && item.hasItemMeta()&& item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
                 player.getInventory().remove(item);

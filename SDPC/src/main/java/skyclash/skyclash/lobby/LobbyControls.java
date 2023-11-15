@@ -163,6 +163,7 @@ public class LobbyControls implements Listener {
         ProjectileSource shooter = event.getEntity().getShooter();
         if (!(shooter instanceof Player)) {return;}
         Player player = (Player) shooter;
+        if (player.hasMetadata("nopearlcooldown")) {return;}
         if(Cooldown.isCooling(player.getName(), "Pearl")) {
             player.sendMessage(ChatColor.GRAY + "Pearl Cooldown: " + ChatColor.AQUA + Cooldown.getRemaining(player.getName(), "Pearl") + " Seconds");
             player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 1));

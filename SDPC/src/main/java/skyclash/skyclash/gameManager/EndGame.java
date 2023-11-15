@@ -2,14 +2,17 @@ package skyclash.skyclash.gameManager;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
 import skyclash.skyclash.Scheduler;
-import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
-import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.lobby.PlayerControls;
 import skyclash.skyclash.lobby.VoteMap;
 import skyclash.skyclash.main;
 import skyclash.skyclash.WorldManager.Multiverse;
 import skyclash.skyclash.WorldManager.SCWorlds;
+import skyclash.skyclash.fileIO.DataFiles;
+import skyclash.skyclash.fileIO.PlayerData;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +25,8 @@ import java.util.stream.Collectors;
 public class EndGame {
     public EndGame(boolean isCommand) {
         new VoteMap().resetMaps();
-        String winner = FindWinner();
+        new StartGame().CancelChestEvents();
+        String winner = FindWinner(isCommand);
         if (isCommand) {Bukkit.broadcastMessage("The game has abruptly ended");} 
 
         PlayerStatus.StatusMap.forEach((key, value) -> {
@@ -38,15 +42,14 @@ public class EndGame {
                 new StatsManager().changeStat(player, "Games", 1);
                 new PlayerControls().resetPlayer(player);
                 new PlayerStatus().SetLobbyOrReady(player);
-                new RemoveTags(player);
+                RemoveTags(player);
             }
         });
         int people_ready = new PlayerStatus().CountPeopleWithStatus(PlayerState.READY);
         if (people_ready >= 2) {new StartGame().AllReady();}
         
-        main.killtracker = new HashMap<>();
+        StatsManager.killtracker = new HashMap<>();
         new Multiverse().DeleteWorld(SCWorlds.INGAME_MAP);
-        main.activeWorld = null;
         main.isGameActive = false;
         Scheduler.playersLeft = 0;
         Scheduler.timer = 0;
@@ -60,8 +63,9 @@ public class EndGame {
         }, 5);
     }
 
-    public String FindWinner() {
+    private String FindWinner(Boolean command) {
         AtomicReference<String> winner = new AtomicReference<>("no one");
+        if (command) {return winner.get();}
         PlayerStatus.StatusMap.forEach((key, value) -> {
             if (value == PlayerState.INGAME) {
                 winner.set(key);
@@ -91,11 +95,33 @@ public class EndGame {
         return SortedHash;
     }
 
-    public void displayKills(Player player) {
+    private void displayKills(Player player) {
         player.sendMessage("");
         player.sendMessage(ChatColor.DARK_RED+"Top kills:");
-        SortHashMapByValue(main.killtracker).forEach((string, value) ->  player.sendMessage("  "+ChatColor.RED+string+": "+ChatColor.YELLOW+value));
-        main.killtracker = new HashMap<>();
+        SortHashMapByValue(StatsManager.killtracker).forEach((string, value)->player.sendMessage("  "+ChatColor.RED+string+": "+ChatColor.YELLOW+value));
+        StatsManager.killtracker = new HashMap<>();
         player.sendMessage("");
+    }
+
+    public static void RemoveTags(Player player) {
+        Plugin p = main.plugin;
+        
+        DataFiles files = new DataFiles(player.getName());
+        PlayerData data = files.data;
+        if (player.hasMetadata(data.Card)) {
+            player.removeMetadata(data.Card, p);
+        }
+
+        if (player.hasMetadata(data.Kit)) {
+            player.removeMetadata(data.Kit, p);
+        }
+
+        if (player.hasMetadata("Doomed")) {
+            player.removeMetadata("Doomed", p);
+        }
+
+        if (player.hasMetadata("nopearlcooldown")) {
+            player.removeMetadata("nopearlcooldown", p);
+        }
     }
 }

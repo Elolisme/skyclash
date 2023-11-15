@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import skyclash.skyclash.Scheduler;
-import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.lobby.LobbyControls;
 import skyclash.skyclash.lobby.PlayerControls;
 import skyclash.skyclash.lobby.VoteMap;
@@ -51,7 +50,7 @@ public class PlayerDC implements Listener {
         playercontrols.toLobby(player);
         PlayerStatus.StatusMap.remove(player.getName());
         VoteMap.playerVote.remove(player.getName());
-        new RemoveTags(player);
+        EndGame.RemoveTags(player);
         EndGame.CheckGameEnded();
     }
 

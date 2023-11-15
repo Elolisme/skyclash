@@ -3,8 +3,9 @@ package skyclash.skyclash.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import skyclash.skyclash.gameManager.StartGame;
+
 import skyclash.skyclash.main;
+import skyclash.skyclash.gameManager.StartGame;
 
 public class startgame implements CommandExecutor {
     @Override

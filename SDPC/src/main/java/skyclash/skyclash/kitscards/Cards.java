@@ -34,9 +34,10 @@ public class Cards {
     }
 
     public void GiveCard() {
+        Boolean didBuy = false;
         // give cards
         if (this.card.equals("Creeper")) {
-            if (!CanBuy(CardRent2)) {return;}
+            if (BuyCard(CardRent2)) {didBuy = true;}
             ItemStack item = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
@@ -45,11 +46,9 @@ public class Cards {
             }
             this.player.getInventory().addItem(item);
             new GiveItem().GiveCustomItem(player, "explosive bow");
-            player.setMetadata("Creeper", new FixedMetadataValue(main.plugin, "card"));
         }
         if (this.card.equals("Bigger Bangs")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Bigger Bangs", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
             ItemStack item1 = new ItemStack(Material.FLINT_AND_STEEL);
             this.player.getInventory().addItem(item1);
             item1 = new ItemStack(Material.TNT);
@@ -57,7 +56,7 @@ public class Cards {
             this.player.getInventory().addItem(item1);
         }
         if (this.card.equals("Damage Potion")) {
-            if (!CanBuy(CardRent1)) {return;}
+            if (BuyCard(CardRent1)) {didBuy = true;}
             Potion item = new Potion(PotionType.INSTANT_DAMAGE);
             item.setLevel(2);
             item.setSplash(true);
@@ -65,52 +64,42 @@ public class Cards {
             this.player.getInventory().addItem(item1);
         }
         if (this.card.equals("Blast Protection")) {
-            if (!CanBuy(CardRent2)) {return;}
+            if (BuyCard(CardRent2)) {didBuy = true;}
             for (int i = 0; i < 2; i++) {new GiveItem().GiveCustomItem(player, "fireball");}
-            player.setMetadata("Blast Protection", new FixedMetadataValue(main.plugin, "card"));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999999, 0, true, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 9999999, 0, true, true));
         }
         if (this.card.equals("Elven Archer")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Elven Archer", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Quiver Refill")) {
-            if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Quiver Refill", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent2)) {didBuy = true;}
         }
         if (this.card.equals("Apple Finder")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Apple Finder", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Hit and Run")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Hit and Run", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Pacify")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Pacify", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Pearl Absorption")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Pearl Absorption", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Sugar Rush")) {
-            if (!CanBuy(CardRent1)) {return;}
-            player.setMetadata("Sugar Rush", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent1)) {didBuy = true;}
         }
         if (this.card.equals("Lifesteal")) {
-            if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Lifesteal", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent2)) {didBuy = true;}
         }
         if (this.card.equals("Monster Hunter")) {
-            if (!CanBuy(CardRent2)) {return;}
-            player.setMetadata("Monster Hunter", new FixedMetadataValue(main.plugin, "card"));
+            if (BuyCard(CardRent2)) {didBuy = true;}
         }
 
+        if (didBuy) {player.setMetadata(this.card, new FixedMetadataValue(main.plugin, "card"));}
     }
 
-    private Boolean CanBuy(int Cost) {
-        // coin system
+    private Boolean BuyCard(int Cost) {
         DataFiles datafiles = new DataFiles(this.player);
         PlayerData data = datafiles.data;
         JSONArray owned = data.Owned;

@@ -4,9 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
 import skyclash.skyclash.lobby.VoteMap;
 
 public class adjust_votes implements CommandExecutor {
+    private VoteMap votemap = new VoteMap();
+    
     /*
      Returns true if command is successful
 
@@ -14,9 +17,6 @@ public class adjust_votes implements CommandExecutor {
      <map index> references to the hashmap of all the maps and the order its in, which is also taken from the map.json file
      <value> is any integer to set votes to
     */
-    private VoteMap votemap = new VoteMap();
-
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check for arguments

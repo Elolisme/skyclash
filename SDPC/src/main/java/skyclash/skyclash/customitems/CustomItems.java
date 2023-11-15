@@ -23,7 +23,6 @@ public class CustomItems implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    // event handler
     @EventHandler
     @Deprecated
     public void onWeaponUse(PlayerInteractEvent event) {
@@ -143,7 +142,7 @@ public class CustomItems implements Listener {
 
         // code
         if (!player.hasPotionEffect(PotionEffectType.JUMP)) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 5, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 15, 0));
         }
 
     }
@@ -173,7 +172,7 @@ public class CustomItems implements Listener {
         // code to run
         Location location = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
         Fireball fireball = (Fireball) player.getWorld().spawnEntity(location, EntityType.FIREBALL);
-        fireball.setYield(1);
+        fireball.setYield(2);
         fireball.setIsIncendiary(false);
         Vector velocity = location.getDirection().multiply(1);
         fireball.setVelocity(velocity);

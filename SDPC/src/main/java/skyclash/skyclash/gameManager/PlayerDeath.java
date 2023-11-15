@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import skyclash.skyclash.Scheduler;
-import skyclash.skyclash.kitscards.RemoveTags;
 import skyclash.skyclash.main;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
@@ -45,7 +44,7 @@ public class PlayerDeath implements Listener {
         Location loc = event.getEntity().getLocation();
         player.getWorld().strikeLightningEffect(loc);
         Scheduler.playersLeft--;
-        new RemoveTags(player);
+        EndGame.RemoveTags(player);
         
         // Respawning
         scheduler.scheduleTask(() -> player.spigot().respawn(), 1);

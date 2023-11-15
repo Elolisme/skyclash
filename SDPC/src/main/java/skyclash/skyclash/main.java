@@ -1,31 +1,32 @@
 package skyclash.skyclash;
 
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
 import skyclash.skyclash.customitems.CustomItems;
+import skyclash.skyclash.fileIO.MOTD;
 import skyclash.skyclash.gameManager.InGame;
 import skyclash.skyclash.gameManager.PlayerDC;
 import skyclash.skyclash.gameManager.PlayerDeath;
 import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.MenuLogic;
 import skyclash.skyclash.lobby.LobbyControls;
-import java.util.HashMap;
 import java.util.Random;
 
-public class main extends JavaPlugin {
+// List of all my sources for code:
+// main.java        | void world generator - https://github.com/chaseoes/VoidWorld
+// chestgen         | chest generation - https://github.com/Veraimt/CustomLootChest
+// cooldown         | ability cooldowns - https://bukkit.org/threads/tutorial-better-cooldowns.165811/
+// abilities.java   | homing arrows - https://bukkit.org/threads/make-an-arrow-follow-a-target.247755/
+// 0% ChatGPT
 
-    public static String activeWorld;
+public class main extends JavaPlugin {
     public static boolean isGameActive = false;
     public static Plugin plugin;
-    public static HashMap<Player, ItemStack[]> EnderChestItems = new HashMap<>();
-    public static HashMap<String, Integer> killtracker = new HashMap<>();
-
+    
     @Override
     public void onEnable() {
         // handlers
@@ -51,6 +52,7 @@ public class main extends JavaPlugin {
         
         plugin = main.getPlugin(main.class);
         new Scheduler().init();
+        new MOTD().changeMOTD();
     }
 
     @Override
@@ -58,9 +60,6 @@ public class main extends JavaPlugin {
         Scheduler.CloseServer();  
     }
 
-
-
-    // void world generator - https://github.com/chaseoes/VoidWorld
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidWorldGenerator();
     }

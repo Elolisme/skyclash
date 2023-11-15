@@ -4,8 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import skyclash.skyclash.gameManager.EndGame;
+
 import skyclash.skyclash.main;
+import skyclash.skyclash.gameManager.EndGame;
 
 public class end_game implements CommandExecutor {
     // use /abort or /endgame

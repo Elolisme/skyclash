@@ -1,5 +1,6 @@
 package skyclash.skyclash.cooldowns;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -61,12 +62,17 @@ public class Cooldown {
         if (cooldownPlayers.isEmpty()) {
             return;
         }
-        for (String key : cooldownPlayers.keySet()) {
-            for (String name : cooldownPlayers.get(key).cooldownMap.keySet()) {
-                if (getRemaining(key, name) <= 0.0) {
-                    removeCooldown(key, name);
+        try {
+            for (String key : cooldownPlayers.keySet()) {
+                for (String name : cooldownPlayers.get(key).cooldownMap.keySet()) {
+                    if (getRemaining(key, name) <= 0.0) {
+                        removeCooldown(key, name);
+                    }
                 }
-            }
+            }    
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage("Concurrent Modification error thing in Cooldown.java ln 65");
         }
+        
     }
 }

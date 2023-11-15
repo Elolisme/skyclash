@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -16,10 +18,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.SpawnEgg;
 import org.bukkit.material.Wool;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.json.simple.JSONObject;
 
@@ -284,6 +289,14 @@ public class Inventories {
         }
         inventory.setItem(11, item);
 
+        item = new ItemStack(Material.SHEARS);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Grim_Reaper");
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(12, item);
+
         for (int i=27; i<36; i++) {
             FillerItems(inventory, i);
         }
@@ -479,7 +492,97 @@ public class Inventories {
         }
         inventory.setItem(0, item);
 
+        item = new ItemStack(Material.EGG);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Jockey Bow");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"20");
+            lore.add(ChatColor.GRAY+"Jockey bow at the start of the next game");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(1, item);
 
+        item = new ItemStack(Material.TNT);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "explosive bow");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"20");
+            lore.add(ChatColor.GRAY+"Explosive bow at the start of the next game");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(2, item);
+
+        item = new ItemStack(Material.IRON_BOOTS);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "winged boots");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"30");
+            lore.add(ChatColor.GRAY+"Winged Boots at the start of the next game");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(3, item);
+
+        item = new ItemStack(Material.FIREBALL);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "fireball");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"20");
+            lore.add(ChatColor.GRAY+"Boom");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(4, item);
+
+        item = new ItemStack(Material.IRON_SWORD);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "sword of justice");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"40");
+            lore.add(ChatColor.GRAY+"Summons lightning every hit, 2 second cooldown");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(5, item);
+
+        item = new ItemStack(Material.ENDER_PEARL);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "No pearl cooldown");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"40");
+            lore.add(ChatColor.GRAY+"Removes your pearl cooldowns for one game");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(6, item);
+
+        item = new Potion(PotionType.WATER).toItemStack(1);
+        item.setAmount(1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Resistance Potion");
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD+"15");
+            lore.add(ChatColor.GRAY+"Gives a potion of damage resistance");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        inventory.setItem(7, item);
+        
         // Change item to green wool if bought
         for (int i = 0; i <= 17; i++) {
             if (inventory.getItem(i) != null && inventory.getItem(i).hasItemMeta()) {
@@ -687,6 +790,27 @@ public class Inventories {
         inventory.setItem(14, item);
 
         return inventory;
+    }
+
+    public static ItemStack CustomPotion(PotionEffectType[] effects, int[] durationsSeconds, int[] amplifiers) {
+        Potion item = new Potion(PotionType.WATER);
+        item.setSplash(true);
+        ItemStack item1 = item.toItemStack(1);
+        PotionMeta meta = (PotionMeta) item1.getItemMeta();
+        String name = "Potion of ";
+        for (PotionEffectType effect: effects) {
+            meta.addCustomEffect(new PotionEffect(effect, durationsSeconds[ArrayUtils.indexOf(effects, effect)]*20, amplifiers[ArrayUtils.indexOf(effects, effect)]), true);
+            name = name + StringUtils.capitalize(effect.getName().toLowerCase()) + ", ";
+        }
+        meta.setDisplayName(ChatColor.WHITE+name);
+        List<String> lore = new ArrayList<>();
+        for (PotionEffectType effect: effects) {
+            lore.add(ChatColor.GRAY+""+StringUtils.capitalize(effect.getName().toLowerCase())+" "+(amplifiers[ArrayUtils.indexOf(effects, effect)]+1)+" (0:"+durationsSeconds[ArrayUtils.indexOf(effects, effect)]+")");
+        }
+        meta.setLore(lore);
+        item1.setItemMeta(meta);
+        
+        return item1;
     }
     
 }

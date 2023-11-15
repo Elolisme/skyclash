@@ -18,9 +18,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import skyclash.skyclash.main;
 import skyclash.skyclash.customitems.GiveItem;
+import skyclash.skyclash.lobby.Inventories;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Kits {
     private String kit;
@@ -68,7 +68,9 @@ public class Kits {
         if (this.kit.equals("Jester")) {
             Jester();
         }
-
+        if (this.kit.equals("Grim_Reaper")) {
+            Grim_Reaper();
+        }
     }
 
     private void Swordsman() {
@@ -130,21 +132,9 @@ public class Kits {
         this.player.getInventory().setChestplate(item1);
         item1 = new ItemStack(Material.COOKED_BEEF, 1);
         this.player.getInventory().addItem(item1);
-        Potion item = new Potion(PotionType.WATER);
-        item.setSplash(true);
-        item1 = item.toItemStack(1);
-        PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*10, 4), true);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*10, 0), true);
-        meta.setDisplayName(ChatColor.WHITE+"Berserker Potion");
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY+"Absorption 5 (0:10)");
-        lore.add(ChatColor.GRAY+"Resistance 1 (0:10)");
-        meta.setLore(lore);
-        item1.setItemMeta(meta);
-        this.player.getInventory().addItem(item1);
+        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[]{PotionEffectType.ABSORPTION, PotionEffectType.DAMAGE_RESISTANCE},new int[] {10, 10} , new int[] {4, 0}));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 99999, 0, true, true), false);
-        this.player.setMetadata("Berserker", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Archer() {
         ItemStack item1;
@@ -157,7 +147,7 @@ public class Kits {
         this.player.getInventory().addItem(item1);
         item1 = new ItemStack(Material.ARROW, 16);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Archer", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Cleric() {
         ItemStack item1;
@@ -186,7 +176,7 @@ public class Kits {
         }
         item1 = new ItemStack(Material.GOLDEN_APPLE, 1);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Cleric", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, true, true), false);
     }
     private void Frost_Knight() {
@@ -219,7 +209,7 @@ public class Kits {
         item.setSplash(true);
         item1 = item.toItemStack(1);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Frost_Knight", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
     private void Guardian() {
         ItemStack item1;
@@ -230,20 +220,13 @@ public class Kits {
         Potion item = new Potion(PotionType.WATER);
         item.setSplash(true);
         item1 = item.toItemStack(1);
-        PotionMeta meta = (PotionMeta) item1.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*15, 1), true);
-        meta.setDisplayName(ChatColor.WHITE+"Absorption Potion");
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY+"Absorption 2 (0:15)");
-        meta.setLore(lore);
-        item1.setItemMeta(meta);
-        this.player.getInventory().addItem(item1);
+        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[] {PotionEffectType.ABSORPTION}, new int[] {15}, new int[] {1}));
         item = new Potion(PotionType.SLOWNESS);
         item.setLevel(1);
         item.setSplash(true);
         item1 = item.toItemStack(2);
         this.player.getInventory().addItem(item1);
-        this.player.setMetadata("Guardian", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Jumpman() {
@@ -267,7 +250,7 @@ public class Kits {
         item = item1Potion.toItemStack(3);
         this.player.getInventory().addItem(item);
         new GiveItem().GiveCustomItem(player, "winged boots");
-        this.player.setMetadata("Jumpman", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Necromancer() {
@@ -292,7 +275,7 @@ public class Kits {
         item = new ItemStack(Material.ARROW, 10);
         this.player.getInventory().addItem(item);
         new GiveItem().GiveCustomItem(player, "chicken bow");
-        this.player.setMetadata("Necromancer", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
     
     private void Treasure_hunter() {
@@ -314,7 +297,7 @@ public class Kits {
         this.player.getInventory().addItem(item);
         item = new ItemStack(Material.WEB, 6);
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Treasure_hunter", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Scout() {
@@ -335,7 +318,7 @@ public class Kits {
         pot.setSplash(true);
         item = pot.toItemStack(1);
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Scout", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
 
     private void Jester() {
@@ -361,6 +344,40 @@ public class Kits {
             item.setItemMeta(meta);
         }
         this.player.getInventory().addItem(item);
-        this.player.setMetadata("Jester", new FixedMetadataValue(main.plugin, "kit"));
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
+    }
+
+    private void Grim_Reaper() {
+        ItemStack item;
+        ItemMeta meta;
+        item = new ItemStack(Material.LEATHER_HELMET);
+        LeatherArmorMeta itemmeta = (LeatherArmorMeta) item.getItemMeta();
+        itemmeta.setColor(Color.BLACK);
+        item.setItemMeta(itemmeta);
+        this.player.getInventory().setHelmet(item);
+        item = new ItemStack(Material.LEATHER_CHESTPLATE);
+        itemmeta = (LeatherArmorMeta) item.getItemMeta();
+        itemmeta.setColor(Color.BLACK);
+        item.setItemMeta(itemmeta);
+        this.player.getInventory().setChestplate(item);
+        item = new ItemStack(Material.LEATHER_LEGGINGS);
+        itemmeta = (LeatherArmorMeta) item.getItemMeta();
+        itemmeta.setColor(Color.BLACK);
+        item.setItemMeta(itemmeta);
+        this.player.getInventory().setLeggings(item);
+
+        item = new ItemStack(Material.DIAMOND_AXE, 1);
+        this.player.getInventory().addItem(item);
+        item = new ItemStack(Material.SHEARS, 1);
+        meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED+"Death Scythe");
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add("Hit someone with this to mark them as dead");
+            meta.setLore(Lore);
+            item.setItemMeta(meta);
+        }
+        this.player.getInventory().addItem(item);
+        this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
 }

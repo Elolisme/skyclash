@@ -1,6 +1,5 @@
 package skyclash.skyclash;
 
-import static skyclash.skyclash.main.activeWorld;
 import static skyclash.skyclash.main.isGameActive;
 
 import java.util.List;
@@ -17,6 +16,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import skyclash.skyclash.WorldManager.Multiverse;
 import skyclash.skyclash.WorldManager.SCWorlds;
 import skyclash.skyclash.cooldowns.Cooldown;
+import skyclash.skyclash.fileIO.MOTD;
 import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.gameManager.EndGame;
 import skyclash.skyclash.kitscards.Abilities;
@@ -35,6 +35,7 @@ public class Scheduler {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
         scheduleRepeatingTask(()->Tick(), 1);
         scheduleRepeatingTask(()->Second(), 20);
+        scheduleRepeatingTask(()->new MOTD().changeMOTD(), 20*60*30);
 
         // Maps
         Mapsfile maps = new Mapsfile();
@@ -71,13 +72,11 @@ public class Scheduler {
             s.setScore(timer);
             s2.setScore(playersLeft);
         }
-
-        switch (timer) {
-            case 60: new SCWorlds().generateChestLoot(activeWorld, true);break;
-            case 240: new SCWorlds().generateChestLoot(activeWorld, true);break;
-            case 420: new SCWorlds().generateChestLoot(activeWorld, true);
-                    new Multiverse().GetBukkitWorld(SCWorlds.INGAME_MAP).getWorldBorder().setSize(20, 400);break;
-            case 1:new EndGame(true);break;
+        if (timer == 420) {
+            new Multiverse().GetBukkitWorld(SCWorlds.INGAME_MAP).getWorldBorder().setSize(20, 400);
+        }
+        if (timer == 1) {
+            new EndGame(true);
         }
         if (timer % 5 == 0 && timer != 0) {Abilities.Every5Seconds();} 
     }

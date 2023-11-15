@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
 import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
+import skyclash.skyclash.lobby.PlayerControls;
 
 import java.util.Set;
 
@@ -30,8 +31,8 @@ public class OpenEChest implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 
         ItemStack[] Echestitems = player.getEnderChest().getContents();
-        if (!main.EnderChestItems.containsKey(player)) {
-            main.EnderChestItems.put(player, Echestitems);
+        if (!PlayerControls.EnderChestItems.containsKey(player)) {
+            PlayerControls.EnderChestItems.put(player, Echestitems);
             player.getEnderChest().clear();
         }
         
