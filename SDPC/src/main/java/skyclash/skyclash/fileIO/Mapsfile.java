@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Mapsfile {
     public JSONObject jsonObject = new JSONObject();
     private File mapsjson = new File("plugins"+File.separator+"maps.json");
-    private String spawnworld = new Multiverse().getSpawnWorld().getName();
 
     public void createFile() {
         try {
@@ -75,7 +74,7 @@ public class Mapsfile {
 
             if (!exists.get()) {
                 JSONObject mapdata = new JSONObject();
-                boolean isspawn = worldname.equals(spawnworld);
+                boolean isspawn = worldname.equals(new Multiverse().getSpawnWorld().getName());
                 JSONArray defaultcoords = new JSONArray();
                 defaultcoords.add(0);
                 defaultcoords.add(64);

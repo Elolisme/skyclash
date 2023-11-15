@@ -186,6 +186,8 @@ Cool people
 
 # Changelog
 
+## v1.6.0
+
 ## v1.5.4
 - finished jester kit
 - added grim reaper kit
@@ -193,6 +195,7 @@ Cool people
 - added no pearl cooldown to shop
 - added resistance potion to shop
 - moved every static variable where it should go, main.java is cleaner, and has all the credits
+- plugin loads before worlds load as well as multiverse, fixed some bugs
 
 Message of the day
 - basically, if there is a file called motdList.txt in the plugins folder, it will take that and randomise a line from there to be the motd of the server

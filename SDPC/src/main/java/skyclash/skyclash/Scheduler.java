@@ -44,14 +44,16 @@ public class Scheduler {
             new VoteMap().addMap(i);
         }
 
-        // Scoreboard
-        board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-        Objective o = board.registerNewObjective("Ingame", "dummy");
-        o.setDisplayName(ChatColor.RED+"SKYCLASH!");
-        o.setDisplaySlot(DisplaySlot.SIDEBAR);
-        s = o.getScore(ChatColor.YELLOW+"Time left: ");
-        s2 = o.getScore(ChatColor.YELLOW+"Players left: ");
-        emptyboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        scheduleTask(()->{
+            // Scoreboard
+            board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+            Objective o = board.registerNewObjective("Ingame", "dummy");
+            o.setDisplayName(ChatColor.RED+"SKYCLASH!");
+            o.setDisplaySlot(DisplaySlot.SIDEBAR);
+            s = o.getScore(ChatColor.YELLOW+"Time left: ");
+            s2 = o.getScore(ChatColor.YELLOW+"Players left: ");
+            emptyboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+        }, 1);
     }
 
     public void Tick() {

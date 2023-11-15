@@ -1,7 +1,9 @@
 name: SDPC
 version: '${project.version}'
 main: skyclash.skyclash.main
-softdepend: ['Multiverse-Core']
+load: STARTUP
+loadbefore: ['Multiverse-Core']
+prefix: SDPC
 commands:
   startgame:
    description: starts game

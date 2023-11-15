@@ -18,7 +18,6 @@ public class MOTD {
         String optionsPath = "server.properties";
         String motdBankPath = "plugins/motdList.txt";
         if (!(new File(motdBankPath).exists())) {
-            Bukkit.getLogger().info("file does not exist");
             return;
         }
 
@@ -27,7 +26,6 @@ public class MOTD {
         
         ArrayList<String> options = setMOTD(readFile(optionsPath), motd);
         String output = ArrayToString(options);
-        Bukkit.getLogger().info("worked");
         writeToFile(optionsPath, output);
     }
 
