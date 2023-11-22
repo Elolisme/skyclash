@@ -24,7 +24,7 @@ public class ShopItems {
         DataFiles dataFiles = new DataFiles(player);
         PlayerData data = dataFiles.data;
         ArrayList<String> itemsToRemove = new ArrayList<>();
-        for (Object item: data.Owned) {
+        for (Object item: data.owned) {
             if (item.equals("+1 Golden Apple")) {
                 gapple(); 
                 itemsToRemove.add((String) item);
@@ -60,7 +60,7 @@ public class ShopItems {
         }
 
         for (Object item: itemsToRemove) {
-            data.Owned.remove(item);
+            data.owned.remove(item);
         }
         
         dataFiles.SetData(data);

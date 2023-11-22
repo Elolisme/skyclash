@@ -1,6 +1,6 @@
 package skyclash.skyclash.WorldManager;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.bukkit.Bukkit;
@@ -8,44 +8,36 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import skyclash.skyclash.main;
 import skyclash.skyclash.chestgen.ChestManager;
-import skyclash.skyclash.chestgen.StringToJSON;
 import skyclash.skyclash.fileIO.CopyWorld;
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapData;
+import skyclash.skyclash.fileIO.MapsFile;
 
 public class SCWorlds {
     public static final String INGAME_MAP = "ingame_map";
     private Multiverse multiverse = new Multiverse();
-    private Mapsfile maps = new Mapsfile();
+    private MapsFile maps = new MapsFile();
     
-    @SuppressWarnings("unchecked")
-    public Location getLobbyLocation() {
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
+    // Get the world which is the lobby, and get its first spawn location
+    public Location getLobbySpawnLocation() {
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
         AtomicReference<String> default_world = new AtomicReference<>();
-        AtomicInteger x = new AtomicInteger();
-        AtomicInteger y = new AtomicInteger();
-        AtomicInteger z = new AtomicInteger();
-        maps.jsonObject.forEach((name, info) -> {
-            JSONObject info1 = (JSONObject) info;
-            boolean isdefault = (boolean) info1.get("isdefault");
+        AtomicReference<ArrayList<Integer>> spawnCoords = new AtomicReference<>();
+
+        // loop through all maps in maps.json
+        maps.data.forEach((name, info) -> {
+            // see if its lobby world
             String name1 = (String) name;
-            JSONArray spawnsarray = StringToJSON.convert((String) info1.get("spawns"));
-            JSONArray lists = (JSONArray) spawnsarray.get(0);
-            if (isdefault) {
+            if (info.getIsdefault()) {
                 default_world.set(name1);
-                x.set(Integer.valueOf(String.valueOf(lists.get(0))));
-                y.set(Integer.valueOf(String.valueOf(lists.get(1))));
-                z.set(Integer.valueOf(String.valueOf(lists.get(2))));
+                spawnCoords.set(info.getSpawns().get(0));
             }
         });
 
         new Multiverse().LoadWorld(default_world.get());
-        return new Location(new Multiverse().GetBukkitWorld(default_world.get()), x.get(), y.get(), z.get());
+        return new Location(new Multiverse().GetBukkitWorld(default_world.get()), spawnCoords.get().get(0), spawnCoords.get().get(1), spawnCoords.get().get(2));
     }
 
     public void CopyWorld(String worldName, String newWorldName) {
@@ -55,40 +47,25 @@ public class SCWorlds {
         main.isGameActive = true;
     }
 
-    @SuppressWarnings("unchecked")
-    public JSONArray getSpawnArray(String worldName) {
-        AtomicReference<JSONObject> worldinfo = new AtomicReference<>();
-        maps.readFile(false, false);
-        maps.jsonObject.forEach((name, info) -> {
-            String name1 = (String) name;
-            JSONObject info1 = (JSONObject) info;
-            if (name1.equals(worldName)) {
-                worldinfo.set(info1);
-            }
-        });
-
-        JSONObject info2 = worldinfo.get();
-        return StringToJSON.convert((String) info2.get("spawns"));
+    // Get the spawn locations from maps.json of a certain world
+    public ArrayList<ArrayList<Integer>> getSpawnArray(String worldName) {
+        maps.loadFileYML();
+        return maps.data.get(worldName).getSpawns();
     }
 
-    public void teleportPlayer(Player player, JSONArray coords) {
-        int x = Integer.valueOf(String.valueOf(coords.get(0)));
-        int y = Integer.valueOf(String.valueOf(coords.get(1)));
-        int z = Integer.valueOf(String.valueOf(coords.get(2)));
-        Location spawnloc = new Location(new Multiverse().GetBukkitWorld(INGAME_MAP), x, y, z);
+    public void teleportPlayer(Player player, ArrayList<Integer> coords) {
+        Location spawnloc = new Location(new Multiverse().GetBukkitWorld(INGAME_MAP), coords.get(0), coords.get(1), coords.get(2));
         player.teleport(spawnloc);
     }
 
     public void generateChestLoot(String worldName, Boolean notify) {
-        maps.readFile(false, false);
-        JSONObject info2 = (JSONObject) maps.jsonObject.get(worldName);
-        JSONArray chestsarray = StringToJSON.convert((String) info2.get("chests"));
-        new ChestManager(chestsarray, multiverse.GetBukkitWorld(INGAME_MAP), "spawn", "mid", true);
-
+        maps.loadFileYML();
+        MapData info = maps.data.get(worldName);
+        ArrayList<ArrayList<Integer>> chestsarray = info.getChests();
+        new ChestManager(chestsarray, multiverse.GetBukkitWorld(INGAME_MAP));
         if (!notify) {
             return;
         }
-        
         Bukkit.getServer().getOnlinePlayers().forEach((player) -> {
             player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1, 0.8f);
             player.sendMessage(ChatColor.YELLOW+"Chests have been refilled");

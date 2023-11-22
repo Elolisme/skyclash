@@ -2,6 +2,7 @@ package skyclash.skyclash.lobby;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -26,11 +27,10 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.json.simple.JSONObject;
 
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapsFile;
 import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
@@ -127,7 +127,7 @@ public class Inventories {
         if (pstatus.PlayerEqualsStatus(player, PlayerState.LOBBY) && !main.isGameActive) {
             inventory.setItem(11, item);
         } else if (pstatus.PlayerEqualsStatus(player, PlayerState.READY) && !main.isGameActive){
-            if (playerdata.Autoready == false) {
+            if (playerdata.autoready == false) {
                 inventory.setItem(11, item1);
             } else {
                 inventory.setItem(11, item3);
@@ -586,7 +586,7 @@ public class Inventories {
         // Change item to green wool if bought
         for (int i = 0; i <= 17; i++) {
             if (inventory.getItem(i) != null && inventory.getItem(i).hasItemMeta()) {
-                if (datafiles.data.Owned.contains(ChatColor.stripColor(inventory.getItem(i).getItemMeta().getDisplayName()))) {
+                if (datafiles.data.owned.contains(ChatColor.stripColor(inventory.getItem(i).getItemMeta().getDisplayName()))) {
                     inventory.getItem(i).setType(Material.WOOL);
                     inventory.getItem(i).setDurability((short)5);
                     ItemMeta meta1 = inventory.getItem(i).getItemMeta();
@@ -610,7 +610,7 @@ public class Inventories {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GREEN+"Buy items to gain a temporary advantage over others");
             lore.add(ChatColor.DARK_GREEN+"Click an item to buy it, lasts one game");
-            lore.add(ChatColor.YELLOW+"Coins: "+datafiles.data.Coins);
+            lore.add(ChatColor.YELLOW+"Coins: "+datafiles.data.coins);
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
@@ -619,20 +619,16 @@ public class Inventories {
         return inventory;
     }
 
-    @SuppressWarnings("unchecked")
     public static Inventory mapsInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Map Selection");
 
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
         AtomicInteger count = new AtomicInteger();
 
-        maps.jsonObject.forEach((name, info) -> {
-            JSONObject info1 = (JSONObject) info;
-            boolean ignore = (boolean) info1.get("ignore");
-            if (!ignore) {
-                String name1 = (String) name;
-                String material = (String) info1.get("icon");
+        maps.data.forEach((name, info) -> {
+            if (!info.getIgnore()) {
+                String material = info.getIcon();
                 ItemStack item;
 
                 switch (material) {
@@ -643,7 +639,7 @@ public class Inventories {
                 item.setAmount(1);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.RED + name1 + ": " +new VoteMap().getMapValue(count.get()+1)+" Votes");
+                    meta.setDisplayName(ChatColor.RED + name + ": " +new VoteMap().getMapValue(count.get()+1)+" Votes");
                     item.setItemMeta(meta);
                 }
                 inventory.setItem(count.get(), item);
@@ -653,14 +649,13 @@ public class Inventories {
         return inventory;
     }
 
-    @SuppressWarnings("unchecked")
     public static ItemStack statItem(Player player) {
         ItemStack item;
         ItemMeta meta;
 
         DataFiles datafiles = new DataFiles(player);
         PlayerData playerdata = datafiles.data;
-        JSONObject stats = playerdata.Stats;
+        HashMap<String, Integer> stats = playerdata.stats;
 
         // item
         item = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
@@ -673,7 +668,7 @@ public class Inventories {
         List<String> lore = new ArrayList<>();
 
         // Coins
-        lore.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)playerdata.Coins);
+        lore.add(ChatColor.GOLD+"Your coins: "+ChatColor.BLUE+(long)playerdata.coins);
         lore.add("");
         lore.add(ChatColor.GOLD+"Your stats:");
 
@@ -698,15 +693,15 @@ public class Inventories {
         lore.add("");
 
         // all other stats in order
-        ArrayList<Long> sortStrings = new ArrayList<>();
-        stats.forEach((stat, value) -> {sortStrings.add((Long)value);});
-        List<Long> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
+        ArrayList<Integer> sortStrings = new ArrayList<>();
+        stats.forEach((stat, value) -> {sortStrings.add(value);});
+        List<Integer> sortStrings2 = sortStrings.stream().distinct().collect(Collectors.toList());
         Collections.sort(sortStrings2);
         Collections.reverse(sortStrings2);
 
         sortStrings2.forEach((value) -> {
             stats.forEach((stat, svalue) -> {
-                if (value.equals((Long)svalue)) {lore.add(ChatColor.YELLOW+(String)stat+": "+ChatColor.BLUE+stats.get(stat));}
+                if (value.equals(svalue)) {lore.add(ChatColor.YELLOW+(String)stat+": "+ChatColor.BLUE+stats.get(stat));}
             });
         });
         meta.setLore(lore);
@@ -721,22 +716,17 @@ public class Inventories {
         inventory.setItem(slot, item);
     }
 
-    @SuppressWarnings("unchecked")
     public static Inventory ViewAndEditMaps(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Map Selection");
 
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
         AtomicInteger count = new AtomicInteger();
 
-        maps.jsonObject.forEach((name, info) -> {
-            JSONObject info1 = (JSONObject) info;
-            boolean ignore = (boolean) info1.get("ignore");
-            if (!ignore) {
-                String name1 = (String) name;
-                String material = (String) info1.get("icon");
+        maps.data.forEach((name, info) -> {
+            if (!info.getIgnore()) {
+                String material = info.getIcon();
                 ItemStack item;
-
                 if (material.equals("purple_wool")) {
                     item = new Wool(DyeColor.PURPLE).toItemStack();
                 } else {
@@ -745,7 +735,7 @@ public class Inventories {
                 item.setAmount(1);
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(name1);
+                    meta.setDisplayName(name);
                     List<String> lore = new ArrayList<>();
                     lore.add("Click to teleport to map");
                     meta.setLore(lore);
@@ -812,5 +802,32 @@ public class Inventories {
         
         return item1;
     }
-    
+
+    // Main menu item
+    public static void GiveSCMenu(Player player) {
+        ItemStack item = new ItemStack(Material.NETHER_STAR);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.RED + "Skyclash Menu");
+            List<String> lore = new ArrayList<>();
+            lore.add("Click to access the menu");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        player.getInventory().setItem(8, item);
+    }
+
+    // Main menu item
+    public static void GiveMapNavItem(Player player) {
+        ItemStack item = new ItemStack(Material.EMERALD);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.AQUA + "View and edit maps");
+            List<String> lore = new ArrayList<>();
+            lore.add("Click to access the menu");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        player.getInventory().setItem(7, item);
+    }
 }

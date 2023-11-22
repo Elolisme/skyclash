@@ -6,18 +6,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.bukkit.World;
-import org.json.simple.JSONObject;
-
 import skyclash.skyclash.WorldManager.Multiverse;
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapsFile;
 
 public class VoteMap {
     private static HashMap<Integer, Integer> mapVotes = new HashMap<>();
     public static HashMap<String, Integer> playerVote = new HashMap<>();
-    private Mapsfile maps = new Mapsfile();
+    private MapsFile maps = new MapsFile();
 
     public void addMap(Integer mapIndex) {
         mapVotes.put(mapIndex, 0);
+    }
+    
+    public void resetMaps() {
+        mapVotes.forEach((key1, value1) -> {
+            mapVotes.put(key1, 0);
+        });
+    }
+
+    public void initialiseMaps() {
+        maps.loadFileYML();
+        maps.saveFileYML();
+        for (int i = 1; i <= maps.getPlayableMaps(); i++) {
+            addMap(i);
+        }
     }
 
     public void setMapValue(Integer index, Integer value) {
@@ -32,14 +44,8 @@ public class VoteMap {
         return mapVotes.get(index);
     }
 
-    public void resetMaps() {
-        mapVotes.forEach((key1, value1) -> {
-            mapVotes.put(key1, 0);
-        });
-    }
 
     private Integer getHighestVotedMapIndex() {
-        // find map with the highest vote
         AtomicInteger max = new AtomicInteger(-1);
         AtomicInteger max_map = new AtomicInteger();
         mapVotes.forEach((mapid, votes) -> {
@@ -57,26 +63,20 @@ public class VoteMap {
         return max_map.get();
     }
 
-    @SuppressWarnings("unchecked")
     public World getHighestVotedWorld() {
-        maps.readFile(false, false);
-
+        maps.loadFileYML();
         Integer maxMap = getHighestVotedMapIndex();
         AtomicReference<String> VotedMap = new AtomicReference<>("");
         AtomicInteger count = new AtomicInteger(1);
         
-        maps.jsonObject.forEach((name, info) -> {
-            String name1 = (String) name;
-            JSONObject info1 = (JSONObject) info;
-            boolean ignore = (boolean) info1.get("ignore");
-            if (!ignore) {
+        maps.data.forEach((name, info) -> {
+            if (!info.getIgnore()) {
                 if (maxMap == count.get()) {
-                    VotedMap.set(name1);
+                    VotedMap.set(name);
                 }
                 count.getAndIncrement();
             }
         });
-
         return new Multiverse().GetBukkitWorld(VotedMap.get());
     }
 }

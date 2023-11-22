@@ -6,7 +6,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
-import org.json.simple.JSONArray;
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.cooldowns.Cooldown;
 import skyclash.skyclash.fileIO.DataFiles;
@@ -19,6 +18,7 @@ import skyclash.skyclash.main;
 import skyclash.skyclash.WorldManager.Multiverse;
 import skyclash.skyclash.WorldManager.SCWorlds;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StartGame {
@@ -64,7 +64,7 @@ public class StartGame {
             }
             Player player = Bukkit.getServer().getPlayer(key);
             Scheduler.playersLeft++;
-            JSONArray spawnsarray = scworlds.getSpawnArray(votedMap.getName());
+            ArrayList<ArrayList<Integer>> spawnsarray = scworlds.getSpawnArray(votedMap.getName());
             int arrayLength = spawnsarray.size();
 
             if (Scheduler.playersLeft > arrayLength) {
@@ -74,8 +74,7 @@ public class StartGame {
                 return;
             } 
 
-            JSONArray SpawnCoords = (JSONArray) spawnsarray.get((Scheduler.playersLeft -1));
-            scworlds.teleportPlayer(player, SpawnCoords);
+            scworlds.teleportPlayer(player, spawnsarray.get(Scheduler.playersLeft - 1));
             new StatsManager().addPlayer(player);
             new PlayerControls().resetPlayer(player);
             EndGame.RemoveTags(player);
@@ -108,8 +107,8 @@ public class StartGame {
             if (!pStatus.PlayerEqualsStatus(player, PlayerState.INGAME)) {
                 return;
             }
-            new Kits(datafiles.data.Kit, player).GiveKit();
-            new Cards(datafiles.data.Card, player).GiveCard();
+            new Kits(datafiles.data.kit, player).GiveKit();
+            new Cards(datafiles.data.card, player).GiveCard();
             new ShopItems(player);
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 254, true));

@@ -8,16 +8,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import skyclash.skyclash.chestgen.StringToJSON;
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapData;
+import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.main;
 
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
-@SuppressWarnings("unchecked")
 public class setchest implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -27,7 +25,7 @@ public class setchest implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        Block targetBlock = Abilities.getTargetBlockNoError(player);
 
         if (args.length == 0 || args.length > 3) {
             player.sendMessage("§cPlease specify the correct arguments\nUse /chests [add|remove|list|scan]");
@@ -83,77 +81,60 @@ public class setchest implements CommandExecutor {
 
     private void addChest(Player player, Block block) {
         String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
-
-        JSONArray newloc = new JSONArray();
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
+        MapData mapdata = maps.data.get(world);
+        ArrayList<Integer> newloc = new ArrayList<>();
         newloc.add((int)block.getLocation().getX());
         newloc.add((int)block.getLocation().getY());
         newloc.add((int)block.getLocation().getZ());
 
-        if (chestsarray.contains(newloc)) {
+        if (mapdata.getChests().contains(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Location already stored");
-            maps.writeFile();
+            maps.saveFileYML();
             return;
         }
 
-        chestsarray.add(newloc);
-
-        String coords = String.valueOf(chestsarray);
-        info.remove("chests");
-        info.put("chests", coords);
-        maps.jsonObject.remove(world);
-        maps.jsonObject.put(world, info);
+        mapdata.getChests().add(newloc);
+        maps.data.put(world, mapdata);
+        maps.saveFileYML();
         player.sendMessage(ChatColor.GREEN+"Added location");
-        maps.writeFile();
     }
 
     private void removeChest(Player player, Block block) {
-        String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
-
-        JSONArray newloc = new JSONArray();
+        String worldname = player.getWorld().getName();
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
+        MapData mapdata = maps.data.get(worldname);
+        ArrayList<Integer> newloc = new ArrayList<>();
         newloc.add((int)block.getLocation().getX());
-        newloc.add((int)block.getLocation().getY());
+        newloc.add((int)block.getLocation().getY() + 1);
         newloc.add((int)block.getLocation().getZ());
 
-        if (chestsarray.remove(newloc)) {
+        if (mapdata.getChests().remove(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Removed location");
         } else {
             player.sendMessage(ChatColor.RED+"location was not found");
+            maps.saveFileYML();
+            return;
         }
 
-        String coords = String.valueOf(chestsarray);
-        info.remove("chests");
-        info.put("chests", coords);
-        maps.jsonObject.remove(world);
-        maps.jsonObject.put(world, info);
-
-        maps.writeFile();
+        maps.data.put(worldname, mapdata);
+        maps.saveFileYML();
     }
 
     private void listChests(Player player) {
         String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("chests"));
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
+        MapData mapdata = maps.data.get(world);
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");
-        chestsarray.forEach((loc) -> {
-            JSONArray array = (JSONArray) loc;
-            int x = Integer.valueOf(String.valueOf(array.get(0)));
-            int y = Integer.valueOf(String.valueOf(array.get(1)));
-            int z = Integer.valueOf(String.valueOf(array.get(2)));
-            Block worldBlock = player.getWorld().getBlockAt(x, y, z);
+        mapdata.getChests().forEach((loc) -> {
+            Block worldBlock = player.getWorld().getBlockAt(loc.get(0), loc.get(1), loc.get(2));
             if ((worldBlock.getState() instanceof Chest) || worldBlock.getType() == Material.ENDER_CHEST) {
-                player.sendMessage(ChatColor.YELLOW+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2));
+                player.sendMessage(ChatColor.YELLOW+ "   "+loc.get(0)+" "+loc.get(1)+" "+loc.get(2));
             } else {
-                player.sendMessage(ChatColor.RED+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2)+"     No chest at these coords");
+                player.sendMessage(ChatColor.RED+ "   "+loc.get(0)+" "+loc.get(1)+" "+loc.get(2)+"     No chest at these coords");
             }
         });
     }

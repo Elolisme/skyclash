@@ -1,26 +1,37 @@
 package skyclash.skyclash.fileIO;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PlayerData {
-    public String Name;
-    public String Card;
-    public String Kit;
+    public String name;
+    public String card;
+    public String kit;
     public boolean hasJoined;
-    public JSONObject Stats;
-    public int Coins;
-    public Boolean Autoready;
-    public JSONArray Owned;
+    public HashMap<String, Integer> stats;
+    public int coins;
+    public Boolean autoready;
+    public ArrayList<String> owned;
 
-    public PlayerData(String name, String card, String kit, boolean hasJoined, JSONObject stats, int coins, Boolean autoready, JSONArray owned) {
-        this.Name = name;
-        this.Card = card;
-        this.Kit = kit;
+    public PlayerData(String name, String card, String kit, boolean hasJoined, HashMap<String, Integer> stats, int coins, Boolean autoready, ArrayList<String> owned) {
+        this.name = name;
+        this.card = card;
+        this.kit = kit;
         this.hasJoined = hasJoined;
-        this.Stats = stats;
-        this.Coins = coins;
-        this.Autoready = autoready;
-        this.Owned = owned;
+        this.stats = stats;
+        this.coins = coins;
+        this.autoready = autoready;
+        this.owned = owned;
+    }
+
+    public PlayerData(String name) {
+        this.name = name;
+        this.card = "No Card";
+        this.kit = "Swordsman";
+        this.hasJoined = false;
+        this.stats = new HashMap<>();
+        this.coins = 0;
+        this.autoready = false;
+        this.owned = new ArrayList<>();
     }
 }

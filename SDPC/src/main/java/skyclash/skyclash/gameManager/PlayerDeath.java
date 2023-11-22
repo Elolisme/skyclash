@@ -41,11 +41,10 @@ public class PlayerDeath implements Listener {
         pStatus.SetStatus(player, PlayerState.SPECTATOR);
         player.setGameMode(GameMode.SPECTATOR);
         
+        // lightning
         Location loc = event.getEntity().getLocation();
         player.getWorld().strikeLightningEffect(loc);
-        Scheduler.playersLeft--;
-        EndGame.RemoveTags(player);
-        
+
         // Respawning
         scheduler.scheduleTask(() -> player.spigot().respawn(), 1);
         scheduler.scheduleTask(() -> {
@@ -56,6 +55,8 @@ public class PlayerDeath implements Listener {
             }
         }, 3);
 
+        Scheduler.playersLeft--;
+        EndGame.RemoveTags(player);
         EndGame.CheckGameEnded();
     }
 }

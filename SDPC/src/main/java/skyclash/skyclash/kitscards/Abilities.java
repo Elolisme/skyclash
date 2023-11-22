@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -413,7 +414,7 @@ public class Abilities implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
-        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        Block targetBlock = getTargetBlockNoError(player);
         if (!(targetBlock.getState() instanceof Chest)) {
             return;
         }
@@ -435,7 +436,7 @@ public class Abilities implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
-        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        Block targetBlock = getTargetBlockNoError(player);
         if (!(targetBlock.getState() instanceof Chest)) {
             return;
         }
@@ -537,13 +538,13 @@ public class Abilities implements Listener {
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*30, 1));
         player.damage(player.getHealth() / 2);
 
-        hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 1 minute otherwise you will instantly die");
+        hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 45 seconds otherwise you will instantly die");
         hurtPlayer.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
         hurtPlayer.setMetadata("Doomed", new FixedMetadataValue(main.plugin, player.getName()));
 
         new Scheduler().scheduleTask(()->{
             killTaggedPlayers();
-        }, 60*20);
+        }, 45*20);
     }
 
     private void killTaggedPlayers() {
@@ -572,5 +573,16 @@ public class Abilities implements Listener {
                 markedPlayer.sendMessage("You have successfully removed your mark");
             }
         });
+    }
+
+    public static Block getTargetBlockNoError(Player player) {
+        Block target;
+        try {
+            target = player.getTargetBlock((Set<Material>) null, 5);
+        } catch (Exception e) {
+            target = new Location(player.getWorld(), 0, 255, 0).getBlock();
+            target.setType(Material.AIR);
+        }
+        return target;
     }
 }

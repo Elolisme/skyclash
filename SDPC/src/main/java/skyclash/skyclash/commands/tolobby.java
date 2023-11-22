@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
-import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.LobbyListeners;
 import skyclash.skyclash.lobby.PlayerControls;
 
 public class tolobby implements CommandExecutor {
@@ -32,7 +32,7 @@ public class tolobby implements CommandExecutor {
         new PlayerControls().resetPlayer(player);
         new PlayerControls().toLobby(player);
         new PlayerStatus().SetLobbyOrReady(player);     
-        LobbyControls.CheckStartGame(true);
+        LobbyListeners.CheckStartGame(true);
         return true;
     }
 }

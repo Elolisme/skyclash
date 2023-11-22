@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import skyclash.skyclash.Scheduler;
-import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.LobbyListeners;
 import skyclash.skyclash.lobby.PlayerControls;
 import skyclash.skyclash.lobby.VoteMap;
 import skyclash.skyclash.main;
@@ -45,7 +45,6 @@ public class PlayerDC implements Listener {
             }
         }
         
-        player.setScoreboard(Scheduler.emptyboard);
         playercontrols.resetPlayer(player);
         playercontrols.toLobby(player);
         PlayerStatus.StatusMap.remove(player.getName());
@@ -56,7 +55,7 @@ public class PlayerDC implements Listener {
 
     private void ready(Player player) {
         PlayerStatus.StatusMap.remove(player.getName());
-        LobbyControls.CheckStartGame(false);
+        LobbyListeners.CheckStartGame(false);
     }
 
     private void spec(Player player) {

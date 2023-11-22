@@ -1,147 +1,126 @@
 {
   "name": "spawn",
   "type": "DEFAULT",
-  "lootPoints": 0,
   "shuffle": true,
   "lootItems": [
     {
       "type": "WATER_BUCKET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 20
     },
     {
       "type": "LAVA_BUCKET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 10
     },
     {
       "type": "IRON_PICKAXE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 20
     },
     {
       "type": "EXP_BOTTLE",
       "data": 0,
       "amount": 16,
-      "lootPoints": 0,
       "probability": 20
     },
     {
       "type": "GOLDEN_APPLE",
       "data": 0,
       "amount": 2,
-      "lootPoints": 0,
       "probability": 10
     },
     {
       "type": "COOKED_BEEF",
       "data": 0,
       "amount": 10,
-      "lootPoints": 0,
       "probability": 80
     },
     {
       "type": "STONE_SWORD",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 50
     },
     {
       "type": "IRON_SWORD",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 20
     },
     {
       "type": "BOW",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 15
     },
     {
       "type": "ARROW",
       "data": 0,
       "amount": 10,
-      "lootPoints": 0,
       "probability": 80
     },
     {
       "type": "IRON_HELMET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 50
     },
     {
       "type": "IRON_CHESTPLATE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 50
     },
     {
       "type": "IRON_BOOTS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 50
     },
     {
       "type": "IRON_LEGGINGS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 50
     },
     {
       "type": "CHAINMAIL_HELMET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 70
     },
     {
       "type": "CHAINMAIL_CHESTPLATE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 70
     },
     {
       "type": "CHAINMAIL_LEGGINGS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 70
     },
     {
       "type": "CHAINMAIL_BOOTS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 0,
       "probability": 70
     },
     {
       "type": "STONE",
       "data": 0,
       "amount": 24,
-      "lootPoints": 0,
       "probability": 70
     },
     {
       "type": "WOOD",
       "data": 0,
       "amount": 24,
-      "lootPoints": 0,
       "probability": 70
     }
   ]

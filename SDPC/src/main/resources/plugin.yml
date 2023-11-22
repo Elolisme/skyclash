@@ -13,32 +13,30 @@ commands:
    description: adjusts votes of a map
    usage: /setvotes <map index> <value>
    permission: sgm.host
-   aliases: [setvote, voteset, setmapvotes]
+   aliases: setvote
   giveitem:
     description: gives a custom item
     usage: /giveitem <player> <item>
-    aliases: [gi, customitem]
     permission: sgm.host
   endgame:
     description: manually end a game
     usage: /endgame
-    aliases: [abort, end_game]
+    aliases: abort
     permission: sgm.host
   lobby:
     description: go back to lobby world
     usage: /lobby
-    aliases: [hub]
     permission: sgm.lobby
   setchest:
     description: add or remove chest location from world
     usage: /chests [add|remove|list|scan] <radius> <add chests found>
     permission: sgm.host
-    aliases: [chests, chest]
+    aliases: chests
   gamespawn:
     description: add or remove spawn points for when games start
     usage: /spawns [add|remove|list]
     permission: sgm.host
-    aliases: [spawns, spawn]
+    aliases: spawns
   leaderboard:
     description: list the top 9 people of a certain stat, as well as your position
     usage: /leaderboard <stat>

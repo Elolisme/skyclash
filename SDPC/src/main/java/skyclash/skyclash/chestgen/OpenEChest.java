@@ -13,9 +13,8 @@ import org.bukkit.util.Vector;
 import skyclash.skyclash.main;
 import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
+import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.PlayerControls;
-
-import java.util.Set;
 
 public class OpenEChest implements Listener {
     public OpenEChest(main plugin) {
@@ -36,7 +35,7 @@ public class OpenEChest implements Listener {
             player.getEnderChest().clear();
         }
         
-        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        Block targetBlock = Abilities.getTargetBlockNoError(player);
 
         if (targetBlock.getState() instanceof Chest) {
             return;

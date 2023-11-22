@@ -36,19 +36,19 @@ public class MenuActions {
         if (pStatus.PlayerEqualsStatus(player, PlayerState.LOBBY) && !main.isGameActive) {
             player.sendMessage(ChatColor.YELLOW+"You are now ready");
             pStatus.SetStatus(player, PlayerState.READY);
-            data.Autoready = false;
-            LobbyControls.CheckStartGame(true);
+            data.autoready = false;
+            LobbyListeners.CheckStartGame(true);
         } 
         else if (pStatus.PlayerEqualsStatus(player, PlayerState.READY) && !main.isGameActive){
-            if (data.Autoready == false) {
+            if (data.autoready == false) {
                 player.sendMessage(ChatColor.YELLOW+"You will now automatically ready up");
-                data.Autoready = true;
+                data.autoready = true;
             } 
             else {
                 player.sendMessage(ChatColor.YELLOW+"You are no longer ready");
                 pStatus.SetStatus(player, PlayerState.LOBBY);
-                data.Autoready = false;
-                LobbyControls.CheckStartGame(false);
+                data.autoready = false;
+                LobbyListeners.CheckStartGame(false);
             }
         } 
         else if (main.isGameActive) {
@@ -104,13 +104,12 @@ public class MenuActions {
             player.closeInventory();
             DataFiles datafiles = new DataFiles(player);
             PlayerData data = datafiles.data;
-            data.Kit = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-            player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.Kit + " kit");
+            data.kit = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
+            player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.kit + " kit");
             datafiles.SetData(data);
         }
      }
 
-    @SuppressWarnings("unchecked")
     public static void SelectCard(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
 
@@ -122,32 +121,32 @@ public class MenuActions {
             if (0 <= event.getRawSlot() && event.getRawSlot() <= 8) {
                 player.closeInventory();
                 
-                if (data.Coins<5) {
+                if (data.coins<5) {
                     player.sendMessage(ChatColor.YELLOW + "You don't have enough money to use this card");
-                    data.Card = "No Card";
+                    data.card = "No Card";
                     datafiles.SetData(data);
                     return;
                 }
-                data.Card = selectedCard;
-                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.Card + " card");
+                data.card = selectedCard;
+                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.card + " card");
                 datafiles.SetData(data);
             }
             if (9 <= event.getRawSlot() && event.getRawSlot() <= 17) {
                 player.closeInventory();
-                if (data.Coins<8) {
+                if (data.coins<8) {
                     player.sendMessage(ChatColor.YELLOW + "You don't have enough money to use this card");
-                    data.Card = "No Card";
+                    data.card = "No Card";
                     datafiles.SetData(data);
                     return;
                 }
-                data.Card = selectedCard;
-                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.Card + " card");
+                data.card = selectedCard;
+                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.card + " card");
                 datafiles.SetData(data);
             }
             if (event.getRawSlot() == 31) {
                 player.closeInventory();
-                data.Card = selectedCard;
-                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.Card);
+                data.card = selectedCard;
+                player.sendMessage(ChatColor.YELLOW + "You have chosen " + data.card);
                 datafiles.SetData(data);
             }
             if (event.getRawSlot() == 32) {
@@ -161,7 +160,7 @@ public class MenuActions {
 
                 for (int i = 0; i <= 17; i++) {
                     if (event.getInventory().getItem(i) != null && event.getInventory().getItem(i).hasItemMeta()) {
-                        if (datafiles.data.Owned.contains(ChatColor.stripColor(event.getInventory().getItem(i).getItemMeta().getDisplayName()))) {
+                        if (datafiles.data.owned.contains(ChatColor.stripColor(event.getInventory().getItem(i).getItemMeta().getDisplayName()))) {
                             event.getInventory().getItem(i).setType(Material.WOOL);
                             event.getInventory().getItem(i).setDurability((short)5);
                             ItemMeta meta1 = event.getInventory().getItem(i).getItemMeta();
@@ -177,34 +176,34 @@ public class MenuActions {
         else {
             if (0 <= event.getRawSlot() && event.getRawSlot() <= 8) {
                 player.closeInventory();
-                if (data.Owned.contains(selectedCard)) {
+                if (data.owned.contains(selectedCard)) {
                     player.sendMessage(ChatColor.YELLOW + "You already own this card");
                     return;
                 }
-                if (data.Coins<Cards.CardCost1) {
+                if (data.coins<Cards.CardCost1) {
                     player.sendMessage(ChatColor.RED + "You don't have enough money to buy this card");
                     return;
                 }
-                data.Owned.add(selectedCard);
+                data.owned.add(selectedCard);
                 player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for "+Cards.CardCost1+" coins\nIt has been selected");
-                data.Coins = data.Coins - Cards.CardCost1;
-                data.Card = selectedCard;
+                data.coins = data.coins - Cards.CardCost1;
+                data.card = selectedCard;
                 datafiles.SetData(data);
             }
             if (9 <= event.getRawSlot() && event.getRawSlot() <= 17) {
                 player.closeInventory();
-                if (data.Owned.contains(selectedCard)) {
+                if (data.owned.contains(selectedCard)) {
                     player.sendMessage(ChatColor.YELLOW + "You already own this card");
                     return;
                 }
-                if (data.Coins<Cards.CardCost2) {
+                if (data.coins<Cards.CardCost2) {
                     player.sendMessage(ChatColor.RED + "You don't have enough money to buy this card");
                     return;
                 }
-                data.Owned.add(selectedCard);
+                data.owned.add(selectedCard);
                 player.sendMessage(ChatColor.YELLOW + "You have bought " + selectedCard + " card for "+Cards.CardCost2+" coins\nIt has been selected");
-                data.Coins = data.Coins - Cards.CardCost2;
-                data.Card = selectedCard;
+                data.coins = data.coins - Cards.CardCost2;
+                data.card = selectedCard;
                 datafiles.SetData(data);
             }
             if (event.getRawSlot() == 32) {
@@ -220,7 +219,6 @@ public class MenuActions {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void BuyItemFromShop(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
 
@@ -237,11 +235,11 @@ public class MenuActions {
             player.closeInventory();
             int Cost = Integer.valueOf(ChatColor.stripColor(event.getInventory().getItem(event.getSlot()).getItemMeta().getLore().get(0)));
             String currentSelection = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-            if (data.Coins<Cost) {player.sendMessage(ChatColor.YELLOW + "You don't have enough money to buy this");return;}
+            if (data.coins<Cost) {player.sendMessage(ChatColor.YELLOW + "You don't have enough money to buy this");return;}
             
-            data.Owned.add(currentSelection);
+            data.owned.add(currentSelection);
             player.sendMessage(ChatColor.YELLOW + "You have bought " + currentSelection + " for " + Cost + " coins");
-            data.Coins = data.Coins - Cost;
+            data.coins = data.coins - Cost;
             datafiles.SetData(data);
         }
     }

@@ -16,14 +16,12 @@ public class LootItem {
     private final byte data;
     private final int amount;
 
-    private final int lootPoints;
     private final byte probability;
 
     @SuppressWarnings("deprecation")
     public LootItem(ItemStack itemStack) {
         this.itemStack = itemStack;
         this.probability = 100;
-        this.lootPoints = 0;
         if (itemStack != null) {
             this.type = itemStack.getType();
             this.data = itemStack.getData().getData();
@@ -49,10 +47,6 @@ public class LootItem {
 
     public byte getProbability() {
         return probability;
-    }
-
-    public int getLootPoints() {
-        return lootPoints;
     }
 
     public Material getType() {

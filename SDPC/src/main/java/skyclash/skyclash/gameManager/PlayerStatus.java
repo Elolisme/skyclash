@@ -49,10 +49,14 @@ public class PlayerStatus {
     }
 
     public void SetLobbyOrReady(Player player) {
-        new PlayerStatus().SetStatus(player, PlayerState.LOBBY);
+        PlayerStatus playerstatus = new PlayerStatus();
+        if (!playerstatus.ContainsName(player)) {
+            playerstatus.SetStatus(player, PlayerState.LOBBY);
+        }
+        playerstatus.SetStatus(player, PlayerState.LOBBY);
         DataFiles datafiles = new DataFiles(player);
         PlayerData playerdata = datafiles.data;
-        if (playerdata.Autoready == true) {
+        if (playerdata.autoready == true) {
             SetStatus(player, PlayerState.READY);
         }
     }

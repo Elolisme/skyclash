@@ -1,5 +1,7 @@
 package skyclash.skyclash.kitscards;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,8 +12,6 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.json.simple.JSONArray;
-
 import skyclash.skyclash.main;
 import skyclash.skyclash.customitems.GiveItem;
 import skyclash.skyclash.fileIO.DataFiles;
@@ -102,15 +102,15 @@ public class Cards {
     private Boolean BuyCard(int Cost) {
         DataFiles datafiles = new DataFiles(this.player);
         PlayerData data = datafiles.data;
-        JSONArray owned = data.Owned;
+        ArrayList<String> owned = data.owned;
         if (!owned.contains(this.card)) {
-            if (Cost>data.Coins) {
+            if (Cost>data.coins) {
                 player.sendMessage(ChatColor.RED+"You do not have enough money to use your card");
-                data.Card = "No Card";
+                data.card = "No Card";
                 datafiles.SetData(data);
                 return false;
             } else {
-                data.Coins = data.Coins - Cost;
+                data.coins = data.coins - Cost;
                 datafiles.SetData(data);
             }
         }

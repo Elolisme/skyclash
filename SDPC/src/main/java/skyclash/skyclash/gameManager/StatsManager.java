@@ -19,11 +19,9 @@ public class StatsManager {
     }
 
     // all other stats
-    @SuppressWarnings("unchecked")
     public void changeStat(Player player, String stat, int change) {
         DataFiles files = new DataFiles(player);
         PlayerData pdata = files.data;
-        pdata.Stats.remove("temp");
 
         // remove obselete stats
         HashMap<String, String> obseletes = new HashMap<>();
@@ -33,23 +31,23 @@ public class StatsManager {
         obseletes.put("joins", "Joins");
         
         obseletes.forEach((Object1, Object2) -> {
-            if (pdata.Stats.containsKey(Object1)) {
-                int new_change = (int) ((long) pdata.Stats.get(Object1));
-                pdata.Stats.put(Object2, new_change); 
-                pdata.Stats.remove(Object1);
+            if (pdata.stats.containsKey(Object1)) {
+                int new_change = (int) ((long) pdata.stats.get(Object1));
+                pdata.stats.put(Object2, new_change); 
+                pdata.stats.remove(Object1);
             }
         });
 
         if (stat.equals("coins")) {
-            int new_coins = pdata.Coins + change;
-            pdata.Coins = new_coins;  
+            int new_coins = pdata.coins + change;
+            pdata.coins = new_coins;  
         }
-        else if (pdata.Stats.containsKey(stat)) {            
-            int new_change = (int) ((long) pdata.Stats.get(stat) + change);  
-            pdata.Stats.put(stat, new_change); 
+        else if (pdata.stats.containsKey(stat)) {            
+            int new_change = pdata.stats.get(stat) + change;
+            pdata.stats.put(stat, new_change); 
         } 
         else {
-            pdata.Stats.put(stat, change); 
+            pdata.stats.put(stat, change); 
         }
 
         files.SetData(pdata);

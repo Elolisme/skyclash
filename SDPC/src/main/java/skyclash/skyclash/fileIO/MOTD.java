@@ -11,15 +11,17 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 
+import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.Scheduler;
 
 public class MOTD {
     public void changeMOTD() {
         String optionsPath = "server.properties";
-        String motdBankPath = "plugins/motdList.txt";
+        String motdBankPath = "plugins"+File.separator+"SDPC"+File.separator+"motdList.txt";
         if (!(new File(motdBankPath).exists())) {
             return;
         }
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"MOTD Changed");
 
         ArrayList<String> motds = readFile(motdBankPath);
         String motd = motds.get(new Random().nextInt(motds.size()));

@@ -1,126 +1,108 @@
 {
   "name": "mid",
-  "type": "LOOT_POINT",
-  "lootPoints": 100,
+  "type": "DEFAULT",
   "shuffle": true,
   "lootItems": [
     {
       "type": "DIAMOND_HELMET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 80,
-      "probability": 100
+      "probability": 20
     },
     {
       "type": "IRON_CHESTPLATE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
-      "probability": 100
+      "probability": 50
     },
     {
       "type": "IRON_LEGGINGS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
-      "probability": 100
+      "probability": 50
     },
     {
       "type": "DIAMOND_BOOTS",
       "data": 0,
       "amount": 1,
-      "lootPoints": 80,
-      "probability": 100
+      "probability": 20
     },
     {
       "type": "IRON_SWORD",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
-      "probability": 100
+      "probability": 60
     },
     {
       "type": "BOW",
       "data": 0,
       "amount": 1,
-      "lootPoints": 80,
-      "probability": 100
+      "probability": 60
     },
     {
       "type": "ARROW",
       "data": 0,
       "amount": 16,
-      "lootPoints": 30,
       "probability": 100
     },
     {
       "type": "ENDER_PEARL",
       "data": 0,
-      "amount": 3,
-      "lootPoints": 100,
-      "probability": 100
+      "amount": 1,
+      "probability": 50
     },
     {
       "type": "TNT",
       "data": 0,
       "amount": 16,
-      "lootPoints": 80,
-      "probability": 100
+      "probability": 65
     },
     {
       "type": "DIAMOND_AXE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 100,
-      "probability": 100
+      "probability": 70
     },
     {
       "type": "LAVA_BUCKET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
-      "probability": 100
+      "probability": 40
     },
     {
       "type": "GOLDEN_APPLE",
       "data": 0,
-      "amount": 5,
-      "lootPoints": 60,
-      "probability": 100
+      "amount": 2,
+      "probability": 80
     },
     {
       "type": "EXP_BOTTLE",
       "data": 0,
       "amount": 16,
-      "lootPoints": 30,
-      "probability": 100
+      "probability": 50
     },
     {
       "type": "WATER_BUCKET",
       "data": 0,
       "amount": 1,
-      "lootPoints": 30,
-      "probability": 100
+      "probability": 60
     },
     {
       "type": "FISHING_ROD",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
       "probability": 100
     },
     {
       "type": "DIAMOND_PICKAXE",
       "data": 0,
       "amount": 1,
-      "lootPoints": 50,
-      "probability": 100
+      "probability": 80
     },
     {
       "type": "LOG",
       "data": 0,
       "amount": 24,
-      "lootPoints": 20,
       "probability": 100
     }
   ]

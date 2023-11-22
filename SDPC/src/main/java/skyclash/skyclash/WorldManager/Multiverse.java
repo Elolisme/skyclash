@@ -52,6 +52,7 @@ public class Multiverse {
         }
     }
 
+    // Set the default settings of a new game
     public void PrepareWorld(String worldName) {
         MultiverseWorld mvworld = GetWorld(worldName);
         World world = GetBukkitWorld(worldName);
@@ -75,6 +76,7 @@ public class Multiverse {
         mvcore.getMVWorldManager().setFirstSpawnWorld(worldName);
     }
 
+    // Creates a world, and sets some default settings like void world, spawn location at center, and time
     public Boolean createNewSCWorld(String worldName) {
         if (worldManager.getMVWorld(worldName) != null) {return false;}
         worldManager.addWorld(worldName, Environment.NORMAL, null, WorldType.FLAT, false, "SDPC");
@@ -90,6 +92,14 @@ public class Multiverse {
         newMVworld.setBedRespawn(false);
         newMVworld.setGameMode(GameMode.CREATIVE);
         return true;
+    }
+
+    public void everySecond() {
+        List<World> world = Bukkit.getWorlds();
+        world.forEach(world1 -> {
+            world1.setStorm(false);
+            world1.setThundering(false);
+        });
     }
 
 }

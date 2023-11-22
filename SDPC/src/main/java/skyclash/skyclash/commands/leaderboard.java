@@ -77,10 +77,10 @@ public class leaderboard implements CommandExecutor {
         DataFiles dfiles = new DataFiles(player);
         PlayerData pdata = dfiles.data;
         if (stat.equals("coins")) {
-            return pdata.Coins;
+            return pdata.coins;
         }
-        else if (pdata.Stats.containsKey(stat)) {
-            return Math.toIntExact((long)pdata.Stats.get(stat));
+        else if (pdata.stats.containsKey(stat)) {
+            return pdata.stats.get(stat);
         }
         else {
             return Integer.MIN_VALUE;
@@ -89,7 +89,7 @@ public class leaderboard implements CommandExecutor {
 
     private HashMap<String, Integer> PlayersWithStat(String stat) {
         HashMap<String, Integer> statList = new HashMap<>();
-        File dir = new File("players");
+        File dir = new File("plugins"+File.separator+"SDPC"+File.separator+"Players");
         File[] dirList = dir.listFiles();
         for (File file: dirList){
             if (file.isFile()) {

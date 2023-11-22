@@ -5,15 +5,20 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
-
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapsFile;
 import skyclash.skyclash.lobby.VoteMap;
 
-@SuppressWarnings("unchecked")
 public class ModifyWorlds {
     private Multiverse multiverse = new Multiverse();
+    private MapsFile mapsfile;
 
+    public ModifyWorlds(MapsFile mapsfile) {
+        this.mapsfile = mapsfile;
+        mapsfile.loadFileYML();
+        mapsfile.saveFileYML();
+    }
+
+    // Create a new multiverse world with default map settings
     public void createWorld(String name, CommandSender sender) {
         Boolean created = multiverse.createNewSCWorld(name);
         if (!created) {
@@ -25,19 +30,18 @@ public class ModifyWorlds {
             player.teleport(new Location(multiverse.GetBukkitWorld(name), 0, 65, 0));
         }
 
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(true, true);
         new VoteMap().addMap(new VoteMap().mapSize()+1);
     }
 
-    public void modifySetting(String world, String setting, String value, CommandSender sender) {        
-        Mapsfile maps1 = new Mapsfile();
-        maps1.readFile(true, true);
-
+    // change world setting in maps.json
+    public void modifySetting(String world, String setting, String value, CommandSender sender) {  
+        mapsfile.loadFileYML();
+        mapsfile.saveFileYML();      
         if (multiverse.GetWorld(world) == null) {
             sender.sendMessage(ChatColor.RED+"No multiverse world with that name exists");
             return;
         }
+
         switch (setting) {
             case "setLobby": setDefault(world, sender);break;
             case "setIcon": setIcon(world, value, sender);break;
@@ -46,28 +50,21 @@ public class ModifyWorlds {
         }
     }
 
-    public void setDefault(String world, CommandSender sender) {
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject newdata = new JSONObject();
-        maps.jsonObject.forEach((map, data) -> {
-            String mapName = (String) map;
-            JSONObject data1 = (JSONObject) data;
-            if (mapName.equals(world)) {
-                data1.put("isdefault", true);
+    // set world which is default lobby
+    private void setDefault(String world, CommandSender sender) {
+        mapsfile.data.forEach((name, data) -> {
+            if (name.equals(world)) {
+                data.isdefault = true;
                 sender.sendMessage(ChatColor.GREEN+"You have successfully set "+world+" as the lobby");
                 multiverse.setSpawnWorld(world);
             } else {
-                data1.put("isdefault", false);
+                data.isdefault = false;
             }
-            newdata.put(map, data1);
         });
-
-        maps.jsonObject = newdata;
-        maps.writeFile();
+        mapsfile.saveFileYML();
     }
 
-    public void setIcon(String world, String value, CommandSender sender) {
+    private void setIcon(String world, String value, CommandSender sender) {
         if (value == null) {
             sender.sendMessage(ChatColor.RED+"Please add the block you want as the icon for the world\n/scworld modify <world> setIcon <material>");
             return;
@@ -76,25 +73,17 @@ public class ModifyWorlds {
             sender.sendMessage(ChatColor.RED+"Please use a valid material (block/item)\n/scworld modify <world> setIcon <material>");
             return;
         }
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject newdata = new JSONObject();
-        maps.jsonObject.forEach((map, data) -> {
-            String mapName = (String) map;
-            JSONObject data1 = (JSONObject) data;
-            if (mapName.equals(world)) {
-                data1.put("icon", value.toUpperCase());
+        
+        mapsfile.data.forEach((name, data) -> {
+            if (name.equals(world)) {
+                data.icon = value.toUpperCase();
                 sender.sendMessage(ChatColor.GREEN+"You have successfully set "+world+" icon to "+value.toUpperCase());
             }
-            newdata.put(map, data1);
         });
-        maps.jsonObject = newdata;
-        maps.writeFile();
+        mapsfile.saveFileYML();
     }
 
-    public void setIgnore(String world, String value, CommandSender sender) {
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
+    private void setIgnore(String world, String value, CommandSender sender) {
         Boolean isIgnore;
         if ("true".equals(value)) {
             isIgnore = false;
@@ -105,28 +94,19 @@ public class ModifyWorlds {
             return;
         }
 
-        JSONObject newdata = new JSONObject();
-        maps.jsonObject.forEach((map, data) -> {
-            String mapName = (String) map;
-            JSONObject data1 = (JSONObject) data;
-            if (mapName.equals(world)) {
-                data1.put("ignore", isIgnore);
+        mapsfile.data.forEach((name, data) -> {
+            if (name.equals(world)) {
+                data.ignore = isIgnore;
                 sender.sendMessage(ChatColor.GREEN+"You have successfully changed "+world+" visibility");
             }
-            newdata.put(map, data1);
         });
-
-        maps.jsonObject = newdata;
-        maps.writeFile();
+        mapsfile.saveFileYML();
     }
 
     public void listSCWorlds(CommandSender sender) {
-        Mapsfile maps1 = new Mapsfile();
-        maps1.readFile(false, false);
         sender.sendMessage(ChatColor.YELLOW+"Maps:");
-        maps1.jsonObject.forEach((map, value1) -> {
-            String map1 = (String) map;
-            sender.sendMessage(ChatColor.GRAY+" "+map1);
+        mapsfile.data.forEach((name, value1) -> {
+            sender.sendMessage(ChatColor.GREEN+" "+name);
         });
     }
 }

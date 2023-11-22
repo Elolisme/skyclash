@@ -1,22 +1,19 @@
 package skyclash.skyclash.commands;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import skyclash.skyclash.chestgen.StringToJSON;
-import skyclash.skyclash.fileIO.Mapsfile;
+import skyclash.skyclash.fileIO.MapData;
+import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.main;
 
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
-@SuppressWarnings("unchecked")
 public class gamespawn implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -26,7 +23,7 @@ public class gamespawn implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        Block targetBlock = player.getTargetBlock((Set<Material>) null, 5);
+        Block targetBlock = Abilities.getTargetBlockNoError(player);
 
         if (args.length == 0 || args.length > 1) {
             player.sendMessage("§cPlease specify the correct arguments\nUse /spawn [add|remove|list]");
@@ -58,71 +55,56 @@ public class gamespawn implements CommandExecutor {
     }
 
     private void addSpawn(Player player, Block block) {
-        String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
-
-        JSONArray newloc = new JSONArray();
+        String worldname = player.getWorld().getName();
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
+        MapData mapdata = maps.data.get(worldname);
+        ArrayList<Integer> newloc = new ArrayList<>();
         newloc.add((int)block.getLocation().getX());
         newloc.add((int)block.getLocation().getY() + 1);
         newloc.add((int)block.getLocation().getZ());
 
-        if (chestsarray.contains(newloc)) {
+        if (mapdata.getSpawns().contains(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Location already stored");
-            maps.writeFile();
+            maps.saveFileYML();
             return;
         }
 
-        chestsarray.add(newloc);
-
-        String coords = String.valueOf(chestsarray);
-        info.remove("spawns");
-        info.put("spawns", coords);
-        maps.jsonObject.remove(world);
-        maps.jsonObject.put(world, info);
+        mapdata.getSpawns().add(newloc);
+        maps.data.put(worldname, mapdata);
+        maps.saveFileYML();
         player.sendMessage(ChatColor.GREEN+"Added location");
-        maps.writeFile();
     }
 
     private void removeSpawn(Player player, Block block) {
-        String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
-
-        JSONArray newloc = new JSONArray();
+        String worldname = player.getWorld().getName();
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
+        MapData mapdata = maps.data.get(worldname);
+        ArrayList<Integer> newloc = new ArrayList<>();
         newloc.add((int)block.getLocation().getX());
         newloc.add((int)block.getLocation().getY() + 1);
         newloc.add((int)block.getLocation().getZ());
 
-        if (chestsarray.remove(newloc)) {
+        if (mapdata.getSpawns().remove(newloc)) {
             player.sendMessage(ChatColor.GREEN+"Removed location");
         } else {
             player.sendMessage(ChatColor.RED+"location was not found");
+            maps.saveFileYML();
+            return;
         }
 
-        String coords = String.valueOf(chestsarray);
-        info.remove("spawns");
-        info.put("spawns", coords);
-        maps.jsonObject.remove(world);
-        maps.jsonObject.put(world, info);
-
-        maps.writeFile();
+        maps.data.put(worldname, mapdata);
+        maps.saveFileYML();
     }
 
     private void listSpawns(Player player) {
         String world = player.getWorld().getName();
-        Mapsfile maps = new Mapsfile();
-        maps.readFile(false, false);
-        JSONObject info = (JSONObject) maps.jsonObject.get(world);
-        JSONArray chestsarray = StringToJSON.convert((String) info.get("spawns"));
+        MapsFile maps = new MapsFile();
+        maps.loadFileYML();
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");
-        chestsarray.forEach((loc) -> {
-            JSONArray array = (JSONArray) loc;
-            player.sendMessage(ChatColor.YELLOW+ "   "+array.get(0)+" "+array.get(1)+" "+array.get(2));
+        maps.data.get(world).getSpawns().forEach((loc) -> {
+            player.sendMessage(ChatColor.YELLOW+ "   "+loc.get(0)+" "+loc.get(1)+" "+loc.get(2));
         });
     }
 }

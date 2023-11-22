@@ -2,8 +2,6 @@ package skyclash.skyclash.gameManager;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import skyclash.skyclash.Scheduler;
 import skyclash.skyclash.lobby.PlayerControls;
 import skyclash.skyclash.lobby.VoteMap;
@@ -29,25 +27,29 @@ public class EndGame {
         String winner = FindWinner(isCommand);
         if (isCommand) {Bukkit.broadcastMessage("The game has abruptly ended");} 
 
+        // reset each player
         PlayerStatus.StatusMap.forEach((key, value) -> {
-            if (value == PlayerState.SPECTATOR || value == PlayerState.INGAME) {
-                Player player = Bukkit.getServer().getPlayer(key);
-                
-                player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
-                player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
-                VoteMap.playerVote.remove(player.getName());
-                displayKills(player);
-                
-                new PlayerControls().toLobby(player);
-                new StatsManager().changeStat(player, "Games", 1);
-                new PlayerControls().resetPlayer(player);
-                new PlayerStatus().SetLobbyOrReady(player);
-                RemoveTags(player);
+            if (!(value == PlayerState.SPECTATOR || value == PlayerState.INGAME)) {
+                return;
             }
+            Player player = Bukkit.getServer().getPlayer(key);  
+
+            player.sendMessage(ChatColor.GREEN + "The winner is " + winner);
+            player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+            VoteMap.playerVote.remove(player.getName());
+            displayKills(player);
+            new PlayerControls().toLobby(player);
+            new StatsManager().changeStat(player, "Games", 1);
+            new PlayerControls().resetPlayer(player);
+            new PlayerStatus().SetLobbyOrReady(player);
+            RemoveTags(player);
         });
+
+        // check if new game starts
         int people_ready = new PlayerStatus().CountPeopleWithStatus(PlayerState.READY);
         if (people_ready >= 2) {new StartGame().AllReady();}
         
+        // reset global variables
         StatsManager.killtracker = new HashMap<>();
         new Multiverse().DeleteWorld(SCWorlds.INGAME_MAP);
         main.isGameActive = false;
@@ -63,6 +65,7 @@ public class EndGame {
         }, 5);
     }
 
+    // go through and find player who is still alive, awards them
     private String FindWinner(Boolean command) {
         AtomicReference<String> winner = new AtomicReference<>("no one");
         if (command) {return winner.get();}
@@ -104,24 +107,19 @@ public class EndGame {
     }
 
     public static void RemoveTags(Player player) {
-        Plugin p = main.plugin;
-        
         DataFiles files = new DataFiles(player.getName());
         PlayerData data = files.data;
-        if (player.hasMetadata(data.Card)) {
-            player.removeMetadata(data.Card, p);
+        if (player.hasMetadata(data.card)) {
+            player.removeMetadata(data.card, main.plugin);
         }
-
-        if (player.hasMetadata(data.Kit)) {
-            player.removeMetadata(data.Kit, p);
+        if (player.hasMetadata(data.kit)) {
+            player.removeMetadata(data.kit, main.plugin);
         }
-
         if (player.hasMetadata("Doomed")) {
-            player.removeMetadata("Doomed", p);
+            player.removeMetadata("Doomed", main.plugin);
         }
-
         if (player.hasMetadata("nopearlcooldown")) {
-            player.removeMetadata("nopearlcooldown", p);
+            player.removeMetadata("nopearlcooldown", main.plugin);
         }
     }
 }

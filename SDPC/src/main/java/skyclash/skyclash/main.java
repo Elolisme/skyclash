@@ -7,13 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import skyclash.skyclash.chestgen.OpenEChest;
 import skyclash.skyclash.commands.*;
 import skyclash.skyclash.customitems.CustomItems;
-import skyclash.skyclash.fileIO.MOTD;
 import skyclash.skyclash.gameManager.InGame;
 import skyclash.skyclash.gameManager.PlayerDC;
 import skyclash.skyclash.gameManager.PlayerDeath;
 import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.lobby.MenuLogic;
-import skyclash.skyclash.lobby.LobbyControls;
+import skyclash.skyclash.lobby.LobbyListeners;
 import java.util.Random;
 
 // List of all my sources for code:
@@ -21,7 +20,6 @@ import java.util.Random;
 // chestgen         | chest generation - https://github.com/Veraimt/CustomLootChest
 // cooldown         | ability cooldowns - https://bukkit.org/threads/tutorial-better-cooldowns.165811/
 // abilities.java   | homing arrows - https://bukkit.org/threads/make-an-arrow-follow-a-target.247755/
-// 0% ChatGPT
 
 public class main extends JavaPlugin {
     public static boolean isGameActive = false;
@@ -30,7 +28,7 @@ public class main extends JavaPlugin {
     @Override
     public void onEnable() {
         // handlers
-        new LobbyControls(this);
+        new LobbyListeners(this);
         new MenuLogic(this);
         new InGame(this);
         new CustomItems(this);
@@ -52,7 +50,6 @@ public class main extends JavaPlugin {
         
         plugin = main.getPlugin(main.class);
         new Scheduler().init();
-        new MOTD().changeMOTD();
     }
 
     @Override
@@ -60,6 +57,7 @@ public class main extends JavaPlugin {
         Scheduler.CloseServer();  
     }
 
+    // SDPC void world generator
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new VoidWorldGenerator();
     }
