@@ -7,31 +7,31 @@
       "type": "DIAMOND_HELMET",
       "data": 0,
       "amount": 1,
-      "probability": 20
+      "probability": 30
     },
     {
       "type": "IRON_CHESTPLATE",
-      "data": 0,
+      "data": 1,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "IRON_LEGGINGS",
-      "data": 0,
+      "data": 1,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "DIAMOND_BOOTS",
       "data": 0,
       "amount": 1,
-      "probability": 20
+      "probability": 30
     },
     {
       "type": "IRON_SWORD",
-      "data": 0,
+      "data": 1,
       "amount": 1,
-      "probability": 60
+      "probability": 80
     },
     {
       "type": "BOW",
@@ -49,13 +49,13 @@
       "type": "ENDER_PEARL",
       "data": 0,
       "amount": 1,
-      "probability": 50
+      "probability": 40
     },
     {
       "type": "TNT",
       "data": 0,
-      "amount": 16,
-      "probability": 65
+      "amount": 4,
+      "probability": 70
     },
     {
       "type": "DIAMOND_AXE",
@@ -67,7 +67,7 @@
       "type": "LAVA_BUCKET",
       "data": 0,
       "amount": 1,
-      "probability": 40
+      "probability": 60
     },
     {
       "type": "GOLDEN_APPLE",
@@ -79,19 +79,19 @@
       "type": "EXP_BOTTLE",
       "data": 0,
       "amount": 16,
-      "probability": 50
+      "probability": 80
     },
     {
       "type": "WATER_BUCKET",
       "data": 0,
       "amount": 1,
-      "probability": 60
+      "probability": 80
     },
     {
       "type": "FISHING_ROD",
       "data": 0,
       "amount": 1,
-      "probability": 100
+      "probability": 80
     },
     {
       "type": "DIAMOND_PICKAXE",
