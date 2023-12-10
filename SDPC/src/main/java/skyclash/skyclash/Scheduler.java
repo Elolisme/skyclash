@@ -114,32 +114,56 @@ public class Scheduler {
             List<String> lines = Resources.readLines(url, Charsets.UTF_8);
             latestVersion = lines.get(1).replace("## v", "");
         } catch (Exception e) {
-            latestVersion = "";
+            e.printStackTrace();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Could not get file with version from Github");
+            return;
         }
 
         File folder = new File("plugins/");
         File[] listOfFiles = folder.listFiles();
         String version = "";
+        File oldfile = null;
 
         for (File file : listOfFiles) {
-            if (file.isFile() && file.getName().contains("SDPCv")) {
-                version = file.getName().replace("SDPCv", "").replace(".jar", "");
+            if (file.isFile() && file.getName().contains("SDPC-")) {
+                oldfile = file;
+                version = file.getName().replace("SDPC-", "").replace(".jar", "");
             }
         }
 
-        if (!version.equals(latestVersion)) {
-            Bukkit.getLogger().warning("Not current version: " + version + " should be "+latestVersion);
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the latest version of SDPC...");
-            try {
-                URL url2 = new URL("https", "raw.githubusercontent.com", "/main/SDPC/target/SDPC-"+latestVersion+".jar");
-                File file = new File( "plugins"+File.separator+"SDPC" + File.separator + "SDPC-"+latestVersion+".jar");
-                FileUtils.copyURLToFile(url2, file, 10*1000, 10*1000);
-            } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage(e.getMessage());
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"The download failed");
-                return;
-            }
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
+        if (oldfile == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"How");
+            return;
+        }
+
+        if (version.equals(latestVersion)) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"SDPC is up to date");
+            return;
+        }
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Not up to date, should be on version "+latestVersion);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the latest version of SDPC...");
+
+        try {
+            URL url2 = new URL("https", "github.com", "/Elolisme/skyclash/blob/main/SDPC/target/SDPC-"+latestVersion+".jar");
+            File file = new File( "plugins" + File.separator + "SDPC-"+latestVersion+".jar");
+            FileUtils.copyURLToFile(url2, file, 10*1000, 10*1000);
+        } catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"The download failed");
+            return;
+        }
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
+
+        try {
+            Bukkit.shutdown();
+            oldfile.delete();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Restart the server immediately");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Could not delete files or stop server");
+            return;
         }
     }
 }

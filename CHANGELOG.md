@@ -1,4 +1,7 @@
 # Changelog
+## v1.6.3
+- test to check if auto updater works
+
 ## v1.6.2
 - fixed new players files being null
 - fixed starting at spawn when die
