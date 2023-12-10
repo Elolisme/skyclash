@@ -1,7 +1,16 @@
 # TODO
-- 
+- fix jester chest bug
+- gamemode where killing makes you join their team
+- fix starting at spawn when die
+- fix kill leaderboard
+- buff guardian
+- fix the instakill not working
+- debuff berserker
+- nerf lifesteal
 
 # Changelog
+## v1.6.2
+- fixing bugs
 
 ## v1.6.1
 - Finished last bit of YML implementation
