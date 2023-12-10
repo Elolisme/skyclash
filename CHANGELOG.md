@@ -1,4 +1,7 @@
 # Changelog
+## v1.6.4
+- another version test
+
 ## v1.6.3
 - test to check if auto updater works
 

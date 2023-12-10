@@ -24,6 +24,7 @@ import java.util.Random;
 public class main extends JavaPlugin {
     public static boolean isGameActive = false;
     public static Plugin plugin;
+    public static String pluginFileName;
     
     @Override
     public void onEnable() {
@@ -47,7 +48,8 @@ public class main extends JavaPlugin {
         this.getCommand("gamespawn").setExecutor(new gamespawn());
         this.getCommand("leaderboard").setExecutor(new leaderboard());
         this.getCommand("scworld").setExecutor(new scworld());
-        
+
+        pluginFileName = this.getFile().getName();
         plugin = main.getPlugin(main.class);
         new Scheduler().init();
     }

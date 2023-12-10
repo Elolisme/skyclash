@@ -1,7 +1,6 @@
 package skyclash.skyclash;
 
 import static skyclash.skyclash.main.isGameActive;
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -121,23 +120,33 @@ public class Scheduler {
 
         File folder = new File("plugins/");
         File[] listOfFiles = folder.listFiles();
-        String version = "";
-        File oldfile = null;
+        Boolean containsNew = false;
 
         for (File file : listOfFiles) {
             if (file.isFile() && file.getName().contains("SDPC-")) {
-                oldfile = file;
-                version = file.getName().replace("SDPC-", "").replace(".jar", "");
+                String version = file.getName().replace("SDPC-", "").replace(".jar", "");
+                if (version.equals(latestVersion)) {
+                    containsNew = true;
+                }
             }
         }
 
-        if (oldfile == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"How");
-            return;
-        }
-
-        if (version.equals(latestVersion)) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"SDPC is up to date");
+        if (containsNew) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"SDPC is up to date: version "+latestVersion);
+            if (!main.pluginFileName.replace("SDPC-", "").replace(".jar", "").equals(latestVersion)) {
+                Bukkit.getPluginManager().disablePlugin(main.plugin);
+            } else {
+                new Scheduler().scheduleTask(()->{
+                    for (File file : listOfFiles) {
+                        if (file.isFile() && file.getName().contains("SDPC-")) {
+                            String version = file.getName().replace("SDPC-", "").replace(".jar", "");
+                            if (!version.equals(latestVersion)) {
+                                file.delete();
+                            }
+                        }
+                    }
+                }, 20);
+            }
             return;
         }
 
@@ -155,15 +164,8 @@ public class Scheduler {
         }
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
-
-        try {
-            Bukkit.shutdown();
-            oldfile.delete();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Restart the server immediately");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Could not delete files or stop server");
-            return;
-        }
+        Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Restart the server immediately");
+        Bukkit.shutdown();
+        
     }
 }
