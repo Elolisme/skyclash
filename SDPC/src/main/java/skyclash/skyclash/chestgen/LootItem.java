@@ -37,18 +37,16 @@ public class LootItem {
         if ((type == Material.IRON_CHESTPLATE || type == Material.IRON_LEGGINGS) && data == 1) {
             itemStack = new ItemStack(type, amount);
             ItemMeta meta = itemStack.getItemMeta();
-            if (meta != null) {
-                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
-                itemStack.setItemMeta(meta);
-            }
+            
+            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
+            itemStack.setItemMeta(meta);
         }
         if (type == Material.IRON_SWORD && data == 1) {
             itemStack = new ItemStack(type, amount);
             ItemMeta meta = itemStack.getItemMeta();
-            if (meta != null) {
-                meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
-                itemStack.setItemMeta(meta);
-            }
+            
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
+            itemStack.setItemMeta(meta);
         }
         return itemStack;
     }

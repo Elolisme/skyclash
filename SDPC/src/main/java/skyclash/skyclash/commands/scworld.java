@@ -5,12 +5,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import skyclash.skyclash.WorldManager.ModifyWorlds;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 
 public class scworld implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        ModifyWorlds modify = new ModifyWorlds(new MapsFile());
+        ModifyWorlds modify = new ModifyWorlds(new Mapsfile());
 
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "Please add more arguments\nUse /scworld [add | modify | list] <args>");

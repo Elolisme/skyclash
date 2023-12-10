@@ -5,14 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.lobby.VoteMap;
 
 public class ModifyWorlds {
     private Multiverse multiverse = new Multiverse();
-    private MapsFile mapsfile;
+    private Mapsfile mapsfile;
 
-    public ModifyWorlds(MapsFile mapsfile) {
+    public ModifyWorlds(Mapsfile mapsfile) {
         this.mapsfile = mapsfile;
         mapsfile.loadFileYML();
         mapsfile.saveFileYML();

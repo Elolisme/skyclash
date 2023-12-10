@@ -41,6 +41,10 @@ public class LobbyListeners implements Listener {
         playercontrols.GiveLobbyItems(player);
         playercontrols.FirstTimeJoin(player);
         new StatsManager().changeStat(player, "Joins", 1);
+
+        // check if new game starts
+        int people_ready = new PlayerStatus().CountPeopleWithStatus(PlayerState.READY);
+        if (people_ready >= 2) {new StartGame().AllReady();}
     }
 
     @EventHandler

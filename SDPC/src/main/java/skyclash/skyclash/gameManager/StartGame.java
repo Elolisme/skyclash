@@ -74,9 +74,9 @@ public class StartGame {
                 return;
             } 
 
-            scworlds.teleportPlayer(player, spawnsarray.get(Scheduler.playersLeft - 1));
-            new StatsManager().addPlayer(player);
             new PlayerControls().resetPlayer(player);
+            new StatsManager().addPlayer(player);
+            scworlds.teleportPlayer(player, spawnsarray.get(Scheduler.playersLeft - 1));
             EndGame.RemoveTags(player);
             player.setMetadata("NoMovement", new FixedMetadataValue(main.plugin, "1"));
             player.sendMessage("You will be sent to play soon");

@@ -30,7 +30,7 @@ import org.bukkit.potion.PotionType;
 
 import skyclash.skyclash.main;
 import skyclash.skyclash.fileIO.DataFiles;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.fileIO.PlayerData;
 import skyclash.skyclash.gameManager.PlayerStatus;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
@@ -622,7 +622,7 @@ public class Inventories {
     public static Inventory mapsInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE+"Map Selection");
 
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         AtomicInteger count = new AtomicInteger();
 
@@ -719,7 +719,7 @@ public class Inventories {
     public static Inventory ViewAndEditMaps(Player player) {
         Inventory inventory = Bukkit.createInventory(player, 18, ChatColor.DARK_BLUE+"Map Selection");
 
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         AtomicInteger count = new AtomicInteger();
 

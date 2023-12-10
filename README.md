@@ -164,3 +164,6 @@ Cool people
 - iSilkySmooth
 - zapic
 - Chez_E
+
+# TODO
+- gamemode where killing makes you join their team

@@ -99,11 +99,9 @@ public class EndGame {
     }
 
     private void displayKills(Player player) {
-        player.sendMessage("");
         player.sendMessage(ChatColor.DARK_RED+"Top kills:");
         SortHashMapByValue(StatsManager.killtracker).forEach((string, value)->player.sendMessage("  "+ChatColor.RED+string+": "+ChatColor.YELLOW+value));
         StatsManager.killtracker = new HashMap<>();
-        player.sendMessage("");
     }
 
     public static void RemoveTags(Player player) {

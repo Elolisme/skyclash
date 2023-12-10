@@ -2,6 +2,11 @@ package skyclash.skyclash;
 
 import static skyclash.skyclash.main.isGameActive;
 
+import java.io.File;
+import java.net.URL;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -10,6 +15,9 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 
 import skyclash.skyclash.WorldManager.Multiverse;
 import skyclash.skyclash.WorldManager.SCWorlds;
@@ -30,6 +38,8 @@ public class Scheduler {
     public static int playersLeft = 0;
 
     public void init() {
+        checkVersion();
+
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
         scheduleRepeatingTask(()->Tick(), 1);
         scheduleRepeatingTask(()->Second(), 20);
@@ -94,5 +104,42 @@ public class Scheduler {
                 task.run();
             }
         }.runTaskTimer(main.plugin, 0L, periodTicks);
+    }
+
+    private static void checkVersion() {
+        URL url;
+        String latestVersion;
+        try {
+            url = new URL("https://raw.githubusercontent.com/Elolisme/skyclash/main/CHANGELOG.md");
+            List<String> lines = Resources.readLines(url, Charsets.UTF_8);
+            latestVersion = lines.get(1).replace("## v", "");
+        } catch (Exception e) {
+            latestVersion = "";
+        }
+
+        File folder = new File("plugins/");
+        File[] listOfFiles = folder.listFiles();
+        String version = "";
+
+        for (File file : listOfFiles) {
+            if (file.isFile() && file.getName().contains("SDPCv")) {
+                version = file.getName().replace("SDPCv", "").replace(".jar", "");
+            }
+        }
+
+        if (!version.equals(latestVersion)) {
+            Bukkit.getLogger().warning("Not current version: " + version + " should be "+latestVersion);
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the latest version of SDPC...");
+            try {
+                URL url2 = new URL("https", "raw.githubusercontent.com", "/main/SDPC/target/SDPC-"+latestVersion+".jar");
+                File file = new File( "plugins"+File.separator+"SDPC" + File.separator + "SDPC-"+latestVersion+".jar");
+                FileUtils.copyURLToFile(url2, file, 10*1000, 10*1000);
+            } catch (Exception e) {
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"The download failed");
+                return;
+            }
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
+        }
     }
 }

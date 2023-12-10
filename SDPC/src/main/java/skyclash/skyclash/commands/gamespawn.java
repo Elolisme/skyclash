@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import skyclash.skyclash.fileIO.MapData;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 import skyclash.skyclash.kitscards.Abilities;
 import skyclash.skyclash.main;
 
@@ -56,7 +56,7 @@ public class gamespawn implements CommandExecutor {
 
     private void addSpawn(Player player, Block block) {
         String worldname = player.getWorld().getName();
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         MapData mapdata = maps.data.get(worldname);
         ArrayList<Integer> newloc = new ArrayList<>();
@@ -78,7 +78,7 @@ public class gamespawn implements CommandExecutor {
 
     private void removeSpawn(Player player, Block block) {
         String worldname = player.getWorld().getName();
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         MapData mapdata = maps.data.get(worldname);
         ArrayList<Integer> newloc = new ArrayList<>();
@@ -100,7 +100,7 @@ public class gamespawn implements CommandExecutor {
 
     private void listSpawns(Player player) {
         String world = player.getWorld().getName();
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         player.sendMessage(ChatColor.GOLD+"<-- Locations for " +ChatColor.YELLOW+world+ChatColor.GOLD+" -->");
         maps.data.get(world).getSpawns().forEach((loc) -> {

@@ -1,22 +1,22 @@
-# TODO
-- fix jester chest bug
-- gamemode where killing makes you join their team
-- fix starting at spawn when die
-- fix kill leaderboard
-- buff guardian
-- fix the instakill not working
-- debuff berserker
-- nerf lifesteal
-
 # Changelog
 ## v1.6.2
-- fixing bugs
+- fixed new players files being null
+- fixed starting at spawn when die
+- fixed kill leaderboard - idk what the cause is
+- fixed autoready not working for joining
+- disabled jester using number keys to move items
+- buffed guardian to have 2 30s absorption potions
+- nerfed swordsman extra damage by 50% and 15->25s cooldown
+- tried to fix grim reaper instant kill not working
+- buffed grim reaper from 45-30s kills, and less health taken away, chat message to say how long is left
+- nerfed beserker potion from absorption level 4->2
+- nerfed lifesteal from 20% -> 10% health, added message to show how much was stolen
 
 ## v1.6.1
 - Finished last bit of YML implementation
-- changed chest generation, added enchantments to some items in mid chests (TODO: test)
+- changed chest generation, added enchantments to some items in mid chests
 - put changelog in a seperate file
-- simplified cooldown code (TODO: test)
+- simplified cooldown code
 
 ## v1.6.0
 - changed mark on grim reaper to be 45 seconds

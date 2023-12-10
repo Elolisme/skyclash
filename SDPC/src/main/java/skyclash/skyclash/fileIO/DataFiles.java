@@ -43,6 +43,7 @@ public class DataFiles {
         if(!playerFile.exists()) {
             try {
                 playerFile.createNewFile();
+                data = new PlayerData(playerName);
                 saveFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);

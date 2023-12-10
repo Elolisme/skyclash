@@ -33,6 +33,7 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -117,8 +118,8 @@ public class Abilities implements Listener {
         double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
         double extra_damage = damage - event.getFinalDamage();
         float display_damage = (float) Math.round(extra_damage*1000);
-        ((LivingEntity)entity).damage(extra_damage);
-        Cooldown.add(player.getName(), "TrueDamage", 15, System.currentTimeMillis());
+        ((LivingEntity)entity).damage(extra_damage/2);
+        Cooldown.add(player.getName(), "TrueDamage", 25, System.currentTimeMillis());
         player.sendMessage(ChatColor.GREEN+"Dealt "+display_damage/1000+" more damage");
     }
 
@@ -328,6 +329,7 @@ public class Abilities implements Listener {
     }
 
     @EventHandler
+    @SuppressWarnings("deprecation")
     public void onAnyHit(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) {
             return;
@@ -339,7 +341,8 @@ public class Abilities implements Listener {
 
         // lifesteal
         double damage = event.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE);
-        damage = damage * 0.2;
+        damage = damage * 0.1;
+        player.sendTitle("", ChatColor.GREEN+"You gained "+damage+" health");
         double health = player.getHealth() + damage;
         if (health < player.getMaxHealth()) {
             player.setHealth(health);
@@ -508,7 +511,14 @@ public class Abilities implements Listener {
         if (!(invtype == InventoryType.CHEST || invtype == InventoryType.ENDER_CHEST || invtype == InventoryType.WORKBENCH)) {
             return;
         }
-        if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasLore() && event.getCurrentItem().getItemMeta().getLore().get(0).equals("Temporary")) {
+        if (event.getClick() == ClickType.NUMBER_KEY) {
+            if (event.getWhoClicked().hasMetadata("Jester")) {
+                event.setCancelled(true);
+            }
+        }
+        ItemStack currentItem = event.getCurrentItem();
+
+        if (currentItem != null && currentItem.hasItemMeta() && currentItem.getItemMeta().hasLore() && currentItem.getItemMeta().getLore().get(0).equals("Temporary")) {
             event.setCancelled(true);
         }
     }
@@ -536,22 +546,31 @@ public class Abilities implements Listener {
         player.setItemInHand(new ItemStack(Material.AIR));
         player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*30, 1));
-        player.damage(player.getHealth() / 2);
+        player.damage(player.getHealth() / 1.5);
 
-        hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 45 seconds otherwise you will instantly die");
+        hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 30 seconds otherwise you will instantly die");
         hurtPlayer.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
         hurtPlayer.setMetadata("Doomed", new FixedMetadataValue(main.plugin, player.getName()));
 
-        new Scheduler().scheduleTask(()->{
-            killTaggedPlayers();
-        }, 45*20);
+        new Scheduler().scheduleTask(()->{killTaggedPlayers();}, 30*20);
+        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 15 seconds left");}, 15*20);
+        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 5 seconds left");}, 25*20);
     }
 
     private void killTaggedPlayers() {
         PlayerStatus.StatusMap.forEach((player, state) -> {
             Player player2 = Bukkit.getPlayerExact(player);
             if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && player2.hasMetadata("Doomed")) {
-                player2.damage(player2.getHealth());
+                player2.damage(player2.getHealth()*999);
+            }
+        });
+    }
+
+    private void messageTaggedPlayer(String message) {
+        PlayerStatus.StatusMap.forEach((player, state) -> {
+            Player player2 = Bukkit.getPlayerExact(player);
+            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && player2.hasMetadata("Doomed")) {
+                player2.sendMessage(message);
             }
         });
     }

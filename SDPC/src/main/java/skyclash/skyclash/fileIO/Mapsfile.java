@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MapsFile {
+public class Mapsfile {
     public HashMap<String, MapData> data = new HashMap<>();
     private String mapFilePath = "plugins"+File.separator+"SDPC"+File.separator+"maps2.yml";
     

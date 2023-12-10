@@ -12,16 +12,16 @@ import skyclash.skyclash.main;
 import skyclash.skyclash.chestgen.ChestManager;
 import skyclash.skyclash.fileIO.CopyWorld;
 import skyclash.skyclash.fileIO.MapData;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 
 public class SCWorlds {
     public static final String INGAME_MAP = "ingame_map";
     private Multiverse multiverse = new Multiverse();
-    private MapsFile maps = new MapsFile();
+    private Mapsfile maps = new Mapsfile();
     
     // Get the world which is the lobby, and get its first spawn location
     public Location getLobbySpawnLocation() {
-        MapsFile maps = new MapsFile();
+        Mapsfile maps = new Mapsfile();
         maps.loadFileYML();
         AtomicReference<String> default_world = new AtomicReference<>();
         AtomicReference<ArrayList<Integer>> spawnCoords = new AtomicReference<>();

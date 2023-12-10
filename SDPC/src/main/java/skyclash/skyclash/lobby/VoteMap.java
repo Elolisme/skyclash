@@ -7,12 +7,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.bukkit.World;
 import skyclash.skyclash.WorldManager.Multiverse;
-import skyclash.skyclash.fileIO.MapsFile;
+import skyclash.skyclash.fileIO.Mapsfile;
 
 public class VoteMap {
     private static HashMap<Integer, Integer> mapVotes = new HashMap<>();
     public static HashMap<String, Integer> playerVote = new HashMap<>();
-    private MapsFile maps = new MapsFile();
+    private Mapsfile maps = new Mapsfile();
 
     public void addMap(Integer mapIndex) {
         mapVotes.put(mapIndex, 0);

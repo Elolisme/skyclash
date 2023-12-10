@@ -132,7 +132,7 @@ public class Kits {
         this.player.getInventory().setChestplate(item1);
         item1 = new ItemStack(Material.COOKED_BEEF, 1);
         this.player.getInventory().addItem(item1);
-        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[]{PotionEffectType.ABSORPTION, PotionEffectType.DAMAGE_RESISTANCE},new int[] {10, 10} , new int[] {4, 0}));
+        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[]{PotionEffectType.ABSORPTION, PotionEffectType.DAMAGE_RESISTANCE},new int[] {10, 10} , new int[] {2, 0}));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 99999, 0, true, true), false);
         this.player.setMetadata(this.kit, new FixedMetadataValue(main.plugin, "kit"));
     }
@@ -220,7 +220,8 @@ public class Kits {
         Potion item = new Potion(PotionType.WATER);
         item.setSplash(true);
         item1 = item.toItemStack(1);
-        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[] {PotionEffectType.ABSORPTION}, new int[] {15}, new int[] {1}));
+        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[] {PotionEffectType.ABSORPTION}, new int[] {30}, new int[] {2}));
+        this.player.getInventory().addItem(Inventories.CustomPotion(new PotionEffectType[] {PotionEffectType.ABSORPTION}, new int[] {30}, new int[] {2}));
         item = new Potion(PotionType.SLOWNESS);
         item.setLevel(1);
         item.setSplash(true);

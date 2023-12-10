@@ -27,6 +27,7 @@ commands:
     description: go back to lobby world
     usage: /lobby
     permission: sgm.lobby
+    aliases: ["hub"]
   setchest:
     description: add or remove chest location from world
     usage: /chests [add|remove|list|scan] <radius> <add chests found>
