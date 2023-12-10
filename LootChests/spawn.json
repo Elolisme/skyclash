@@ -7,37 +7,37 @@
       "type": "WATER_BUCKET",
       "data": 0,
       "amount": 1,
-      "probability": 20
+      "probability": 30
     },
     {
       "type": "LAVA_BUCKET",
       "data": 0,
       "amount": 1,
-      "probability": 10
+      "probability": 20
     },
     {
       "type": "IRON_PICKAXE",
       "data": 0,
       "amount": 1,
-      "probability": 20
+      "probability": 70
     },
     {
       "type": "EXP_BOTTLE",
       "data": 0,
-      "amount": 16,
-      "probability": 20
+      "amount": 8,
+      "probability": 40
     },
     {
       "type": "GOLDEN_APPLE",
       "data": 0,
-      "amount": 2,
-      "probability": 10
+      "amount": 1,
+      "probability": 30
     },
     {
       "type": "COOKED_BEEF",
       "data": 0,
-      "amount": 10,
-      "probability": 80
+      "amount": 8,
+      "probability": 100
     },
     {
       "type": "STONE_SWORD",
@@ -55,73 +55,79 @@
       "type": "BOW",
       "data": 0,
       "amount": 1,
-      "probability": 15
+      "probability": 25
     },
     {
       "type": "ARROW",
       "data": 0,
-      "amount": 10,
-      "probability": 80
+      "amount": 8,
+      "probability": 100
     },
     {
       "type": "IRON_HELMET",
       "data": 0,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "IRON_CHESTPLATE",
       "data": 0,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "IRON_BOOTS",
       "data": 0,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "IRON_LEGGINGS",
       "data": 0,
       "amount": 1,
-      "probability": 50
+      "probability": 60
     },
     {
       "type": "CHAINMAIL_HELMET",
       "data": 0,
       "amount": 1,
-      "probability": 70
+      "probability": 80
     },
     {
       "type": "CHAINMAIL_CHESTPLATE",
       "data": 0,
       "amount": 1,
-      "probability": 70
+      "probability": 80
     },
     {
       "type": "CHAINMAIL_LEGGINGS",
       "data": 0,
       "amount": 1,
-      "probability": 70
+      "probability": 80
     },
     {
       "type": "CHAINMAIL_BOOTS",
       "data": 0,
       "amount": 1,
-      "probability": 70
+      "probability": 80
     },
     {
       "type": "STONE",
       "data": 0,
       "amount": 24,
-      "probability": 70
+      "probability": 80
     },
     {
       "type": "WOOD",
       "data": 0,
-      "amount": 24,
-      "probability": 70
+      "amount": 8,
+      "probability": 80
+    },
+    {
+      "type": "INK_SACK",
+      "data": 4,
+      "amount": 4,
+      "probability": 40
     }
   ]
 }

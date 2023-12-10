@@ -18,7 +18,7 @@ import java.util.Random;
 // List of all my sources for code:
 // main.java        | void world generator - https://github.com/chaseoes/VoidWorld
 // chestgen         | chest generation - https://github.com/Veraimt/CustomLootChest
-// cooldown         | ability cooldowns - https://bukkit.org/threads/tutorial-better-cooldowns.165811/
+// cooldowns        | ability cooldowns - https://bukkit.org/threads/tutorial-better-cooldowns.165811/
 // abilities.java   | homing arrows - https://bukkit.org/threads/make-an-arrow-follow-a-target.247755/
 
 public class main extends JavaPlugin {

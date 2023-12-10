@@ -26,16 +26,19 @@ public class ChestManager {
         locList.forEach((location) -> {
             Location coords = new Location(world, location.get(0), location.get(1), location.get(2));
             Block targetBlock = coords.getBlock();
+            
             if (targetBlock.getState() instanceof Chest) {
                 chest = (Chest) targetBlock.getState();
                 lootChest = LootChestIO.loadChest(chestName1);
                 chest.getBlockInventory().setContents(lootChest.generate());
+
             } else if (targetBlock.getType() == Material.ENDER_CHEST) {
                 Location newloc = targetBlock.getLocation().add(new Vector(0, 100, 0));
                 newloc.getBlock().setType(Material.CHEST);
                 chest = (Chest) newloc.getBlock().getState();
                 lootChest = LootChestIO.loadChest(chestName2);
                 chest.getBlockInventory().setContents(lootChest.generate());
+
             } else {
                 Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED+"There is no chest at specified location:       "+location.get(0)+" "+location.get(1)+" "+location.get(2));
             }

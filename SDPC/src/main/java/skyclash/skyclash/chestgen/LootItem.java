@@ -1,30 +1,23 @@
 package skyclash.skyclash.chestgen;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class LootItem {
-
-    //transient: see comment below
     private transient ItemStack itemStack;
-
-    //For exporting with Gson -
-    // In the future: fix the exception "class net.minecraft.server.v1_8_R3.EntityItemFrame declares multiple JSON fields named c"
-    // when Exporting an Item Stack with Gson -> using a TypeAdapter
-    // https://www.spigotmc.org/threads/converting-player-inventory-to-json-using-gson-is-throwing-illegalargumentexception.73522/#post-811962
     private final Material type;
     private final byte data;
     private final int amount;
-
     private final byte probability;
 
-    @SuppressWarnings("deprecation")
     public LootItem(ItemStack itemStack) {
         this.itemStack = itemStack;
         this.probability = 100;
         if (itemStack != null) {
             this.type = itemStack.getType();
-            this.data = itemStack.getData().getData();
+            this.data = 0;
             this.amount = itemStack.getAmount();
         } else {
             this.type = null;
@@ -33,27 +26,34 @@ public class LootItem {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public ItemStack getItemStack() {
-        if (itemStack == null)
-            if (data == 4) {
-                itemStack = new ItemStack(type, amount, (short) 4);
-            } else {
-                itemStack = new ItemStack(type, amount, (short) 0, data);
-            }
+        if (itemStack != null) {return itemStack;};
+        itemStack = new ItemStack(type, amount);
 
+        // custom modifications to certain items based on data
+        if (type == Material.INK_SACK) {
+            itemStack = new ItemStack(type, amount, (short) data);
+        }
+        if ((type == Material.IRON_CHESTPLATE || type == Material.IRON_LEGGINGS) && data == 1) {
+            itemStack = new ItemStack(type, amount);
+            ItemMeta meta = itemStack.getItemMeta();
+            if (meta != null) {
+                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
+                itemStack.setItemMeta(meta);
+            }
+        }
+        if (type == Material.IRON_SWORD && data == 1) {
+            itemStack = new ItemStack(type, amount);
+            ItemMeta meta = itemStack.getItemMeta();
+            if (meta != null) {
+                meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
+                itemStack.setItemMeta(meta);
+            }
+        }
         return itemStack;
     }
 
     public byte getProbability() {
         return probability;
-    }
-
-    public Material getType() {
-        return type;
-    }
-
-    public int getAmount() {
-        return amount;
     }
 }

@@ -2,7 +2,6 @@ package skyclash.skyclash.fileIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
@@ -24,8 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MapsFile {
     public HashMap<String, MapData> data = new HashMap<>();
-    private String mapFilePath = "plugins"+File.separator+"SDPC"+File.separator+"maps.json";
-    private String mapFilePath2 = "plugins"+File.separator+"SDPC"+File.separator+"maps2.yml";
+    private String mapFilePath = "plugins"+File.separator+"SDPC"+File.separator+"maps2.yml";
     
     public void createFile() {
         try {
@@ -35,18 +33,8 @@ public class MapsFile {
         }
     }
 
-    // public void saveFileJSON() {
-    //     try (FileWriter file = new FileWriter(new File(mapFilePath))){
-    //         Gson gson = new Gson();
-    //         gson.toJson(data, file);
-    //         file.flush();
-    //     } catch (IOException e) {
-    //         throw new RuntimeException(e);
-    //     }
-    // }
-
     public void saveFileYML() {
-        try (FileWriter writer = new FileWriter(new File(mapFilePath2))) {
+        try (FileWriter writer = new FileWriter(new File(mapFilePath))) {
             Representer representer = new Representer();
             representer.addClassTag(MapData.class, Tag.MAP);
             Yaml yaml = new Yaml(representer);
@@ -54,31 +42,13 @@ public class MapsFile {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
     }
-
-    // public void loadFileJSON() {
-    //     try {
-    //         if (!(new File(mapFilePath).exists())) {
-    //             createFile();
-    //             return;
-    //         }
-    //         JsonObject object = new JsonParser().parse(new FileReader(mapFilePath)).getAsJsonObject();
-    //         Gson gson = new Gson();
-    //         for (Entry<String, JsonElement> entry : object.entrySet()) {
-    //             data.put(entry.getKey(), gson.fromJson(entry.getValue(), MapData.class));
-    //         }   
-    //         addNewWorlds(); 
-    //     } catch (Exception e) {
-    //         Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"There was an error opening the maps file");
-    //         throw new RuntimeException(e);
-    //     }
-    // }
 
     @SuppressWarnings("unchecked")
     public void loadFileYML() {
+        if (!(new File(mapFilePath).exists())) {createFile();return;}
         Yaml yaml = new Yaml(new Constructor(HashMap.class));
-        try (InputStream inputStream = new FileInputStream(new File(mapFilePath2))) {
+        try (InputStream inputStream = new FileInputStream(new File(mapFilePath))) {
             HashMap<String, Object> loadedData = (HashMap<String, Object>) yaml.load(inputStream);
             loadedData.forEach((key, value) -> {
                 Gson gson = new GsonBuilder().create();

@@ -17,15 +17,6 @@ public class LootChest {
 
     }
 
-    public void addLootItem(LootItem lootItem) {
-        if (lootItem.getType() != null)
-            lootItems.add(lootItem);
-    }
-
-    public void addLootItem(ItemStack itemStack) {
-        addLootItem(new LootItem(itemStack));
-    }
-
     public String getName() {
         return name;
     }

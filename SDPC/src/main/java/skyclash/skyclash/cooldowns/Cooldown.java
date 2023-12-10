@@ -3,6 +3,7 @@ package skyclash.skyclash.cooldowns;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class Cooldown {
@@ -28,7 +29,19 @@ public class Cooldown {
             return 0.0;
         if (!cooldownPlayers.get(player).cooldownMap.containsKey(ability))
             return 0.0;
-        return UtilTime.convert((cooldownPlayers.get(player).cooldownMap.get(ability).seconds + cooldownPlayers.get(player).cooldownMap.get(ability).systime) - System.currentTimeMillis(),UtilTime.TimeUnit.SECONDS,1);
+        long cooltime = (cooldownPlayers.get(player).cooldownMap.get(ability).seconds + cooldownPlayers.get(player).cooldownMap.get(ability).systime) - System.currentTimeMillis();
+
+        return trim(cooltime / 1000.0D, 1);
+    }
+
+    public static double trim(double untrimmeded, int decimal) {
+        StringBuilder format = new StringBuilder("#.#");
+
+        for(int i = 1; i < decimal; i++) {
+            format.append("#");
+        }
+        DecimalFormat twoDec = new DecimalFormat(format.toString());
+        return Double.parseDouble(twoDec.format(untrimmeded));
     }
 
     public static void coolDurMessage(Player player, String ability) {
@@ -38,8 +51,6 @@ public class Cooldown {
         if (!isCooling(player.getName(), ability)) {
             return;
         }
-        // player.sendMessage(ChatColor.GRAY + ability + " Cooldown " + ChatColor.AQUA +
-        // getRemaining(player.getName(), ability) + " Seconds");
     }
 
     public static void removeCooldown(String player, String ability) {
@@ -50,12 +61,6 @@ public class Cooldown {
             return;
         }
         cooldownPlayers.get(player).cooldownMap.remove(ability);
-        // Player cPlayer = Bukkit.getPlayer(player);
-        // if(player != null) {
-        // cPlayer.sendMessage(ChatColor.GRAY + "You can now use " + ChatColor.AQUA +
-        // ability);
-
-        // }
     }
 
     public static void handleCooldowns() {
