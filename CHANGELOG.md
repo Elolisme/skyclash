@@ -1,6 +1,13 @@
 # Changelog
 ## v1.6.4
 - another version test
+- finally made the automatic version updater work
+- made auto updater also update loot chest files when updating versions
+- fixed having null cards issue
+- fixed leaderboard command not working
+- added a backup to repo
+
+**THE SECOND LINE BEING THE VERSION IS NECESSARY, AND MUST HAVE THAT FORMATTING**
 
 ## v1.6.3
 - test to check if auto updater works

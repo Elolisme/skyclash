@@ -89,7 +89,7 @@ public class leaderboard implements CommandExecutor {
 
     private HashMap<String, Integer> PlayersWithStat(String stat) {
         HashMap<String, Integer> statList = new HashMap<>();
-        File dir = new File("plugins"+File.separator+"SDPC"+File.separator+"Players");
+        File dir = new File("plugins"+File.separator+"SDPC"+File.separator+"players");
         File[] dirList = dir.listFiles();
         for (File file: dirList){
             if (file.isFile()) {

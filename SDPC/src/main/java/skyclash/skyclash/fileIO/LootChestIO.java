@@ -61,7 +61,11 @@ public class LootChestIO {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Could not create the folder for saving the LootChests");
             return;
         }
+        downloadFilesNoChecks();
+        
+    }
 
+    public static void downloadFilesNoChecks() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the lootchest files...");
         try {
             URL url = new URL("https", "raw.githubusercontent.com", "/Elolisme/skyclash/main/LootChests/mid.json");

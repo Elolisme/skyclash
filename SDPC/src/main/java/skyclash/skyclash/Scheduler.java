@@ -154,15 +154,18 @@ public class Scheduler {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the latest version of SDPC...");
 
         try {
-            URL url2 = new URL("https", "github.com", "/Elolisme/skyclash/blob/main/SDPC/target/SDPC-"+latestVersion+".jar");
-            File file = new File( "plugins" + File.separator + "SDPC-"+latestVersion+".jar");
-            FileUtils.copyURLToFile(url2, file, 10*1000, 10*1000);
+            URL url2 = new URL("https", "github.com", "/Elolisme/skyclash/raw/main/SDPC/target/SDPC-"+latestVersion+".jar");
+            File file2 = new File( "plugins" + File.separator + "SDPC-"+latestVersion+".jar");
+            FileUtils.copyURLToFile(url2, file2, 10*1000, 10*1000);
         } catch (Exception e) {
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"The download failed");
             return;
         }
 
+        if(new File( "plugins"+File.separator+"SDPC"+File.separator+"LootChests" + File.separator).exists()) {
+            LootChestIO.downloadFilesNoChecks();
+        } else {LootChestIO.downloadLootChestFiles();}
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
         Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Restart the server immediately");
         Bukkit.shutdown();

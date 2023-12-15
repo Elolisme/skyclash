@@ -103,6 +103,10 @@ public class Cards {
         DataFiles datafiles = new DataFiles(this.player);
         PlayerData data = datafiles.data;
         ArrayList<String> owned = data.owned;
+        if (owned == null || this.card == null) {
+            return false;
+        }
+
         if (!owned.contains(this.card)) {
             if (Cost>data.coins) {
                 player.sendMessage(ChatColor.RED+"You do not have enough money to use your card");
