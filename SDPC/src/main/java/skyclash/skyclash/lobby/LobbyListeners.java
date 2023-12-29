@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,6 +25,7 @@ import skyclash.skyclash.gameManager.StartGame;
 import skyclash.skyclash.gameManager.StatsManager;
 import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 import skyclash.skyclash.main;
+import skyclash.skyclash.WorldManager.SCWorlds;
 import skyclash.skyclash.cooldowns.Cooldown;
 
 public class LobbyListeners implements Listener {
@@ -55,7 +58,7 @@ public class LobbyListeners implements Listener {
 
     // Stop players hitting each other in lobby
     @EventHandler
-    public  void onHit(EntityDamageByEntityEvent event) {
+    public void onHit(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
@@ -63,6 +66,28 @@ public class LobbyListeners implements Listener {
         if (playerstatus.PlayerEqualsStatus(player, PlayerState.LOBBY) || playerstatus.PlayerEqualsStatus(player, PlayerState.READY)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onDamaged(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) event.getEntity();
+        if (!player.getWorld().getName().equals(new SCWorlds().getLobbyName())) {
+            return;
+        }
+        if (event.getCause() == DamageCause.VOID) {new PlayerControls().toLobby(player);}
+        if (event.getCause() == DamageCause.FALL ||
+            event.getCause() == DamageCause.DROWNING ||
+            event.getCause() == DamageCause.FIRE ||
+            event.getCause() == DamageCause.FIRE_TICK ||
+            event.getCause() == DamageCause.LAVA ||
+            event.getCause() == DamageCause.STARVATION ||
+            event.getCause() == DamageCause.SUFFOCATION || 
+            event.getCause() == DamageCause.VOID) 
+            {event.setCancelled(true);}
+        
     }
 
     // Stop items from being dropped

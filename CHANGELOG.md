@@ -1,4 +1,9 @@
 # Changelog
+## v1.7.0
+- removed damage in lobby
+- fixed grim reaper ability
+- fixed temporary armour not clearing
+
 ## v1.6.4
 - another version test
 - finally made the automatic version updater work

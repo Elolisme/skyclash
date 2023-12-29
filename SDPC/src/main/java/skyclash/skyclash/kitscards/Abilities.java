@@ -22,6 +22,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -546,36 +547,36 @@ public class Abilities implements Listener {
         player.setItemInHand(new ItemStack(Material.AIR));
         player.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*30, 1));
-        player.damage(player.getHealth() / 1.5);
+        player.damage(player.getHealth() / 4);
 
         hurtPlayer.sendMessage(ChatColor.RED+"You have beem marked for doom by "+player.getName()+"\nYou must kill them in 30 seconds otherwise you will instantly die");
         hurtPlayer.playSound(player.getLocation(), Sound.WITHER_DEATH, 1, 0.8f);
         hurtPlayer.setMetadata("Doomed", new FixedMetadataValue(main.plugin, player.getName()));
 
-        new Scheduler().scheduleTask(()->{killTaggedPlayers();}, 30*20);
-        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 15 seconds left");}, 15*20);
-        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 5 seconds left");}, 25*20);
+        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 15 seconds left", player);}, 15*20);
+        new Scheduler().scheduleTask(()->{messageTaggedPlayer(ChatColor.RED+"You have 5 seconds left", player);}, 25*20);
+        new Scheduler().scheduleTask(()->{killTaggedPlayers(player);}, 30*20);
     }
 
-    private void killTaggedPlayers() {
+    private void killTaggedPlayers(Player reaper) {
         PlayerStatus.StatusMap.forEach((player, state) -> {
-            Player player2 = Bukkit.getPlayerExact(player);
-            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && player2.hasMetadata("Doomed")) {
-                player2.damage(player2.getHealth()*999);
+            Player victim = Bukkit.getPlayerExact(player);
+            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && victim.hasMetadata("Doomed") && victim.getMetadata("Doomed").get(0).value().equals(reaper.getName())) {
+                victim.damage(victim.getHealth()*10);
             }
         });
     }
 
-    private void messageTaggedPlayer(String message) {
+    private void messageTaggedPlayer(String message, Player reaper) {
         PlayerStatus.StatusMap.forEach((player, state) -> {
-            Player player2 = Bukkit.getPlayerExact(player);
-            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && player2.hasMetadata("Doomed")) {
-                player2.sendMessage(message);
+            Player victim = Bukkit.getPlayerExact(player);
+            if (new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME) && victim.hasMetadata("Doomed") && victim.getMetadata("Doomed").get(0).value().equals(reaper.getName())) {
+                victim.sendMessage(message);
             }
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onReaperDied(PlayerDeathEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
@@ -583,11 +584,11 @@ public class Abilities implements Listener {
         Player reaper = (Player) event.getEntity();
         if (!playerstatus.PlayerEqualsStatus(reaper, PlayerState.INGAME) || !reaper.hasMetadata("Grim_Reaper")) {
             return;
-        }
+        }       
         
         PlayerStatus.StatusMap.forEach((name, state) -> {
             Player markedPlayer = Bukkit.getPlayerExact(name);
-            if (new PlayerStatus().PlayerEqualsStatus(name, PlayerState.INGAME) && markedPlayer.hasMetadata("Doomed") && markedPlayer.getMetadata("Doomed").get(0) == new FixedMetadataValue(main.plugin, reaper.getName())) {
+            if (new PlayerStatus().PlayerEqualsStatus(name, PlayerState.INGAME) && markedPlayer.hasMetadata("Doomed") && markedPlayer.getMetadata("Doomed").get(0).value().equals(reaper.getName())) {
                 markedPlayer.removeMetadata("Doomed", main.plugin);
                 markedPlayer.sendMessage("You have successfully removed your mark");
             }

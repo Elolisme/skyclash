@@ -40,6 +40,23 @@ public class SCWorlds {
         return new Location(new Multiverse().GetBukkitWorld(default_world.get()), spawnCoords.get().get(0), spawnCoords.get().get(1), spawnCoords.get().get(2));
     }
 
+    public String getLobbyName() {
+        Mapsfile maps = new Mapsfile();
+        maps.loadFileYML();
+        AtomicReference<String> default_world = new AtomicReference<>();
+
+        // loop through all maps in maps.json
+        maps.data.forEach((name, info) -> {
+            // see if its lobby world
+            String name1 = (String) name;
+            if (info.getIsdefault()) {
+                default_world.set(name1);
+            }
+        });
+
+        return default_world.get();
+    }
+
     public void CopyWorld(String worldName, String newWorldName) {
         multiverse.LoadWorld(worldName);
         new CopyWorld().copyWorld(multiverse.GetBukkitWorld(worldName), INGAME_MAP);

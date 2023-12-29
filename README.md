@@ -165,5 +165,6 @@ Cool people
 - zapic
 - Chez_E
 
-# TODO
+# Long term goals
 - gamemode where killing makes you join their team
+- add tier 2 and 3 kits

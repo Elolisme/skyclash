@@ -16,6 +16,8 @@ import org.bukkit.potion.PotionType;
 
 import net.md_5.bungee.api.ChatColor;
 import skyclash.skyclash.Scheduler;
+import skyclash.skyclash.gameManager.PlayerStatus;
+import skyclash.skyclash.gameManager.PlayerStatus.PlayerState;
 
 public class DrawCard {
     public DrawCard(Player player, String suit, int number) {
@@ -310,6 +312,8 @@ public class DrawCard {
     }
 
     private void ClearTempItems(Player player) {
+        if (!(new PlayerStatus().PlayerEqualsStatus(player, PlayerState.INGAME))) {return;}
+
         player.closeInventory();
         player.sendMessage(ChatColor.YELLOW+"Your temporary items have been cleared");
         ItemStack[] items = player.getInventory().getContents();
@@ -318,11 +322,23 @@ public class DrawCard {
                 player.getInventory().remove(item);
             }
         }
-        items = player.getInventory().getArmorContents();
-        for (ItemStack item: items) {
-            if (item != null && item.hasItemMeta()&& item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
-                player.getInventory().remove(item);
-            }
+        
+        // clearing armour
+        ItemStack item = player.getInventory().getHelmet();
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
+            player.getInventory().setHelmet(new ItemStack(Material.AIR));
+        }
+        item = player.getInventory().getChestplate();
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
+            player.getInventory().setChestplate(new ItemStack(Material.AIR));
+        }
+        item = player.getInventory().getLeggings();
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
+            player.getInventory().setLeggings(new ItemStack(Material.AIR));
+        }
+        item = player.getInventory().getBoots();
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().get(0).equals("Temporary")) {
+            player.getInventory().setBoots(new ItemStack(Material.AIR));
         }
     }
 }
