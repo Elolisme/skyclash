@@ -48,6 +48,7 @@ public class main extends JavaPlugin {
         this.getCommand("gamespawn").setExecutor(new gamespawn());
         this.getCommand("leaderboard").setExecutor(new leaderboard());
         this.getCommand("scworld").setExecutor(new scworld());
+        this.getCommand("update").setExecutor(new update());
 
         pluginFileName = this.getFile().getName();
         plugin = main.getPlugin(main.class);

@@ -65,6 +65,7 @@ public class LootChestIO {
         
     }
 
+    @SuppressWarnings("deprecation")
     public static void downloadFilesNoChecks() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the lootchest files...");
         try {

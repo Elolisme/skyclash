@@ -1,11 +1,6 @@
 package skyclash.skyclash;
 
 import static skyclash.skyclash.main.isGameActive;
-import java.io.File;
-import java.net.URL;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,9 +9,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 
 import skyclash.skyclash.WorldManager.Multiverse;
 import skyclash.skyclash.WorldManager.SCWorlds;
@@ -37,8 +29,6 @@ public class Scheduler {
     public static int playersLeft = 0;
 
     public void init() {
-        checkVersion();
-
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN+"Skyclash's Drug Pollinated Code has started");
         scheduleRepeatingTask(()->Tick(), 1);
         scheduleRepeatingTask(()->Second(), 20);
@@ -103,72 +93,5 @@ public class Scheduler {
                 task.run();
             }
         }.runTaskTimer(main.plugin, 0L, periodTicks);
-    }
-
-    private static void checkVersion() {
-        URL url;
-        String latestVersion;
-        try {
-            url = new URL("https://raw.githubusercontent.com/Elolisme/skyclash/main/CHANGELOG.md");
-            List<String> lines = Resources.readLines(url, Charsets.UTF_8);
-            latestVersion = lines.get(1).replace("## v", "");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Could not get file with version from Github");
-            return;
-        }
-
-        File folder = new File("plugins/");
-        File[] listOfFiles = folder.listFiles();
-        Boolean containsNew = false;
-
-        for (File file : listOfFiles) {
-            if (file.isFile() && file.getName().contains("SDPC-")) {
-                String version = file.getName().replace("SDPC-", "").replace(".jar", "");
-                if (version.equals(latestVersion)) {
-                    containsNew = true;
-                }
-            }
-        }
-
-        if (containsNew) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"SDPC is up to date: version "+latestVersion);
-            if (!main.pluginFileName.replace("SDPC-", "").replace(".jar", "").equals(latestVersion)) {
-                Bukkit.getPluginManager().disablePlugin(main.plugin);
-            } else {
-                new Scheduler().scheduleTask(()->{
-                    for (File file : listOfFiles) {
-                        if (file.isFile() && file.getName().contains("SDPC-")) {
-                            String version = file.getName().replace("SDPC-", "").replace(".jar", "");
-                            if (!version.equals(latestVersion)) {
-                                file.delete();
-                            }
-                        }
-                    }
-                }, 20);
-            }
-            return;
-        }
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Not up to date, should be on version "+latestVersion);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Downloading the latest version of SDPC...");
-
-        try {
-            URL url2 = new URL("https", "github.com", "/Elolisme/skyclash/raw/main/SDPC/target/SDPC-"+latestVersion+".jar");
-            File file2 = new File( "plugins" + File.separator + "SDPC-"+latestVersion+".jar");
-            FileUtils.copyURLToFile(url2, file2, 10*1000, 10*1000);
-        } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"The download failed");
-            return;
-        }
-
-        if(new File( "plugins"+File.separator+"SDPC"+File.separator+"LootChests" + File.separator).exists()) {
-            LootChestIO.downloadFilesNoChecks();
-        } else {LootChestIO.downloadLootChestFiles();}
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"The files have been downloaded");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Restart the server immediately");
-        Bukkit.shutdown();
-        
     }
 }

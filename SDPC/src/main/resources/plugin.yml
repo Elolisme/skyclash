@@ -46,6 +46,10 @@ commands:
     description: Allows for easy management of worlds in multiverse for skyclash purposes
     usage: /scworld <add | modify> <args>
     permission: sgm.host
+  update:
+    description: update the plugin
+    usage: /update
+    permission: sgm.host
 
 permissions:
   sgm.lobby:

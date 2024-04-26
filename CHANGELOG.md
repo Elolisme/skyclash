@@ -1,4 +1,9 @@
 # Changelog
+## v1.7.1
+- the auto update was too obnoxious, changed it to a command
+- removed the line that revealed a players ip address
+==============> THIS IS LIKELY ONE OF THE LAST UPDATES I WILL DO TO THIS PROJECT <================
+
 ## v1.7.0
 - removed damage in lobby
 - fixed grim reaper ability
