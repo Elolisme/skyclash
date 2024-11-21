@@ -139,10 +139,6 @@ Get custom weapons by using `/giveitem <player> <item>`,  incorporated through c
 
 ### [Hypickle kits](https://docs.google.com/spreadsheets/d/19AjEcBofWj3tTlZCbzQlgGsIxJ_DaLLrYeETvVY76Nc/edit?usp=sharing)
 
-### Server IP:
-```
-mc.elol.gay
-```
 
 ## Contributers to Skyclash Remake
 Developer + Server host
